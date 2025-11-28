@@ -5,6 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
+using MyPlanU.Services;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace MyPlanU
 {
@@ -75,8 +79,6 @@ namespace MyPlanU
                 return db;
             });
 
-
-
             // Registro de repositorios
             builder.Services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
             builder.Services.AddSingleton<IActividadRepository, ActividadRepository>();
@@ -84,6 +86,15 @@ namespace MyPlanU
             builder.Services.AddSingleton<IAmistadRepository, AmistadRepository>();
             builder.Services.AddSingleton<IPromptyConfigRepository, PromptyConfigRepository>();
             builder.Services.AddSingleton<IActividadCompartidaRepository, ActividadCompartidaRepository>();
+
+            // Registro de cliente HTTP para PROMPTY (FastAPI en localhost:8000)
+            builder.Services.AddHttpClient<IPromptyClient, PromptyClient>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:8000");
+            });
+
+            // Registro de páginas que usan DI
+            builder.Services.AddTransient<PromptyPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
