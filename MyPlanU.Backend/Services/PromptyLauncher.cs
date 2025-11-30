@@ -61,8 +61,8 @@ public class PromptyLauncher
         string currentDir = AppContext.BaseDirectory;
         DirectoryInfo? dirInfo = new DirectoryInfo(currentDir);
 
-        // Subir hasta 5 niveles buscando "PROMPTY_3.0"
-        for (int i = 0; i < 5; i++)
+        // Subir hasta 10 niveles buscando "PROMPTY_3.0"
+        for (int i = 0; i < 10; i++)
         {
             if (dirInfo == null) break;
 
