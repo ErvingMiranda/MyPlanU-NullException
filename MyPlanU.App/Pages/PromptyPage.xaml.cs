@@ -28,4 +28,13 @@ public partial class PromptyPage : ContentPage
             }
         }
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is PromptyViewModel vm)
+        {
+            await vm.InitializeAsync();
+        }
+    }
 }

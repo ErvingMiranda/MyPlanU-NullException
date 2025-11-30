@@ -50,4 +50,17 @@ public class PromptyLiteHttpClient : IPromptyLiteClient
             return $"Error de conexión: {ex.Message}";
         }
     }
+
+    public async Task<bool> CheckHealthAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync("/health", ct);
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
