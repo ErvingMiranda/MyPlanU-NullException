@@ -3,8 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              xmlns:models="clr-namespace:MyPlanU.Backend.Models;assembly=MyPlanU.Backend"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MyPlanU.App.Pages.EventosPage"
              Title="Eventos">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:IsStringNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto, *, Auto">
         <!-- Header / Toolbar -->
@@ -40,6 +47,7 @@
                                    CornerRadius="10">
                                 <VerticalStackLayout Spacing="5">
                                     <Label Text="{Binding Titulo}" FontSize="18" FontAttributes="Bold" />
+                                    <Label Text="{Binding Etiqueta}" FontSize="12" FontAttributes="Italic" TextColor="LightYellow" IsVisible="{Binding Etiqueta, Converter={StaticResource IsNotNullOrEmptyConverter}}" />
                                     <Label Text="{Binding Descripcion}" FontSize="14" />
                                     <Label Text="{Binding FechaInicio}" FontSize="12" TextColor="White" />
                                     <Label Text="{Binding FechaFin}" FontSize="12" TextColor="White" />

@@ -57,8 +57,13 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     private async Task EditarEventoAsync(Actividad? actividad)
     {
         if (actividad == null) return;
-        // Logic to edit
-        await Shell.Current.DisplayAlert("Editar", $"Editar {actividad.Titulo}", "OK");
+        
+        var navigationParameter = new Dictionary<string, object>
+        {
+            { "Usuario", _usuario },
+            { "Actividad", actividad }
+        };
+        await Shell.Current.GoToAsync(nameof(CrearEventoPage), navigationParameter);
     }
 
     [RelayCommand]

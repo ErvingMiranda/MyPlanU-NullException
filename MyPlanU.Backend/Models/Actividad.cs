@@ -18,5 +18,6 @@ public class Actividad
     public bool TodoElDia { get; set; }
     public DateTime? FechaCompletado { get; set; }
     public string NotaRapida { get; set; }
+    public string Etiqueta { get; set; }
     public int? IdRecordatorio { get; set; }
 }

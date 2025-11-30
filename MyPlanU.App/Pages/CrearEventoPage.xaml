@@ -10,6 +10,7 @@
             <Label Text="Nuevo Evento" Style="{StaticResource Headline}" HorizontalOptions="Center" />
 
             <Entry Placeholder="Título" Text="{Binding Titulo}" />
+            <Entry Placeholder="Etiqueta (ej. Trabajo, Estudio)" Text="{Binding Etiqueta}" />
             <Editor Placeholder="Descripción" Text="{Binding Descripcion}" AutoSize="TextChanges" />
 
             <Label Text="Inicio" FontAttributes="Bold" />

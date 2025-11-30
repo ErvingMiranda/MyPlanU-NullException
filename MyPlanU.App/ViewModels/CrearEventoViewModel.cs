@@ -5,16 +5,20 @@ using MyPlanU.Backend.Models;
 
 namespace MyPlanU.App.ViewModels;
 
-public partial class CrearEventoViewModel : ObservableObject
+public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
 {
     private readonly ActividadService _actividadService;
     private Usuario _usuario;
+    private Actividad _actividadExistente;
 
     [ObservableProperty]
     private string titulo;
 
     [ObservableProperty]
     private string descripcion;
+
+    [ObservableProperty]
+    private string etiqueta;
 
     [ObservableProperty]
     private DateTime fechaInicio = DateTime.Now;
@@ -33,9 +37,27 @@ public partial class CrearEventoViewModel : ObservableObject
         _actividadService = actividadService;
     }
 
-    public void SetUsuario(Usuario usuario)
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        _usuario = usuario;
+        if (query.ContainsKey("Usuario"))
+        {
+            _usuario = query["Usuario"] as Usuario;
+        }
+
+        if (query.ContainsKey("Actividad"))
+        {
+            _actividadExistente = query["Actividad"] as Actividad;
+            if (_actividadExistente != null)
+            {
+                Titulo = _actividadExistente.Titulo;
+                Descripcion = _actividadExistente.Descripcion;
+                Etiqueta = _actividadExistente.Etiqueta;
+                FechaInicio = _actividadExistente.FechaInicio.Date;
+                HoraInicio = _actividadExistente.FechaInicio.TimeOfDay;
+                FechaFin = _actividadExistente.FechaFin.Date;
+                HoraFin = _actividadExistente.FechaFin.TimeOfDay;
+            }
+        }
     }
 
     [RelayCommand]
@@ -56,19 +78,35 @@ public partial class CrearEventoViewModel : ObservableObject
             return;
         }
 
-        var nuevaActividad = new Actividad
+        if (_actividadExistente != null)
         {
-            IdUsuarioCreador = _usuario?.IdUsuario ?? 0, // Should handle null user better
-            Titulo = Titulo,
-            Descripcion = Descripcion,
-            FechaInicio = inicio,
-            FechaFin = fin,
-            FechaCreacion = DateTime.Now,
-            Estado = "Pendiente",
-            Prioridad = "Normal"
-        };
+            // Editar existente
+            _actividadExistente.Titulo = Titulo;
+            _actividadExistente.Descripcion = Descripcion;
+            _actividadExistente.Etiqueta = Etiqueta;
+            _actividadExistente.FechaInicio = inicio;
+            _actividadExistente.FechaFin = fin;
+            
+            await _actividadService.SaveActividadAsync(_actividadExistente);
+        }
+        else
+        {
+            // Crear nueva
+            var nuevaActividad = new Actividad
+            {
+                IdUsuarioCreador = _usuario?.IdUsuario ?? 0,
+                Titulo = Titulo,
+                Descripcion = Descripcion,
+                Etiqueta = Etiqueta,
+                FechaInicio = inicio,
+                FechaFin = fin,
+                FechaCreacion = DateTime.Now,
+                Estado = "Pendiente",
+                Prioridad = "Normal"
+            };
+            await _actividadService.SaveActividadAsync(nuevaActividad);
+        }
 
-        await _actividadService.SaveActividadAsync(nuevaActividad);
         await Shell.Current.GoToAsync("..");
     }
 }
