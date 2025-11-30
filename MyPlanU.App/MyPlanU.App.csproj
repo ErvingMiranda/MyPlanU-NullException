@@ -40,4 +40,9 @@
 		<ProjectReference Include="..\MyPlanU.Backend\MyPlanU.Backend.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<MauiImage Include="Resources\AppIcon\appicon.svg" IsAppIcon="true" />
+		<MauiImage Include="Resources\Splash\splash.svg" IsSplashScreen="true" />
+	</ItemGroup>
+
 </Project>
