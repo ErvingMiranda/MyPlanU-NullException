@@ -12,8 +12,17 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,Auto" Padding="16">
-        <CollectionView x:Name="MessagesCollectionView" Grid.Row="0" ItemsSource="{Binding Mensajes}">
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16">
+        
+        <!-- Header explicativo PROMPTY Lite -->
+        <Frame Grid.Row="0" BackgroundColor="#333333" Padding="10" Margin="0,0,0,10" CornerRadius="8" HasShadow="False">
+            <Label Text="Esta es la versión PROMPTY Lite: podés hacer preguntas y recibir sugerencias, pero no se crearán eventos ni tareas automáticamente. Para agendar algo, usá las pantallas normales de MyPlanU."
+                   TextColor="#DDDDDD"
+                   FontSize="12"
+                   HorizontalTextAlignment="Center" />
+        </Frame>
+
+        <CollectionView x:Name="MessagesCollectionView" Grid.Row="1" ItemsSource="{Binding Mensajes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Margin="0,4" Padding="8" HasShadow="False" CornerRadius="10" BackgroundColor="#222222">
@@ -26,7 +35,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
             <Entry Grid.Column="0" Text="{Binding MensajeEntrada}" Placeholder="Escribe un mensaje..." ReturnType="Send" />
             <Button Grid.Column="1" Text="Enviar" Command="{Binding EnviarMensajeCommand}" />
         </Grid>

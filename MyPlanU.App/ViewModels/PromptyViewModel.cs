@@ -9,7 +9,7 @@ namespace MyPlanU.App.ViewModels;
 
 public partial class PromptyViewModel : ObservableObject
 {
-    private readonly IPromptyClient _promptyClient;
+    private readonly IPromptyLiteClient _promptyClient;
     
     [ObservableProperty]
     private ObservableCollection<ChatMessage> mensajes = new();
@@ -22,7 +22,7 @@ public partial class PromptyViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(EnviarMensajeCommand))]
     private bool isSending;
 
-    public PromptyViewModel(IPromptyClient promptyClient)
+    public PromptyViewModel(IPromptyLiteClient promptyClient)
     {
         _promptyClient = promptyClient;
     }
@@ -42,33 +42,16 @@ public partial class PromptyViewModel : ObservableObject
         // 1. Añadir mensaje del usuario
         Mensajes.Add(new ChatMessage { Rol = "Usuario", Texto = texto });
 
-        // 2. Preparar historial
-        var historial = Mensajes.Select(m => new PromptyHistoryItem
-        {
-            Rol = m.Rol.Equals("PROMPTY", StringComparison.OrdinalIgnoreCase) ? "assistant" : "usuario",
-            Contenido = m.Texto
-        }).ToList();
+        // 2. Enviar al backend (PROMPTY Lite)
+        // La versión Lite no maneja historial complejo ni acciones, solo texto.
+        var respuestaTexto = await _promptyClient.AskAsync(texto);
 
-        // 3. Enviar al backend
-        var respuesta = await _promptyClient.EnviarMensajeAsync(texto, historial);
-
-        // 4. Mostrar respuesta
-        if (respuesta != null)
+        // 3. Mostrar respuesta
+        Mensajes.Add(new ChatMessage
         {
-            Mensajes.Add(new ChatMessage
-            {
-                Rol = "PROMPTY",
-                Texto = respuesta.Respuesta
-            });
-        }
-        else
-        {
-            Mensajes.Add(new ChatMessage
-            {
-                Rol = "PROMPTY",
-                Texto = "Error desconocido al recibir respuesta."
-            });
-        }
+            Rol = "PROMPTY",
+            Texto = respuestaTexto
+        });
 
         IsSending = false;
     }

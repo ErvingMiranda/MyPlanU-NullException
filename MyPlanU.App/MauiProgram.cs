@@ -42,7 +42,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ActividadCompartidaService>();
 
         // Prompty Client
-        builder.Services.AddHttpClient<IPromptyClient, PromptyClient>(client =>
+        builder.Services.AddHttpClient<IPromptyLiteClient, PromptyLiteHttpClient>(client =>
         {
             // Ajustar URL base según entorno (127.0.0.1 para Windows/Mac, 10.0.2.2 para Android Emulator)
             string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://127.0.0.1:8000";
