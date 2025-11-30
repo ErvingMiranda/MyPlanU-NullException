@@ -14,9 +14,11 @@ public partial class PromptyViewModel : ObservableObject
     private ObservableCollection<ChatMessage> mensajes = new();
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(EnviarMensajeCommand))]
     private string mensajeEntrada = string.Empty;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(EnviarMensajeCommand))]
     private bool isSending;
 
     public PromptyViewModel(IPromptyClient promptyClient)
@@ -25,11 +27,14 @@ public partial class PromptyViewModel : ObservableObject
         Mensajes.Add(new ChatMessage { Rol = "PROMPTY", Texto = "Hola, soy PROMPTY. ¿En qué te ayudo con tu planificación?" });
     }
 
-    [RelayCommand]
+    private bool CanEnviarMensaje()
+    {
+        return !string.IsNullOrWhiteSpace(MensajeEntrada) && !IsSending;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEnviarMensaje))]
     private async Task EnviarMensajeAsync()
     {
-        if (string.IsNullOrWhiteSpace(MensajeEntrada) || IsSending) return;
-
         var texto = MensajeEntrada;
         MensajeEntrada = string.Empty;
         IsSending = true;
