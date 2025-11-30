@@ -4,9 +4,7 @@ namespace MyPlanU.Backend.Models;
 
 public class PromptyChatResponse
 {
-    public bool Exito { get; set; }
     public string Respuesta { get; set; } = string.Empty;
-    public string? Accion { get; set; }
-    public Dictionary<string, object>? Parametros { get; set; }
-    public string Origen { get; set; } = "interprete";
+    public string? Accion { get; set; }   // "decir_hora", "abrir_youtube" o null
+    public Dictionary<string, object>? Argumentos { get; set; }
 }

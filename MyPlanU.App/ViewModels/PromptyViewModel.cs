@@ -42,20 +42,15 @@ public partial class PromptyViewModel : ObservableObject
 
         Mensajes.Add(new ChatMessage { Rol = "Usuario", Texto = texto });
 
-        var historial = Mensajes.Select(m => new HistorialItem
+        var historial = Mensajes.Select(m => new PromptyMensaje
         {
             Rol = m.Rol.Equals("PROMPTY", StringComparison.OrdinalIgnoreCase) ? "asistente" : "usuario",
             Contenido = m.Texto
-        });
+        }).ToList();
 
         try
         {
             var respuesta = await _promptyClient.EnviarMensajeAsync(texto, historial);
-
-            if (!respuesta.Exito)
-            {
-                await Shell.Current.DisplayAlert("Error", "PROMPTY no está disponible.", "OK");
-            }
 
             Mensajes.Add(new ChatMessage
             {
@@ -65,9 +60,9 @@ public partial class PromptyViewModel : ObservableObject
 
             await EjecutarAccionPromptyAsync(respuesta);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", "PROMPTY no está disponible.", "OK");
+            await Shell.Current.DisplayAlert("Error", $"No se pudo contactar con PROMPTY: {ex.Message}", "OK");
             Mensajes.Add(new ChatMessage
             {
                 Rol = "PROMPTY",
@@ -82,18 +77,19 @@ public partial class PromptyViewModel : ObservableObject
 
     private async Task EjecutarAccionPromptyAsync(PromptyChatResponse respuesta)
     {
-        if (!respuesta.Exito || string.IsNullOrWhiteSpace(respuesta.Accion))
+        if (string.IsNullOrWhiteSpace(respuesta.Accion))
             return;
 
         switch (respuesta.Accion)
         {
             case "decir_hora":
-                // Ya tienes DateTime.Now del sistema, úsalo para algo si quieres.
-                // Por ahora, la hora ya viene en respuesta.Respuesta, así que no necesitas más.
+                var ahora = DateTime.Now;
+                var textoHora = $"La hora actual es: {ahora:HH:mm}";
+                Mensajes.Add(new ChatMessage { Rol = "PROMPTY", Texto = textoHora });
                 break;
 
-            case "buscar_youtube":
-                if (respuesta.Parametros != null && respuesta.Parametros.TryGetValue("query", out var qObj))
+            case "abrir_youtube":
+                if (respuesta.Argumentos != null && respuesta.Argumentos.TryGetValue("query", out var qObj))
                 {
                     string? query = null;
                     if (qObj is JsonElement qElement && qElement.ValueKind == JsonValueKind.String)
@@ -101,27 +97,11 @@ public partial class PromptyViewModel : ObservableObject
                     else if (qObj is string qStr)
                         query = qStr;
 
-                    if (!string.IsNullOrWhiteSpace(query))
-                    {
-                        var url = $"https://www.youtube.com/results?search_query={Uri.EscapeDataString(query)}";
-                        await Browser.Default.OpenAsync(url, BrowserLaunchMode.External);
-                    }
-                }
-                break;
+                    if (string.IsNullOrWhiteSpace(query))
+                        query = "youtube";
 
-            case "abrir_url":
-                if (respuesta.Parametros != null && respuesta.Parametros.TryGetValue("url", out var urlObj))
-                {
-                    string? url = null;
-                    if (urlObj is JsonElement urlElement && urlElement.ValueKind == JsonValueKind.String)
-                        url = urlElement.GetString();
-                    else if (urlObj is string urlStr)
-                        url = urlStr;
-
-                    if (url != null && Uri.TryCreate(url, UriKind.Absolute, out var uri))
-                    {
-                        await Browser.Default.OpenAsync(uri, BrowserLaunchMode.External);
-                    }
+                    var url = $"https://www.youtube.com/results?search_query={Uri.EscapeDataString(query)}";
+                    await Browser.Default.OpenAsync(url, BrowserLaunchMode.SystemPreferred);
                 }
                 break;
 
