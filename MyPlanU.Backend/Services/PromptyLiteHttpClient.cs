@@ -63,4 +63,50 @@ public class PromptyLiteHttpClient : IPromptyLiteClient
             return false;
         }
     }
+
+    public async Task<bool> HasValidTokenAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync("/api/config/token-status", ct);
+            if (!response.IsSuccessStatusCode) return false;
+
+            var body = await response.Content.ReadAsStringAsync(ct);
+            using var doc = JsonDocument.Parse(body);
+            if (doc.RootElement.TryGetProperty("has_token", out var prop))
+            {
+                return prop.GetBoolean();
+            }
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> SetTokenAsync(string token, CancellationToken ct = default)
+    {
+        try
+        {
+            var payload = new { api_token = token };
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/config/set-token", content, ct);
+            if (!response.IsSuccessStatusCode) return false;
+
+            var body = await response.Content.ReadAsStringAsync(ct);
+            using var doc = JsonDocument.Parse(body);
+            if (doc.RootElement.TryGetProperty("ok", out var prop))
+            {
+                return prop.GetBoolean();
+            }
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

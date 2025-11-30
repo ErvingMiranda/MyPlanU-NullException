@@ -16,6 +16,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
 from ai import ServicioIA
+from ai.config import IAConfig
 
 _LITE_LIMITATION_MESSAGE = (
     "En esta versión (PROMPTY Lite) no puedo abrir aplicaciones ni ver tu sistema. "
@@ -135,9 +136,41 @@ class CommandResponse(BaseModel):
     origen: str
 
 
+class SetTokenRequest(BaseModel):
+    api_token: str = Field(..., min_length=1)
+
+
 @app.get("/health")
 async def healthcheck() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/api/config/token-status")
+async def get_token_status() -> dict:
+    """Verifica si hay un token configurado y válido."""
+    config = IAConfig.from_env()
+    has_token = bool(config.api_token)
+    return {"has_token": has_token}
+
+
+@app.post("/api/config/set-token")
+async def set_token(req: SetTokenRequest) -> dict:
+    """Valida y guarda un nuevo token."""
+    token = req.api_token.strip()
+    if not token:
+        return {"ok": False, "error": "empty_token"}
+
+    # Validar el token
+    es_valido = await run_in_threadpool(servicio_ia.validar_nuevo_token, token)
+    
+    if es_valido:
+        # Guardar el token
+        IAConfig.save_token(token)
+        # Recargar la configuración del servicio actual
+        servicio_ia.config = IAConfig.from_env()
+        return {"ok": True}
+    else:
+        return {"ok": False, "error": "invalid_token"}
 
 
 @app.post("/api/chat", response_model=ChatResponse)
