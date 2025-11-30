@@ -3,10 +3,8 @@ setlocal
 rem Cambia a la carpeta raíz del proyecto (PROMPTY_3.0)
 cd /d "%~dp0.."
 
-rem Activa el entorno virtual si existe
-if exist "venv\Scripts\activate.bat" (
-    call "venv\Scripts\activate.bat"
-)
+echo Sincronizando dependencias con uv...
+uv sync
 
-rem Inicia el servidor HTTP de PROMPTY Lite
-python -m uvicorn api.server:app --host 0.0.0.0 --port 8000
+echo Iniciando servidor API con uv...
+uv run uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
