@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyPlanU.Backend.Business;
@@ -21,6 +22,21 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     private string etiqueta = string.Empty;
 
     [ObservableProperty]
+    private ObservableCollection<string> etiquetasDisponibles = new()
+    {
+        "Trabajo", "Personal", "Urgente", "Importante", "Crear nueva..."
+    };
+
+    [ObservableProperty]
+    private string etiquetaSeleccionadaPicker;
+
+    [ObservableProperty]
+    private bool isNuevaEtiquetaVisible;
+
+    [ObservableProperty]
+    private string nuevaEtiquetaTexto = string.Empty;
+
+    [ObservableProperty]
     private DateTime fechaInicio = DateTime.Now;
 
     [ObservableProperty]
@@ -35,6 +51,34 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     public CrearEventoViewModel(ActividadService actividadService)
     {
         _actividadService = actividadService;
+    }
+
+    partial void OnEtiquetaSeleccionadaPickerChanged(string value)
+    {
+        if (value == "Crear nueva...")
+        {
+            IsNuevaEtiquetaVisible = true;
+            Etiqueta = string.Empty;
+        }
+        else
+        {
+            IsNuevaEtiquetaVisible = false;
+            Etiqueta = value;
+        }
+    }
+
+    [RelayCommand]
+    private void AgregarNuevaEtiqueta()
+    {
+        if (!string.IsNullOrWhiteSpace(NuevaEtiquetaTexto))
+        {
+            // Insert before "Crear nueva..."
+            EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, NuevaEtiquetaTexto);
+            EtiquetaSeleccionadaPicker = NuevaEtiquetaTexto;
+            Etiqueta = NuevaEtiquetaTexto;
+            NuevaEtiquetaTexto = string.Empty;
+            IsNuevaEtiquetaVisible = false;
+        }
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -52,6 +96,17 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
                 Titulo = _actividadExistente.Titulo;
                 Descripcion = _actividadExistente.Descripcion;
                 Etiqueta = _actividadExistente.Etiqueta;
+                
+                // Set picker
+                if (!string.IsNullOrEmpty(Etiqueta))
+                {
+                    if (!EtiquetasDisponibles.Contains(Etiqueta))
+                    {
+                        EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, Etiqueta);
+                    }
+                    EtiquetaSeleccionadaPicker = Etiqueta;
+                }
+
                 FechaInicio = _actividadExistente.FechaInicio.Date;
                 HoraInicio = _actividadExistente.FechaInicio.TimeOfDay;
                 FechaFin = _actividadExistente.FechaFin.Date;

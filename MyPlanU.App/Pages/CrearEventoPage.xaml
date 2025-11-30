@@ -10,7 +10,17 @@
             <Label Text="Nuevo Evento" Style="{StaticResource Headline}" HorizontalOptions="Center" />
 
             <Entry Placeholder="Título" Text="{Binding Titulo}" />
-            <Entry Placeholder="Etiqueta (ej. Trabajo, Estudio)" Text="{Binding Etiqueta}" />
+            
+            <Label Text="Etiqueta" FontAttributes="Bold" />
+            <Picker Title="Selecciona una etiqueta"
+                    ItemsSource="{Binding EtiquetasDisponibles}"
+                    SelectedItem="{Binding EtiquetaSeleccionadaPicker}" />
+
+            <HorizontalStackLayout IsVisible="{Binding IsNuevaEtiquetaVisible}" Spacing="10">
+                <Entry Placeholder="Nueva etiqueta" Text="{Binding NuevaEtiquetaTexto}" HorizontalOptions="FillAndExpand" />
+                <Button Text="Agregar" Command="{Binding AgregarNuevaEtiquetaCommand}" />
+            </HorizontalStackLayout>
+
             <Editor Placeholder="Descripción" Text="{Binding Descripcion}" AutoSize="TextChanges" />
 
             <Label Text="Inicio" FontAttributes="Bold" />
