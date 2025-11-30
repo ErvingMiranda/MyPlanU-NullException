@@ -10,10 +10,10 @@ public partial class LoginViewModel : ObservableObject
     private readonly AuthService _authService;
 
     [ObservableProperty]
-    private string email;
+    private string email = string.Empty;
 
     [ObservableProperty]
-    private string password;
+    private string password = string.Empty;
 
     public LoginViewModel(AuthService authService)
     {

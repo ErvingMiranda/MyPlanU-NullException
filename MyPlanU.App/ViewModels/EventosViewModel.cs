@@ -10,7 +10,7 @@ namespace MyPlanU.App.ViewModels;
 public partial class EventosViewModel : ObservableObject, IQueryAttributable
 {
     private readonly ActividadService _actividadService;
-    private Usuario _usuario;
+    private Usuario? _usuario;
 
     [ObservableProperty]
     private ObservableCollection<Actividad> actividades;
@@ -28,7 +28,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
             _usuario = query["Usuario"] as Usuario;
         }
         // Reload always when navigating back
-        LoadActividadesAsync();
+        _ = LoadActividadesAsync();
     }
 
     private async Task LoadActividadesAsync()
@@ -45,6 +45,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task AgregarEventoAsync()
     {
+        if (_usuario == null) return;
         var navigationParameter = new Dictionary<string, object>
         {
             { "Usuario", _usuario }
@@ -53,15 +54,17 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    private async Task EditarEventoAsync(Actividad actividad)
+    private async Task EditarEventoAsync(Actividad? actividad)
     {
+        if (actividad == null) return;
         // Logic to edit
         await Shell.Current.DisplayAlert("Editar", $"Editar {actividad.Titulo}", "OK");
     }
 
     [RelayCommand]
-    private async Task EliminarEventoAsync(Actividad actividad)
+    private async Task EliminarEventoAsync(Actividad? actividad)
     {
+        if (actividad == null) return;
         await _actividadService.DeleteActividadAsync(actividad);
         await LoadActividadesAsync();
     }

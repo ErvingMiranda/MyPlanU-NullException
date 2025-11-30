@@ -14,7 +14,7 @@ public partial class PromptyViewModel : ObservableObject
     private ObservableCollection<ChatMessage> mensajes = new();
 
     [ObservableProperty]
-    private string mensajeEntrada;
+    private string mensajeEntrada = string.Empty;
 
     [ObservableProperty]
     private bool isSending;
