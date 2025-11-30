@@ -5,7 +5,7 @@ namespace MyPlanU.Backend.Data;
 
 public class SQLiteContext
 {
-    private SQLiteAsyncConnection _database;
+    private SQLiteAsyncConnection? _database; // nullable to allow lazy initialization
     private readonly string _dbPath;
 
     public SQLiteContext(string dbPath)
@@ -28,5 +28,5 @@ public class SQLiteContext
         await _database.CreateTableAsync<ActividadCompartida>();
     }
 
-    public SQLiteAsyncConnection Connection => _database;
+    public SQLiteAsyncConnection? Connection => _database;
 }
