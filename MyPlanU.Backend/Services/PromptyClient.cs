@@ -24,7 +24,7 @@ public class PromptyClient : IPromptyClient
             Historial = historial
         };
 
-        var json = JsonSerializer.Serialize(request);
+        var json = JsonSerializer.Serialize(request, new JsonSerializerOptions { PropertyNamingPolicy = null });
         using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await _httpClient.PostAsync("/api/chat", content, cancellationToken);
