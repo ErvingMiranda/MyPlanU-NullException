@@ -39,74 +39,37 @@ public partial class PromptyViewModel : ObservableObject
         MensajeEntrada = string.Empty;
         IsSending = true;
 
+        // 1. Añadir mensaje del usuario
         Mensajes.Add(new ChatMessage { Rol = "Usuario", Texto = texto });
 
+        // 2. Preparar historial
         var historial = Mensajes.Select(m => new PromptyHistoryItem
         {
             Rol = m.Rol.Equals("PROMPTY", StringComparison.OrdinalIgnoreCase) ? "assistant" : "usuario",
             Contenido = m.Texto
         }).ToList();
 
-        try
-        {
-            var respuesta = await _promptyClient.EnviarMensajeAsync(texto, historial);
+        // 3. Enviar al backend
+        var respuesta = await _promptyClient.EnviarMensajeAsync(texto, historial);
 
+        // 4. Mostrar respuesta
+        if (respuesta != null)
+        {
             Mensajes.Add(new ChatMessage
             {
                 Rol = "PROMPTY",
                 Texto = respuesta.Respuesta
             });
-
-            await EjecutarAccionPromptyAsync(respuesta);
         }
-        catch (Exception ex)
+        else
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo contactar con PROMPTY: {ex.Message}", "OK");
             Mensajes.Add(new ChatMessage
             {
                 Rol = "PROMPTY",
-                Texto = "Error al conectar con el servicio."
+                Texto = "Error desconocido al recibir respuesta."
             });
         }
-        finally
-        {
-            IsSending = false;
-        }
-    }
 
-    private async Task EjecutarAccionPromptyAsync(PromptyChatResponse respuesta)
-    {
-        if (string.IsNullOrWhiteSpace(respuesta.Accion))
-            return;
-
-        switch (respuesta.Accion)
-        {
-            case "decir_hora":
-                var ahora = DateTime.Now;
-                var textoHora = $"La hora actual es: {ahora:HH:mm}";
-                Mensajes.Add(new ChatMessage { Rol = "PROMPTY", Texto = textoHora });
-                break;
-
-            case "abrir_youtube":
-                if (respuesta.Argumentos != null && respuesta.Argumentos.TryGetValue("query", out var qObj))
-                {
-                    string? query = null;
-                    if (qObj is JsonElement qElement && qElement.ValueKind == JsonValueKind.String)
-                        query = qElement.GetString();
-                    else if (qObj is string qStr)
-                        query = qStr;
-
-                    if (string.IsNullOrWhiteSpace(query))
-                        query = "youtube";
-
-                    var url = $"https://www.youtube.com/results?search_query={Uri.EscapeDataString(query)}";
-                    await Browser.Default.OpenAsync(url, BrowserLaunchMode.SystemPreferred);
-                }
-                break;
-
-            default:
-                // Acción desconocida: por ahora no hacer nada extra.
-                break;
-        }
+        IsSending = false;
     }
 }

@@ -13,36 +13,44 @@ public class PromptyClient : IPromptyClient
         _httpClient = httpClient;
     }
 
-    public async Task<PromptyChatResponse> EnviarMensajeAsync(
+    public async Task<PromptyChatResponse?> EnviarMensajeAsync(
         string mensaje,
-        List<PromptyHistoryItem>? historial = null,
-        CancellationToken cancellationToken = default)
+        List<PromptyHistoryItem> historial)
     {
-        var request = new PromptyChatRequest
+        try
         {
-            Mensaje = mensaje,
-            Historial = historial
-        };
+            var request = new PromptyChatRequest
+            {
+                Mensaje = mensaje,
+                Historial = historial
+            };
 
-        var json = JsonSerializer.Serialize(request);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var json = JsonSerializer.Serialize(request);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("/api/chat", content, cancellationToken);
+            var response = await _httpClient.PostAsync("/api/chat", content);
 
-        if ((int)response.StatusCode == 422)
-        {
-            var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-            Console.WriteLine($"[PROMPTY] Error 422. Enviado: {json}");
-            Console.WriteLine($"[PROMPTY] Recibido: {errorBody}");
-            // Podríamos lanzar excepción o devolver un error formateado
-            return new PromptyChatResponse { Respuesta = $"Error de validación (422): {errorBody}" };
+            if (!response.IsSuccessStatusCode)
+            {
+                return new PromptyChatResponse
+                {
+                    Respuesta = $"Error al conectar con el servicio. Status: {response.StatusCode}",
+                    Exito = false
+                };
+            }
+
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<PromptyChatResponse>(body);
+
+            return result ?? new PromptyChatResponse { Respuesta = "Respuesta vacía del servidor.", Exito = false };
         }
-
-        response.EnsureSuccessStatusCode();
-
-        var body = await response.Content.ReadAsStringAsync(cancellationToken);
-        var result = JsonSerializer.Deserialize<PromptyChatResponse>(body);
-
-        return result ?? new PromptyChatResponse { Respuesta = "Error al interpretar la respuesta de PROMPTY." };
+        catch (Exception ex)
+        {
+            return new PromptyChatResponse
+            {
+                Respuesta = $"Excepción: {ex.Message}",
+                Exito = false
+            };
+        }
     }
 }
