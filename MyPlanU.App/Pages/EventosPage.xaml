@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
+             xmlns:models="clr-namespace:MyPlanU.Backend.Models;assembly=MyPlanU.Backend"
+             x:Class="MyPlanU.App.Pages.EventosPage"
+             Title="Eventos">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Header / Toolbar -->
+        <HorizontalStackLayout Grid.Row="0" Padding="10" Spacing="10" HorizontalOptions="End">
+            <Button Text="Prompty" Command="{Binding OpenPromptyCommand}" />
+            <Button Text="Config" Command="{Binding GoToConfigCommand}" />
+            <Button Text="Logout" Command="{Binding LogoutCommand}" />
+            <Button Text="Salir" Command="{Binding ExitAppCommand}" BackgroundColor="Red" />
+        </HorizontalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+
+                <Label Text="Lista de eventos"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+
+                <Button Text="Agregar Evento"
+                        Command="{Binding AgregarEventoCommand}"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        HorizontalOptions="Center"
+                        WidthRequest="200" />
+
+                <CollectionView ItemsSource="{Binding Actividades}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Actividad">
+                            <Frame Padding="10" Margin="5"
+                                   BackgroundColor="MediumPurple"
+                                   BorderColor="Gray"
+                                   CornerRadius="10">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding Titulo}" FontSize="18" FontAttributes="Bold" />
+                                    <Label Text="{Binding Descripcion}" FontSize="14" />
+                                    <Label Text="{Binding FechaInicio}" FontSize="12" TextColor="White" />
+                                    <Label Text="{Binding FechaFin}" FontSize="12" TextColor="White" />
+
+                                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                                        <Button Text="Editar"
+                                                BackgroundColor="#9C27B0"
+                                                TextColor="White"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventosViewModel}}, Path=EditarEventoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        <Button Text="Eliminar"
+                                                BackgroundColor="#F44336"
+                                                TextColor="White"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventosViewModel}}, Path=EliminarEventoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

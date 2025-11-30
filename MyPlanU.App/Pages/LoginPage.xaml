@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
+             x:Class="MyPlanU.App.Pages.LoginPage"
+             Title="Login">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="25">
+            <Label Text="Iniciar Sesión"
+                   Style="{StaticResource Headline}"
+                   SemanticProperties.HeadingLevel="Level1" />
+
+            <Label Text="Correo" />
+            <Entry Placeholder="tu@correo.com"
+                   Keyboard="Email"
+                   Text="{Binding Email}" />
+
+            <Label Text="Contraseña" />
+            <Entry IsPassword="True"
+                   Text="{Binding Password}" />
+
+            <Button Text="Iniciar Sesión"
+                    Command="{Binding LoginCommand}"
+                    HorizontalOptions="Fill" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
