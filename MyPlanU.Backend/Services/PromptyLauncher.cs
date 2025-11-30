@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace MyPlanU.Backend.Services;
 
@@ -8,13 +9,19 @@ public class PromptyLauncher
 
     public async Task StartPromptyApiAsync()
     {
-        string scriptName = "start_prompty_api.bat";
+        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
+            ? "start_prompty_api.bat" 
+            : "start_prompty_api.sh";
+            
         await RunScriptAsync(scriptName);
     }
 
     public async Task StartPromptyGuiAsync()
     {
-        string scriptName = "start_prompty_gui.bat";
+        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
+            ? "start_prompty_gui.bat" 
+            : "start_prompty_gui.sh"; // Asumiendo que existe o se creará
+            
         await RunScriptAsync(scriptName);
     }
 
@@ -27,23 +34,30 @@ public class PromptyLauncher
 
             try
             {
-                // Verificación básica (opcional, ya que UseShellExecute=true maneja rutas, pero es bueno saber si existe)
-                // Nota: File.Exists puede fallar si el path es relativo o complejo, pero aquí usamos absoluto.
+                // Verificación básica
                 if (!File.Exists(fullPath))
                 {
-                    // Log o Console
                     Console.WriteLine($"[PromptyLauncher] ADVERTENCIA: No se encontró el script en: {fullPath}");
-                    // Intentamos ejecutarlo de todas formas por si el sistema lo resuelve, o lanzamos excepción.
-                    // throw new FileNotFoundException("Script no encontrado", fullPath);
                 }
 
                 var psi = new ProcessStartInfo
                 {
                     FileName = fullPath,
                     UseShellExecute = true,
-                    CreateNoWindow = false, // Permitir ventana visible
-                    WorkingDirectory = Path.GetDirectoryName(fullPath) // Establecer directorio de trabajo
+                    CreateNoWindow = false,
+                    WorkingDirectory = Path.GetDirectoryName(fullPath)
                 };
+
+                // En Linux/Mac, a veces es mejor invocar bash explícitamente si UseShellExecute falla o para asegurar terminal
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    // Asegurar permisos de ejecución (intento best-effort)
+                    try 
+                    { 
+                        File.SetUnixFileMode(fullPath, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute); 
+                    } 
+                    catch { /* Ignorar si falla o no soportado */ }
+                }
 
                 Console.WriteLine($"[PromptyLauncher] Iniciando proceso: {fullPath}");
                 Process.Start(psi);
@@ -51,7 +65,7 @@ public class PromptyLauncher
             catch (Exception ex)
             {
                 Console.WriteLine($"[PromptyLauncher] Error al iniciar {scriptName}: {ex.Message}");
-                throw; // Re-lanzar para manejo en UI
+                throw;
             }
         });
     }

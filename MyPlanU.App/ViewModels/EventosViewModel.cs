@@ -12,15 +12,17 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
 {
     private readonly ActividadService _actividadService;
     private readonly IPromptyLiteClient _promptyClient;
+    private readonly PromptyLauncher _promptyLauncher;
     private Usuario? _usuario;
 
     [ObservableProperty]
     private ObservableCollection<Actividad> actividades;
 
-    public EventosViewModel(ActividadService actividadService, IPromptyLiteClient promptyClient)
+    public EventosViewModel(ActividadService actividadService, IPromptyLiteClient promptyClient, PromptyLauncher promptyLauncher)
     {
         _actividadService = actividadService;
         _promptyClient = promptyClient;
+        _promptyLauncher = promptyLauncher;
         Actividades = new ObservableCollection<Actividad>();
     }
 
@@ -84,8 +86,40 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
         bool isHealthy = await _promptyClient.CheckHealthAsync();
         if (!isHealthy)
         {
-            await Shell.Current.DisplayAlert("Error", "No se puede conectar con PROMPTY. Asegúrate de que el servidor Python esté corriendo.", "OK");
-            return;
+            bool startServer = await Shell.Current.DisplayAlert("PROMPTY", 
+                "El servidor de IA no está corriendo. ¿Deseas iniciarlo ahora?", 
+                "Sí, iniciar", "Cancelar");
+            
+            if (!startServer) return;
+
+            try
+            {
+                await _promptyLauncher.StartPromptyApiAsync();
+                
+                // Esperar a que levante (polling)
+                bool started = false;
+                // Intentamos durante 15 segundos
+                for (int i = 0; i < 15; i++)
+                {
+                    await Task.Delay(1000); // Esperar 1s
+                    if (await _promptyClient.CheckHealthAsync())
+                    {
+                        started = true;
+                        break;
+                    }
+                }
+
+                if (!started)
+                {
+                    await Shell.Current.DisplayAlert("Error", "No se pudo iniciar el servidor automáticamente. Intenta ejecutar 'start_prompty_api.bat' manualmente.", "OK");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", $"Falló el inicio del servidor: {ex.Message}", "OK");
+                return;
+            }
         }
 
         // 2. Verificar si ya hay un token válido
