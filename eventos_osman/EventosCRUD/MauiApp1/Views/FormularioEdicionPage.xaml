@@ -1,0 +1,100 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MauiApp1.Views"
+             x:Class="MauiApp1.Views.FormularioEdicionPage"
+             Title="Editar Evento">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label Text="Editar evento"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="tituloEntry"
+                   Placeholder="Título del evento" />
+
+            <Editor x:Name="descripcionEditor"
+                    Placeholder="Descripción"
+                    AutoSize="TextChanges" />
+
+            <!-- Fecha y hora de inicio -->
+            <Label Text="Fecha y hora de inicio" FontAttributes="Bold" />
+            <DatePicker x:Name="fechaInicioPicker" />
+            <TimePicker x:Name="horaInicioPicker" />
+
+            <!-- Fecha y hora de fin -->
+            <Label Text="Fecha y hora de fin" FontAttributes="Bold" />
+            <DatePicker x:Name="fechaFinPicker" />
+            <TimePicker x:Name="horaFinPicker" />
+
+            <!-- Etiquetas -->
+            <Label Text="Etiquetas disponibles" FontAttributes="Bold" />
+            <Picker x:Name="etiquetasPicker"
+                    Title="Selecciona una etiqueta"
+                    SelectedIndexChanged="OnEtiquetaSeleccionada" />
+
+            <!-- Panel para crear nueva etiqueta -->
+            <StackLayout x:Name="crearEtiquetaPanel"
+                         IsVisible="False"
+                         Spacing="10">
+                <Entry x:Name="nuevaEtiquetaEntry"
+                       Placeholder="Nueva etiqueta" />
+                <Button Text="Agregar"
+                        Clicked="OnAgregarEtiquetaClicked"
+                        BackgroundColor="#9C27B0"
+                        TextColor="White" />
+            </StackLayout>
+
+            <!-- Etiquetas seleccionadas -->
+            <Label Text="Etiquetas seleccionadas" FontAttributes="Bold" />
+            <CollectionView x:Name="etiquetasSeleccionadasView"
+                            ItemsSource="{Binding EtiquetasSeleccionadas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="5" Margin="2"
+                               BackgroundColor="#934CF2"
+                               CornerRadius="10"
+                               BorderColor="Gray">
+                            <Grid ColumnDefinitions="*,Auto,Auto" VerticalOptions="Center">
+                                <!-- Texto de la etiqueta -->
+                                <Label Grid.Column="0"
+                                       Text="{Binding .}"
+                                       FontSize="14"
+                                       TextColor="Black"
+                                       VerticalOptions="Center" />
+
+                                <!-- Botón Editar -->
+                                <ImageButton Grid.Column="1"
+                                             Source="edit.png"
+                                             HeightRequest="24"
+                                             WidthRequest="24"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type local:FormularioEdicionPage}}, Path=EditarEtiquetaCommand}"
+                                             CommandParameter="{Binding .}" />
+
+                                <!-- Botón Eliminar -->
+                                <ImageButton Grid.Column="2"
+                                             Source="delete.png"
+                                             HeightRequest="24"
+                                             WidthRequest="24"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type local:FormularioEdicionPage}}, Path=EliminarEtiquetaCommand}"
+                                             CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Botón Guardar -->
+            <Button Text="Guardar Cambios"
+                    Clicked="OnGuardarCambiosClicked"
+                    BackgroundColor="#2196F3"
+                    TextColor="White" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

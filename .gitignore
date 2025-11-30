@@ -1,0 +1,11 @@
+# Cosas que no se versionan
+.vs/
+**/bin/
+**/obj/
+*.user
+*.userprefs
+
+# Bases de datos locales
+*.db
+*.db-shm
+*.db-wal
