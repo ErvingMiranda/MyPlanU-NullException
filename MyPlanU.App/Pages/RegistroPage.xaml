@@ -2,14 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
-             x:Class="MyPlanU.App.Pages.LoginPage"
-             Title="Login">
+             x:Class="MyPlanU.App.Pages.RegistroPage"
+             Title="Registro">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="25">
-            <Label Text="Iniciar Sesión"
+        <VerticalStackLayout Padding="30" Spacing="20">
+            <Label Text="Crear Cuenta"
                    Style="{StaticResource Headline}"
-                   SemanticProperties.HeadingLevel="Level1" />
+                   HorizontalOptions="Center" />
+
+            <Label Text="Nombre" />
+            <Entry Placeholder="Tu nombre"
+                   Text="{Binding Nombre}" />
 
             <Label Text="Correo" />
             <Entry Placeholder="tu@correo.com"
@@ -20,16 +24,9 @@
             <Entry IsPassword="True"
                    Text="{Binding Password}" />
 
-            <Button Text="Iniciar Sesión"
-                    Command="{Binding LoginCommand}"
-                    HorizontalOptions="Fill" />
-
-            <Button Text="¿No tienes cuenta? Regístrate"
-                    Command="{Binding GoToRegistroCommand}"
-                    BackgroundColor="Transparent"
-                    TextColor="{StaticResource Primary}"
-                    HorizontalOptions="Center" />
-
+            <Button Text="Registrarse"
+                    Command="{Binding RegistrarCommand}"
+                    Margin="0,20,0,0" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

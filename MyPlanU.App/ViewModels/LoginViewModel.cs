@@ -21,6 +21,12 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task GoToRegistroAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(RegistroPage));
+    }
+
+    [RelayCommand]
     private async Task LoginAsync()
     {
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))

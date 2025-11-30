@@ -10,5 +10,6 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute(nameof(EventosPage), typeof(EventosPage));
         Routing.RegisterRoute(nameof(ConfiguracionPage), typeof(ConfiguracionPage));
+        Routing.RegisterRoute(nameof(RegistroPage), typeof(RegistroPage));
 	}
 }
