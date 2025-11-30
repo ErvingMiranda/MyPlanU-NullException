@@ -1,4 +1,6 @@
-using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using MyPlanU.Backend.Models;
 
 namespace MyPlanU.Backend.Services;
 
@@ -11,35 +13,39 @@ public class PromptyClient : IPromptyClient
         _http = http;
     }
 
-    public async Task<PromptyResponse> EnviarMensajeAsync(string mensaje, IEnumerable<HistorialItem>? historial = null)
+    public async Task<PromptyChatResponse> EnviarMensajeAsync(string mensaje, IEnumerable<HistorialItem>? historial = null)
     {
         var payload = new
         {
             mensaje = mensaje,
-            historial = historial ?? new List<HistorialItem>()
+            historial = (historial ?? new List<HistorialItem>()).Select(h => new { rol = h.Rol, contenido = h.Contenido }).ToList()
         };
 
         try 
         {
-            // Assuming localhost:8000 for now as per reference code
-            // In Android emulator, localhost is 10.0.2.2
-            var resp = await _http.PostAsJsonAsync("/api/chat", payload);
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (!resp.IsSuccessStatusCode)
+            var response = await _http.PostAsync("/api/chat", content);
+            
+            if (!response.IsSuccessStatusCode)
             {
-                return new PromptyResponse
+                return new PromptyChatResponse
                 {
                     Exito = false,
-                    Respuesta = $"Error HTTP {resp.StatusCode}"
+                    Respuesta = $"Error HTTP {response.StatusCode}"
                 };
             }
 
-            var json = await resp.Content.ReadFromJsonAsync<PromptyResponse>();
-            return json ?? new PromptyResponse { Exito = false, Respuesta = "(Sin respuesta)" };
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<PromptyChatResponse>(jsonResponse, opciones);
+            
+            return result ?? new PromptyChatResponse { Exito = false, Respuesta = "Error al procesar la respuesta de PROMPTY." };
         }
         catch (Exception ex)
         {
-             return new PromptyResponse
+             return new PromptyChatResponse
             {
                 Exito = false,
                 Respuesta = $"Error de conexión: {ex.Message}"
