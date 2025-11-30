@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
+             x:Class="MyPlanU.App.Pages.CrearEventoPage"
+             Title="Crear Evento">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Nuevo Evento" Style="{StaticResource Headline}" HorizontalOptions="Center" />
+
+            <Entry Placeholder="Título" Text="{Binding Titulo}" />
+            <Editor Placeholder="Descripción" Text="{Binding Descripcion}" AutoSize="TextChanges" />
+
+            <Label Text="Inicio" FontAttributes="Bold" />
+            <DatePicker Date="{Binding FechaInicio}" />
+            <TimePicker Time="{Binding HoraInicio}" />
+
+            <Label Text="Fin" FontAttributes="Bold" />
+            <DatePicker Date="{Binding FechaFin}" />
+            <TimePicker Time="{Binding HoraFin}" />
+
+            <Button Text="Guardar" Command="{Binding GuardarCommand}" Margin="0,20,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

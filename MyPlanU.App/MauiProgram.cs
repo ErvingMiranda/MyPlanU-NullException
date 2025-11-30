@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using MyPlanU.Backend.Business;
 using MyPlanU.Backend.Data;
 using MyPlanU.Backend.Data.Repositories;
+using MyPlanU.Backend.Services;
 using MyPlanU.App.Pages;
 using MyPlanU.App.ViewModels;
 using Microsoft.Maui.Storage;
@@ -16,7 +17,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -40,6 +41,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecordatorioService>();
         builder.Services.AddSingleton<ActividadCompartidaService>();
 
+        // Prompty Client
+        builder.Services.AddHttpClient<IPromptyClient, PromptyClient>(client =>
+        {
+            // Ajustar URL base según entorno (localhost para Windows, 10.0.2.2 para Android Emulator)
+            string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
+            client.BaseAddress = new Uri(baseUrl);
+        });
+
         // Pages & ViewModels
         builder.Services.AddTransient<LoginPage>();
         builder.Services.AddTransient<LoginViewModel>();
@@ -50,8 +59,14 @@ public static class MauiProgram
         builder.Services.AddTransient<EventosPage>();
         builder.Services.AddTransient<EventosViewModel>();
 
+        builder.Services.AddTransient<CrearEventoPage>();
+        builder.Services.AddTransient<CrearEventoViewModel>();
+
         builder.Services.AddTransient<ConfiguracionPage>();
         builder.Services.AddTransient<ConfiguracionViewModel>();
+
+        builder.Services.AddTransient<PromptyPage>();
+        builder.Services.AddTransient<PromptyViewModel>();
 
 		return builder.Build();
 	}

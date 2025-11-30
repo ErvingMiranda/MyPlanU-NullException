@@ -26,9 +26,23 @@ public partial class RegistroViewModel : ObservableObject
     [RelayCommand]
     private async Task RegistrarAsync()
     {
-        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(Nombre))
+        var errorCorreo = ValidationHelper.ValidarCorreo(Email);
+        if (!string.IsNullOrEmpty(errorCorreo))
         {
-            await Shell.Current.DisplayAlert("Error", "Por favor complete todos los campos", "OK");
+            await Shell.Current.DisplayAlert("Error", errorCorreo, "OK");
+            return;
+        }
+
+        var errorPass = ValidationHelper.ValidarContrasena(Password);
+        if (!string.IsNullOrEmpty(errorPass))
+        {
+            await Shell.Current.DisplayAlert("Error", errorPass, "OK");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Nombre))
+        {
+            await Shell.Current.DisplayAlert("Error", "El nombre es requerido", "OK");
             return;
         }
 

@@ -26,8 +26,9 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
         if (query.ContainsKey("Usuario"))
         {
             _usuario = query["Usuario"] as Usuario;
-            LoadActividadesAsync();
         }
+        // Reload always when navigating back
+        LoadActividadesAsync();
     }
 
     private async Task LoadActividadesAsync()
@@ -44,19 +45,11 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task AgregarEventoAsync()
     {
-        // Logic to add event (maybe navigate to a Create page or show a popup)
-        // For now, just add a dummy one
-        var nueva = new Actividad
+        var navigationParameter = new Dictionary<string, object>
         {
-            IdUsuarioCreador = _usuario.IdUsuario,
-            Titulo = "Nueva Actividad",
-            Descripcion = "Descripción de prueba",
-            FechaInicio = DateTime.Now,
-            FechaFin = DateTime.Now.AddHours(1),
-            FechaCreacion = DateTime.Now
+            { "Usuario", _usuario }
         };
-        await _actividadService.SaveActividadAsync(nueva);
-        await LoadActividadesAsync();
+        await Shell.Current.GoToAsync(nameof(CrearEventoPage), navigationParameter);
     }
 
     [RelayCommand]
@@ -76,8 +69,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task OpenPromptyAsync()
     {
-        // Stub
-        await Shell.Current.DisplayAlert("PROMPTY", "Abriendo Prompty...", "OK");
+        await Shell.Current.GoToAsync(nameof(PromptyPage));
     }
 
     [RelayCommand]
