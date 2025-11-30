@@ -13,7 +13,7 @@
     </ContentPage.Resources>
 
     <Grid RowDefinitions="*,Auto" Padding="16">
-        <CollectionView Grid.Row="0" ItemsSource="{Binding Mensajes}">
+        <CollectionView x:Name="MessagesCollectionView" Grid.Row="0" ItemsSource="{Binding Mensajes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Margin="0,4" Padding="8" HasShadow="False" CornerRadius="10" BackgroundColor="#222222">

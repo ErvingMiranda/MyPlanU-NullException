@@ -1,15 +1,21 @@
-using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MyPlanU.Backend.Models;
 
 public class PromptyChatRequest
 {
+    [JsonPropertyName("mensaje")]
     public string Mensaje { get; set; } = string.Empty;
-    public List<PromptyMensaje>? Historial { get; set; }
+
+    [JsonPropertyName("historial")]
+    public List<PromptyHistoryItem>? Historial { get; set; }
 }
 
-public class PromptyMensaje
+public class PromptyHistoryItem
 {
-    public string Rol { get; set; } = string.Empty;       // "usuario" o "asistente"
+    [JsonPropertyName("rol")]
+    public string Rol { get; set; } = string.Empty; // "usuario" o "assistant"
+
+    [JsonPropertyName("contenido")]
     public string Contenido { get; set; } = string.Empty;
 }

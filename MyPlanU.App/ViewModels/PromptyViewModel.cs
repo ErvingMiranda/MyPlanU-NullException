@@ -25,7 +25,6 @@ public partial class PromptyViewModel : ObservableObject
     public PromptyViewModel(IPromptyClient promptyClient)
     {
         _promptyClient = promptyClient;
-        Mensajes.Add(new ChatMessage { Rol = "PROMPTY", Texto = "Hola, soy PROMPTY. ¿En qué te ayudo con tu planificación?" });
     }
 
     private bool CanEnviarMensaje()
@@ -42,9 +41,9 @@ public partial class PromptyViewModel : ObservableObject
 
         Mensajes.Add(new ChatMessage { Rol = "Usuario", Texto = texto });
 
-        var historial = Mensajes.Select(m => new PromptyMensaje
+        var historial = Mensajes.Select(m => new PromptyHistoryItem
         {
-            Rol = m.Rol.Equals("PROMPTY", StringComparison.OrdinalIgnoreCase) ? "asistente" : "usuario",
+            Rol = m.Rol.Equals("PROMPTY", StringComparison.OrdinalIgnoreCase) ? "assistant" : "usuario",
             Contenido = m.Texto
         }).ToList();
 

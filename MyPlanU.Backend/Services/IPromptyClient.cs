@@ -6,6 +6,6 @@ public interface IPromptyClient
 {
     Task<PromptyChatResponse> EnviarMensajeAsync(
         string mensaje,
-        List<PromptyMensaje>? historial = null,
+        List<PromptyHistoryItem>? historial = null,
         CancellationToken cancellationToken = default);
 }

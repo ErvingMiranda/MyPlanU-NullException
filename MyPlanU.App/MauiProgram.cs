@@ -44,8 +44,8 @@ public static class MauiProgram
         // Prompty Client
         builder.Services.AddHttpClient<IPromptyClient, PromptyClient>(client =>
         {
-            // Ajustar URL base según entorno (localhost para Windows, 10.0.2.2 para Android Emulator)
-            string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://localhost:8000";
+            // Ajustar URL base según entorno (127.0.0.1 para Windows/Mac, 10.0.2.2 para Android Emulator)
+            string baseUrl = DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:8000" : "http://127.0.0.1:8000";
             client.BaseAddress = new Uri(baseUrl);
         });
 
