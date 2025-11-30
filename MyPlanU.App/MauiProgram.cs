@@ -40,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ActividadService>();
         builder.Services.AddSingleton<RecordatorioService>();
         builder.Services.AddSingleton<ActividadCompartidaService>();
+        builder.Services.AddSingleton<PromptyLauncher>();
 
         // Prompty Client
         builder.Services.AddHttpClient<IPromptyLiteClient, PromptyLiteHttpClient>(client =>

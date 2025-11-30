@@ -10,6 +10,7 @@ namespace MyPlanU.App.ViewModels;
 public partial class PromptyViewModel : ObservableObject
 {
     private readonly IPromptyLiteClient _promptyClient;
+    private readonly PromptyLauncher _promptyLauncher;
     
     [ObservableProperty]
     private ObservableCollection<ChatMessage> mensajes = new();
@@ -22,9 +23,38 @@ public partial class PromptyViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(EnviarMensajeCommand))]
     private bool isSending;
 
-    public PromptyViewModel(IPromptyLiteClient promptyClient)
+    public PromptyViewModel(IPromptyLiteClient promptyClient, PromptyLauncher promptyLauncher)
     {
         _promptyClient = promptyClient;
+        _promptyLauncher = promptyLauncher;
+    }
+
+    [RelayCommand]
+    private async Task StartApiAsync()
+    {
+        try
+        {
+            await _promptyLauncher.StartPromptyApiAsync();
+            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Iniciando API de PROMPTY..." });
+        }
+        catch (Exception ex)
+        {
+            Mensajes.Add(new ChatMessage { Rol = "Error", Texto = $"Error al iniciar API: {ex.Message}" });
+        }
+    }
+
+    [RelayCommand]
+    private async Task StartGuiAsync()
+    {
+        try
+        {
+            await _promptyLauncher.StartPromptyGuiAsync();
+            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Iniciando GUI de PROMPTY..." });
+        }
+        catch (Exception ex)
+        {
+            Mensajes.Add(new ChatMessage { Rol = "Error", Texto = $"Error al iniciar GUI: {ex.Message}" });
+        }
     }
 
     private bool CanEnviarMensaje()

@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="16">
+    <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="16">
         
         <!-- Header explicativo PROMPTY Lite -->
         <Frame Grid.Row="0" BackgroundColor="#333333" Padding="10" Margin="0,0,0,10" CornerRadius="8" HasShadow="False">
@@ -35,9 +35,16 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,0,0,10">
             <Entry Grid.Column="0" Text="{Binding MensajeEntrada}" Placeholder="Escribe un mensaje..." ReturnType="Send" />
             <Button Grid.Column="1" Text="Enviar" Command="{Binding EnviarMensajeCommand}" />
         </Grid>
+
+        <Button Grid.Row="3" 
+                Text="Abrir PROMPTY completo" 
+                Command="{Binding StartGuiCommand}"
+                BackgroundColor="#444444"
+                TextColor="White"
+                HorizontalOptions="Fill" />
     </Grid>
 </ContentPage>
