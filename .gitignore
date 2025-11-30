@@ -9,3 +9,11 @@
 *.db
 *.db-shm
 *.db-wal
+
+# Ignore PROMPTY caches
+PROMPTY_3.0/**/__pycache__/
+PROMPTY_3.0/.venv/
+PROMPTY_3.0/dir/
+
+# Config local de PROMPTY (no subir al repo)
+PROMPTY_3.0/config_local.json
