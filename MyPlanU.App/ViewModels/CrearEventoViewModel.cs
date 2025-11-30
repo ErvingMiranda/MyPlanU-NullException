@@ -19,7 +19,7 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     private string descripcion = string.Empty;
 
     [ObservableProperty]
-    private string etiqueta = string.Empty;
+    private ObservableCollection<string> etiquetasSeleccionadas = new();
 
     [ObservableProperty]
     private ObservableCollection<string> etiquetasDisponibles = new()
@@ -58,12 +58,16 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
         if (value == "Crear nueva...")
         {
             IsNuevaEtiquetaVisible = true;
-            Etiqueta = string.Empty;
         }
-        else
+        else if (!string.IsNullOrEmpty(value))
         {
             IsNuevaEtiquetaVisible = false;
-            Etiqueta = value;
+            if (!EtiquetasSeleccionadas.Contains(value))
+            {
+                EtiquetasSeleccionadas.Add(value);
+            }
+            // Reset picker to allow re-selecting same item if removed
+            EtiquetaSeleccionadaPicker = null; 
         }
     }
 
@@ -73,11 +77,27 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
         if (!string.IsNullOrWhiteSpace(NuevaEtiquetaTexto))
         {
             // Insert before "Crear nueva..."
-            EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, NuevaEtiquetaTexto);
-            EtiquetaSeleccionadaPicker = NuevaEtiquetaTexto;
-            Etiqueta = NuevaEtiquetaTexto;
+            if (!EtiquetasDisponibles.Contains(NuevaEtiquetaTexto))
+            {
+                EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, NuevaEtiquetaTexto);
+            }
+            
+            if (!EtiquetasSeleccionadas.Contains(NuevaEtiquetaTexto))
+            {
+                EtiquetasSeleccionadas.Add(NuevaEtiquetaTexto);
+            }
+
             NuevaEtiquetaTexto = string.Empty;
             IsNuevaEtiquetaVisible = false;
+        }
+    }
+
+    [RelayCommand]
+    private void EliminarEtiqueta(string etiqueta)
+    {
+        if (EtiquetasSeleccionadas.Contains(etiqueta))
+        {
+            EtiquetasSeleccionadas.Remove(etiqueta);
         }
     }
 
@@ -95,16 +115,19 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             {
                 Titulo = _actividadExistente.Titulo;
                 Descripcion = _actividadExistente.Descripcion;
-                Etiqueta = _actividadExistente.Etiqueta;
                 
-                // Set picker
-                if (!string.IsNullOrEmpty(Etiqueta))
+                EtiquetasSeleccionadas.Clear();
+                if (!string.IsNullOrEmpty(_actividadExistente.Etiquetas))
                 {
-                    if (!EtiquetasDisponibles.Contains(Etiqueta))
+                    var tags = _actividadExistente.Etiquetas.Split('|', StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var tag in tags)
                     {
-                        EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, Etiqueta);
+                        EtiquetasSeleccionadas.Add(tag);
+                        if (!EtiquetasDisponibles.Contains(tag))
+                        {
+                            EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, tag);
+                        }
                     }
-                    EtiquetaSeleccionadaPicker = Etiqueta;
                 }
 
                 FechaInicio = _actividadExistente.FechaInicio.Date;
@@ -133,12 +156,14 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             return;
         }
 
+        var etiquetasString = string.Join("|", EtiquetasSeleccionadas);
+
         if (_actividadExistente != null)
         {
             // Editar existente
             _actividadExistente.Titulo = Titulo;
             _actividadExistente.Descripcion = Descripcion;
-            _actividadExistente.Etiqueta = Etiqueta;
+            _actividadExistente.Etiquetas = etiquetasString;
             _actividadExistente.FechaInicio = inicio;
             _actividadExistente.FechaFin = fin;
             
@@ -152,7 +177,7 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
                 IdUsuarioCreador = _usuario?.IdUsuario ?? 0,
                 Titulo = Titulo,
                 Descripcion = Descripcion,
-                Etiqueta = Etiqueta,
+                Etiquetas = etiquetasString,
                 FechaInicio = inicio,
                 FechaFin = fin,
                 FechaCreacion = DateTime.Now,

@@ -18,6 +18,6 @@ public class Actividad
     public bool TodoElDia { get; set; }
     public DateTime? FechaCompletado { get; set; }
     public string NotaRapida { get; set; }
-    public string Etiqueta { get; set; }
+    public string Etiquetas { get; set; } // Almacenado como "Tag1|Tag2|Tag3"
     public int? IdRecordatorio { get; set; }
 }

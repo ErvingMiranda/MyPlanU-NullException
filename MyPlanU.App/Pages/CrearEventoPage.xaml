@@ -11,7 +11,7 @@
 
             <Entry Placeholder="Título" Text="{Binding Titulo}" />
             
-            <Label Text="Etiqueta" FontAttributes="Bold" />
+            <Label Text="Etiquetas" FontAttributes="Bold" />
             <Picker Title="Selecciona una etiqueta"
                     ItemsSource="{Binding EtiquetasDisponibles}"
                     SelectedItem="{Binding EtiquetaSeleccionadaPicker}" />
@@ -20,6 +20,31 @@
                 <Entry Placeholder="Nueva etiqueta" Text="{Binding NuevaEtiquetaTexto}" HorizontalOptions="FillAndExpand" />
                 <Button Text="Agregar" Command="{Binding AgregarNuevaEtiquetaCommand}" />
             </HorizontalStackLayout>
+
+            <!-- Selected Tags List -->
+            <CollectionView ItemsSource="{Binding EtiquetasSeleccionadas}" HeightRequest="100">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="5,2" BackgroundColor="#E0E0E0" CornerRadius="5" BorderColor="Gray">
+                            <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                <Label Text="{Binding .}" VerticalOptions="Center" TextColor="Black" />
+                                <Button Text="X" 
+                                        FontSize="10" 
+                                        HeightRequest="20" 
+                                        WidthRequest="20" 
+                                        Padding="0"
+                                        BackgroundColor="Transparent" 
+                                        TextColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CrearEventoViewModel}}, Path=EliminarEtiquetaCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Editor Placeholder="Descripción" Text="{Binding Descripcion}" AutoSize="TextChanges" />
 

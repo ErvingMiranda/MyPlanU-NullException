@@ -47,7 +47,7 @@
                                    CornerRadius="10">
                                 <VerticalStackLayout Spacing="5">
                                     <Label Text="{Binding Titulo}" FontSize="18" FontAttributes="Bold" />
-                                    <Label Text="{Binding Etiqueta}" FontSize="12" FontAttributes="Italic" TextColor="LightYellow" IsVisible="{Binding Etiqueta, Converter={StaticResource IsNotNullOrEmptyConverter}}" />
+                                    <Label Text="{Binding Etiquetas}" FontSize="12" FontAttributes="Italic" TextColor="LightYellow" IsVisible="{Binding Etiquetas, Converter={StaticResource IsNotNullOrEmptyConverter}}" />
                                     <Label Text="{Binding Descripcion}" FontSize="14" />
                                     <Label Text="{Binding FechaInicio}" FontSize="12" TextColor="White" />
                                     <Label Text="{Binding FechaFin}" FontSize="12" TextColor="White" />
