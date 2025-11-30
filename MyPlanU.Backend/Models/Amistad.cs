@@ -10,8 +10,8 @@ public class Amistad
     public int IdUsuarioPrincipal { get; set; }
     [Indexed]
     public int IdUsuarioAmigo { get; set; }
-    public string Alias { get; set; }
-    public string EstadoSolicitud { get; set; }
+    public string? Alias { get; set; }
+    public string? EstadoSolicitud { get; set; }
     public DateTime FechaCreacion { get; set; }
     public DateTime FechaActualizacion { get; set; }
 }

@@ -12,7 +12,7 @@ public class AuthService
         _usuarioRepository = usuarioRepository;
     }
 
-    public async Task<Usuario> LoginAsync(string email, string password)
+    public async Task<Usuario?> LoginAsync(string email, string password)
     {
         var usuario = await _usuarioRepository.GetUsuarioByEmailAsync(email);
         if (usuario != null && usuario.ContrasenaHash == password) // In real app, hash check
