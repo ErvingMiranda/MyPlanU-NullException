@@ -56,7 +56,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task EditarEventoAsync(Actividad? actividad)
     {
-        if (actividad == null) return;
+        if (actividad == null || _usuario == null) return;
         
         var navigationParameter = new Dictionary<string, object>
         {

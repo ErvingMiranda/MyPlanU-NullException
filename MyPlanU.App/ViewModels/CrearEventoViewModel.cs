@@ -8,17 +8,17 @@ namespace MyPlanU.App.ViewModels;
 public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
 {
     private readonly ActividadService _actividadService;
-    private Usuario _usuario;
-    private Actividad _actividadExistente;
+    private Usuario? _usuario;
+    private Actividad? _actividadExistente;
 
     [ObservableProperty]
-    private string titulo;
+    private string titulo = string.Empty;
 
     [ObservableProperty]
-    private string descripcion;
+    private string descripcion = string.Empty;
 
     [ObservableProperty]
-    private string etiqueta;
+    private string etiqueta = string.Empty;
 
     [ObservableProperty]
     private DateTime fechaInicio = DateTime.Now;
