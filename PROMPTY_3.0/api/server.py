@@ -161,7 +161,7 @@ async def set_token(req: SetTokenRequest) -> dict:
         return {"ok": False, "error": "empty_token"}
 
     # Validar el token
-    es_valido = await run_in_threadpool(servicio_ia.validar_nuevo_token, token)
+    es_valido, mensaje_error = await run_in_threadpool(servicio_ia.validar_nuevo_token, token)
     
     if es_valido:
         # Guardar el token
@@ -170,7 +170,8 @@ async def set_token(req: SetTokenRequest) -> dict:
         servicio_ia.config = IAConfig.from_env()
         return {"ok": True}
     else:
-        return {"ok": False, "error": "invalid_token"}
+        # Devolver el error específico para depuración
+        return {"ok": False, "error": "invalid_token", "details": mensaje_error}
 
 
 @app.post("/api/chat", response_model=ChatResponse)

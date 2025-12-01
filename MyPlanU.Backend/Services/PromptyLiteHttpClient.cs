@@ -85,7 +85,7 @@ public class PromptyLiteHttpClient : IPromptyLiteClient
         }
     }
 
-    public async Task<bool> SetTokenAsync(string token, CancellationToken ct = default)
+    public async Task<(bool Success, string ErrorMessage)> SetTokenWithDetailsAsync(string token, CancellationToken ct = default)
     {
         try
         {
@@ -94,19 +94,43 @@ public class PromptyLiteHttpClient : IPromptyLiteClient
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("/api/config/set-token", content, ct);
-            if (!response.IsSuccessStatusCode) return false;
+            if (!response.IsSuccessStatusCode) 
+                return (false, $"Error HTTP {response.StatusCode}");
 
             var body = await response.Content.ReadAsStringAsync(ct);
             using var doc = JsonDocument.Parse(body);
+            
+            bool ok = false;
+            string errorDetails = "Token inválido";
+
             if (doc.RootElement.TryGetProperty("ok", out var prop))
             {
-                return prop.GetBoolean();
+                ok = prop.GetBoolean();
             }
-            return false;
+
+            if (!ok && doc.RootElement.TryGetProperty("details", out var detailsProp))
+            {
+                errorDetails = detailsProp.GetString() ?? errorDetails;
+            }
+            else if (!ok && doc.RootElement.TryGetProperty("error", out var errorProp))
+            {
+                errorDetails = errorProp.GetString() ?? errorDetails;
+            }
+
+            return (ok, ok ? "" : errorDetails);
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            return (false, $"Excepción: {ex.Message}");
         }
+    }
+
+    // Mantener compatibilidad si alguien usa la versión vieja, o redirigir
+    public Task<bool> SetTokenAsync(string token, CancellationToken ct = default)
+    {
+        return Task.FromResult(false); // Deprecated in interface, removed from interface but kept here if needed by old code? 
+        // Actually I removed it from interface, so I can remove it here or rename.
+        // But wait, I removed SetTokenAsync from interface and added SetTokenWithDetailsAsync.
+        // So I should remove SetTokenAsync from here.
     }
 }

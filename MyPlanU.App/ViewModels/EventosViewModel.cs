@@ -144,7 +144,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
             }
 
             // 4. Validar y guardar token
-            bool success = await _promptyClient.SetTokenAsync(token);
+            var (success, errorMsg) = await _promptyClient.SetTokenWithDetailsAsync(token);
             if (success)
             {
                 await Shell.Current.DisplayAlert("Éxito", "Token verificado correctamente. PROMPTY ya está listo para usarse.", "OK");
@@ -153,7 +153,9 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
             }
             else
             {
-                bool retry = await Shell.Current.DisplayAlert("Error", "El token no es válido o hubo un error al verificarlo.", "Reintentar", "Cancelar");
+                bool retry = await Shell.Current.DisplayAlert("Error de Validación", 
+                    $"El token no pudo ser verificado.\nDetalle: {errorMsg}", 
+                    "Reintentar", "Cancelar");
                 if (!retry) return;
             }
         }

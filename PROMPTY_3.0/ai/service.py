@@ -248,8 +248,11 @@ class ServicioIA:
     ) -> Dict[str, Any]:
         return self._consultar_automatizacion(mensaje, historial)
 
-    def validar_nuevo_token(self, token: str) -> bool:
-        """Prueba si un token es válido haciendo una consulta mínima."""
+    def validar_nuevo_token(self, token: str) -> tuple[bool, str]:
+        """Prueba si un token es válido haciendo una consulta mínima.
+        
+        Retorna: (es_valido, mensaje_error)
+        """
         # Creamos una config temporal con el nuevo token
         temp_config = IAConfig.from_env()
         temp_config.api_token = token
@@ -258,5 +261,10 @@ class ServicioIA:
         temp_service = ServicioIA(config=temp_config)
         
         # Hacemos una consulta de prueba
-        _, exito = temp_service.consultar_lite("Hola", [])
-        return exito
+        respuesta, exito = temp_service.consultar_lite("Hola", [])
+        
+        if exito:
+            return True, ""
+        else:
+            # Si falló, 'respuesta' contiene el mensaje de error
+            return False, respuesta
