@@ -16,7 +16,7 @@ class IAConfig:
     """Configuración necesaria para conectarse al proveedor de IA."""
 
     api_token: Optional[str] = None
-    model_id: str = "mistralai/Mistral-7B-Instruct-v0.3"
+    model_id: str = "meta-llama/Llama-3.2-3B-Instruct"
     base_url: Optional[str] = DEFAULT_BASE_URL
     timeout: float = 45.0
     max_new_tokens: int = 320
