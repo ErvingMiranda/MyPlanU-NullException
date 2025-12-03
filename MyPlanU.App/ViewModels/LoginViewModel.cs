@@ -15,6 +15,10 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty]
     private string password = string.Empty;
 
+    public LoginViewModel()
+    {
+    }
+
     public LoginViewModel(AuthService authService)
     {
         _authService = authService;

@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MyPlanU.App"
              x:Class="MyPlanU.App.App">
+
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Gradiente de tus colores -->
+            <LinearGradientBrush x:Key="StartupBackground">
+                <GradientStop Color="#5e17eb" Offset="0.0" />
+                <GradientStop Color="#2fffa3" Offset="1.0" />
+            </LinearGradientBrush>
+
+            <!--  Estilo global para pantallas de inicio -->
+            <Style x:Key="StartPageStyle" TargetType="ContentPage">
+                <Setter Property="Background"
+                        Value="{StaticResource StartupBackground}" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
+
 </Application>
+

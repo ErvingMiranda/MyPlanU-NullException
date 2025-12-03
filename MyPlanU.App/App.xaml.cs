@@ -1,11 +1,13 @@
+
 namespace MyPlanU.App;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App()
+    {
+        InitializeComponent();
 
-		MainPage = new AppShell();
-	}
+        // Pantalla inicial: Login SIN parámetros
+        MainPage = new AppShell();
+    }
 }
