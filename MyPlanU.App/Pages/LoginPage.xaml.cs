@@ -1,14 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using MyPlanU.Backend.Business;
 
 namespace MyPlanU.App.Pages
 {
     public partial class LoginPage : ContentPage
     {
-        public LoginPage()
+        private readonly AuthService _authService;
+
+        public LoginPage(AuthService authService)
         {
             InitializeComponent();
+            _authService = authService;
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
@@ -24,27 +29,29 @@ namespace MyPlanU.App.Pages
                 return;
             }
 
-            // LOGIN FALSO PARA PRUEBAS (luego lo conectamos a tu backend)
-            await Task.Delay(300); // Simulación
+            // LOGIN REAL CON AUTHSERVICE
+            var usuario = await _authService.LoginAsync(email, password);
 
-            // Comparación de correo sin distinguir mayúsculas
-            if (string.Equals(email, "admin@admin.com", StringComparison.OrdinalIgnoreCase) && password == "1234")
+            if (usuario != null)
             {
                 await DisplayAlert("Bienvenido", "Inicio de sesión exitoso ", "Continuar");
 
-                // Redirigir a la pantalla principal (AppShell)
-                Application.Current.MainPage = new AppShell();
+                var navigationParameter = new Dictionary<string, object>
+                {
+                    { "Usuario", usuario }
+                };
+                await Shell.Current.GoToAsync(nameof(EventosPage), navigationParameter);
             }
             else
             {
-                // Mostrar el correo recibido para depuración (no mostrar la contraseña)
-                await DisplayAlert("Acceso denegado", $"Correo o contraseña incorrectos. Correo recibido: '{email}'", "Reintentar");
+                // Mensaje corregido sin mostrar el correo recibido
+                await DisplayAlert("Acceso denegado", "Correo o contraseña incorrectos.", "Reintentar");
             }
         }
 
         private async void OnRegisterClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new RegistroPage());
+            await Shell.Current.GoToAsync(nameof(RegistroPage));
         }
     }
 }

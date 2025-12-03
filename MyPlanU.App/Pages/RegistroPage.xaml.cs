@@ -1,14 +1,19 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using MyPlanU.Backend.Business;
+using MyPlanU.Backend.Models;
 
 namespace MyPlanU.App.Pages
 {
     public partial class RegistroPage : ContentPage
     {
-        public RegistroPage()
+        private readonly AuthService _authService;
+
+        public RegistroPage(AuthService authService)
         {
-            InitializeComponent();   // 👈 SOLO se llama, NO se define
+            InitializeComponent();
+            _authService = authService;
         }
 
         private async void OnRegistrarseClicked(object sender, EventArgs e)
@@ -32,14 +37,29 @@ namespace MyPlanU.App.Pages
                 return;
             }
 
-            await Task.Delay(500); // simulación
+            var nuevoUsuario = new Usuario
+            {
+                Nombre = nombre,
+                Email = email,
+                ContrasenaHash = password,
+                FechaRegistro = DateTime.Now
+            };
 
-            await DisplayAlert(
-                "Registrado",
-                "Tu cuenta fue creada correctamente 💜",
-                "Continuar");
+            bool exito = await _authService.RegisterAsync(nuevoUsuario);
 
-            await Navigation.PopAsync();
+            if (exito)
+            {
+                await DisplayAlert(
+                    "Registrado",
+                    "Tu cuenta fue creada correctamente 💜",
+                    "Continuar");
+
+                await Shell.Current.GoToAsync("..");
+            }
+            else
+            {
+                await DisplayAlert("Error", "El correo ya está registrado.", "Aceptar");
+            }
         }
     }
 }
