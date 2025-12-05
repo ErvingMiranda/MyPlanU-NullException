@@ -34,7 +34,7 @@ public partial class ConfiguracionViewModel : ObservableObject
     [RelayCommand]
     private async Task CambiarPasswordAsync()
     {
-        await Shell.Current.GoToAsync(nameof(CambiarPasswordPage));
+        await Shell.Current.GoToAsync(nameof(Pages.CambiarPasswordPage));
     }
 
     [RelayCommand]
