@@ -42,12 +42,13 @@ public partial class LoginViewModel : ObservableObject
         var usuario = await _authService.LoginAsync(Email, Password);
         if (usuario != null)
         {
+            App.CurrentUser = usuario;
             // Navigate to EventosPage passing the user
             var navigationParameter = new Dictionary<string, object>
             {
                 { "Usuario", usuario }
             };
-            await Shell.Current.GoToAsync(nameof(EventosPage), navigationParameter);
+            await Shell.Current.GoToAsync($"//{nameof(EventosPage)}", navigationParameter);
         }
         else
         {

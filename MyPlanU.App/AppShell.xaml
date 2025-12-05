@@ -16,4 +16,11 @@
         Title="Registro"
         ContentTemplate="{DataTemplate pages:RegistroPage}"
         Route="RegistroPage" />
+
+    <ShellContent
+        Title="CambiarPassword"
+        ContentTemplate="{DataTemplate pages:CambiarPasswordPage}"
+        Route="CambiarPasswordPage"
+        IsTabStop="False"
+        FlyoutItemIsVisible="False" />
 </Shell>

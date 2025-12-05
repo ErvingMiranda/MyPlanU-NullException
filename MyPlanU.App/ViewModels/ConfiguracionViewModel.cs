@@ -34,7 +34,7 @@ public partial class ConfiguracionViewModel : ObservableObject
     [RelayCommand]
     private async Task CambiarPasswordAsync()
     {
-        await Application.Current.MainPage.DisplayAlert("Cambiar Contraseña", "Esta funcionalidad estará disponible próximamente.", "OK");
+        await Shell.Current.GoToAsync(nameof(CambiarPasswordPage));
     }
 
     [RelayCommand]

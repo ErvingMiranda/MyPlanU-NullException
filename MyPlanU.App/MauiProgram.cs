@@ -69,6 +69,9 @@ public static class MauiProgram
         builder.Services.AddTransient<PromptyPage>();
         builder.Services.AddTransient<PromptyViewModel>();
 
+        builder.Services.AddTransient<CambiarPasswordPage>();
+        builder.Services.AddTransient<CambiarPasswordViewModel>();
+
 		return builder.Build();
 	}
 }
