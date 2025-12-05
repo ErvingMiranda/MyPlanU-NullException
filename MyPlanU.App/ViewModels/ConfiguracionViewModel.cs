@@ -25,6 +25,12 @@ public partial class ConfiguracionViewModel : ObservableObject
         }
     }
 
+    partial void OnIsNotificacionesEnabledChanged(bool value)
+    {
+        // Avisar que está en desarrollo
+        Application.Current?.MainPage?.DisplayAlert("Notificaciones", "Esta funcionalidad estará disponible próximamente.", "OK");
+    }
+
     [RelayCommand]
     private async Task EditarPerfilAsync()
     {

@@ -58,12 +58,11 @@ Para preparar el entorno de Python:
 *   **Integración con PROMPTY Lite**: Chat con asistente de IA para consultas rápidas.
 *   **Configuración Básica**:
     *   Cambio de tema (Claro/Oscuro).
-    *   Interruptor de notificaciones (UI).
 
 ### En Desarrollo (Próximamente)
 *   Edición de perfil de usuario.
 *   Cambio de contraseña.
-*   Sincronización de notificaciones con el sistema operativo.
+*   Sistema de Notificaciones y Alertas.
 *   Creación automática de eventos desde el chat de IA.
 
 ---
