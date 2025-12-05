@@ -5,58 +5,121 @@
              x:Class="MyPlanU.App.Pages.CrearEventoPage"
              Title="Crear Evento">
 
+    <!-- Fondo degradado consistente -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#5e17eb" Offset="0.0" />
+            <GradientStop Color="#2fffa3" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Nuevo Evento" Style="{StaticResource Headline}" HorizontalOptions="Center" />
+        <Grid Padding="20">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Nuevo Evento" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="White" />
 
-            <Entry Placeholder="Título" Text="{Binding Titulo}" />
-            
-            <Label Text="Etiquetas" FontAttributes="Bold" />
-            <Picker Title="Selecciona una etiqueta"
-                    ItemsSource="{Binding EtiquetasDisponibles}"
-                    SelectedItem="{Binding EtiquetaSeleccionadaPicker}" />
+                <Frame BackgroundColor="#50000000"
+                       CornerRadius="20"
+                       Padding="20">
+                    <VerticalStackLayout Spacing="15">
 
-            <HorizontalStackLayout IsVisible="{Binding IsNuevaEtiquetaVisible}" Spacing="10">
-                <Entry Placeholder="Nueva etiqueta" Text="{Binding NuevaEtiquetaTexto}" HorizontalOptions="FillAndExpand" />
-                <Button Text="Agregar" Command="{Binding AgregarNuevaEtiquetaCommand}" />
-            </HorizontalStackLayout>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Título" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Título del evento" 
+                                   Text="{Binding Titulo}"
+                                   TextColor="White"
+                                   PlaceholderColor="#E0E0E0"
+                                   BackgroundColor="Transparent" />
+                        </VerticalStackLayout>
 
-            <!-- Selected Tags List -->
-            <CollectionView ItemsSource="{Binding EtiquetasSeleccionadas}" HeightRequest="100">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="5,2" BackgroundColor="#E0E0E0" CornerRadius="5" BorderColor="Gray">
-                            <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
-                                <Label Text="{Binding .}" VerticalOptions="Center" TextColor="Black" />
-                                <Button Text="X" 
-                                        FontSize="10" 
-                                        HeightRequest="20" 
-                                        WidthRequest="20" 
-                                        Padding="0"
-                                        BackgroundColor="Transparent" 
-                                        TextColor="Red"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CrearEventoViewModel}}, Path=EliminarEtiquetaCommand}"
-                                        CommandParameter="{Binding .}" />
-                            </HorizontalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Etiquetas" TextColor="White" FontSize="14" FontAttributes="Bold" />
+                            <Picker Title="Selecciona una etiqueta"
+                                    ItemsSource="{Binding EtiquetasDisponibles}"
+                                    SelectedItem="{Binding EtiquetaSeleccionadaPicker}"
+                                    TextColor="White"
+                                    TitleColor="#E0E0E0"
+                                    BackgroundColor="Transparent" />
+                        </VerticalStackLayout>
 
-            <Editor Placeholder="Descripción" Text="{Binding Descripcion}" AutoSize="TextChanges" />
+                        <HorizontalStackLayout IsVisible="{Binding IsNuevaEtiquetaVisible}" Spacing="10">
+                            <Entry Placeholder="Nueva etiqueta" 
+                                   Text="{Binding NuevaEtiquetaTexto}" 
+                                   HorizontalOptions="FillAndExpand"
+                                   TextColor="White"
+                                   PlaceholderColor="#E0E0E0"
+                                   BackgroundColor="Transparent" />
+                            <Button Text="Agregar" 
+                                    Command="{Binding AgregarNuevaEtiquetaCommand}"
+                                    BackgroundColor="#2fffa3"
+                                    TextColor="#5e17eb"
+                                    CornerRadius="15"
+                                    HeightRequest="40"/>
+                        </HorizontalStackLayout>
 
-            <Label Text="Inicio" FontAttributes="Bold" />
-            <DatePicker Date="{Binding FechaInicio}" />
-            <TimePicker Time="{Binding HoraInicio}" />
+                        <!-- Selected Tags List -->
+                        <CollectionView ItemsSource="{Binding EtiquetasSeleccionadas}" HeightRequest="60">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Padding="10,5" BackgroundColor="#30FFFFFF" CornerRadius="15" BorderColor="Transparent">
+                                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                            <Label Text="{Binding .}" VerticalOptions="Center" TextColor="White" />
+                                            <Button Text="✕" 
+                                                    FontSize="12" 
+                                                    HeightRequest="25" 
+                                                    WidthRequest="25" 
+                                                    Padding="0"
+                                                    BackgroundColor="Transparent" 
+                                                    TextColor="#FF6B6B"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CrearEventoViewModel}}, Path=EliminarEtiquetaCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
-            <Label Text="Fin" FontAttributes="Bold" />
-            <DatePicker Date="{Binding FechaFin}" />
-            <TimePicker Time="{Binding HoraFin}" />
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Descripción" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                            <Editor Placeholder="Detalles del evento" 
+                                    Text="{Binding Descripcion}" 
+                                    AutoSize="TextChanges"
+                                    TextColor="White"
+                                    PlaceholderColor="#E0E0E0"
+                                    BackgroundColor="Transparent" />
+                        </VerticalStackLayout>
 
-            <Button Text="Guardar" Command="{Binding GuardarCommand}" Margin="0,20,0,0" />
-        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label Text="Inicio" TextColor="White" FontAttributes="Bold" />
+                                <DatePicker Date="{Binding FechaInicio}" TextColor="White" BackgroundColor="Transparent" />
+                                <TimePicker Time="{Binding HoraInicio}" TextColor="White" BackgroundColor="Transparent" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Fin" TextColor="White" FontAttributes="Bold" />
+                                <DatePicker Date="{Binding FechaFin}" TextColor="White" BackgroundColor="Transparent" />
+                                <TimePicker Time="{Binding HoraFin}" TextColor="White" BackgroundColor="Transparent" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Button Text="Guardar" 
+                                Command="{Binding GuardarCommand}" 
+                                Margin="0,20,0,0"
+                                BackgroundColor="#5e17eb"
+                                TextColor="White"
+                                CornerRadius="25"
+                                HeightRequest="48" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 </ContentPage>

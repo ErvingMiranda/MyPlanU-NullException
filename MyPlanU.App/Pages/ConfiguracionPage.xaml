@@ -5,9 +5,73 @@
              x:Class="MyPlanU.App.Pages.ConfiguracionPage"
              Title="Configuración">
 
-    <VerticalStackLayout Padding="30" Spacing="25">
-        <Label Text="Configuración pendiente de diseño"
-               VerticalOptions="Center" 
-               HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <!-- Fondo degradado consistente -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#5e17eb" Offset="0.0" />
+            <GradientStop Color="#2fffa3" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <Grid Padding="20">
+            <VerticalStackLayout Spacing="20">
+                <Label Text="Ajustes" 
+                       FontSize="34" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" 
+                       TextColor="White" />
+
+                <Frame BackgroundColor="#50000000" CornerRadius="20" Padding="20">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="General" TextColor="#2fffa3" FontAttributes="Bold" FontSize="18"/>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="Notificaciones" TextColor="White" VerticalOptions="Center"/>
+                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White"/>
+                        </Grid>
+                        
+                        <BoxView HeightRequest="1" Color="#30FFFFFF"/>
+
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="Modo Oscuro" TextColor="White" VerticalOptions="Center"/>
+                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="True"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#50000000" CornerRadius="20" Padding="20">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Cuenta" TextColor="#2fffa3" FontAttributes="Bold" FontSize="18"/>
+                        
+                        <Button Text="Editar Perfil" 
+                                BackgroundColor="Transparent" 
+                                TextColor="White" 
+                                HorizontalOptions="Start" 
+                                BorderColor="White" 
+                                BorderWidth="1" 
+                                CornerRadius="20"
+                                HeightRequest="40"/>
+
+                        <Button Text="Cambiar Contraseña" 
+                                BackgroundColor="Transparent" 
+                                TextColor="White" 
+                                HorizontalOptions="Start" 
+                                BorderColor="White" 
+                                BorderWidth="1" 
+                                CornerRadius="20"
+                                HeightRequest="40"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button Text="Cerrar Sesión" 
+                        BackgroundColor="#FF6B6B" 
+                        TextColor="White" 
+                        CornerRadius="25" 
+                        HeightRequest="50" 
+                        Margin="0,20,0,0"/>
+
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>

@@ -12,12 +12,20 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="16">
+    <!-- Fondo degradado consistente -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#5e17eb" Offset="0.0" />
+            <GradientStop Color="#2fffa3" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="16" RowSpacing="10">
         
         <!-- Header explicativo PROMPTY Lite -->
-        <Frame Grid.Row="0" BackgroundColor="#333333" Padding="10" Margin="0,0,0,10" CornerRadius="8" HasShadow="False">
+        <Frame Grid.Row="0" BackgroundColor="#50000000" Padding="15" CornerRadius="15" BorderColor="Transparent">
             <Label Text="Esta es la versión PROMPTY Lite: podés hacer preguntas y recibir sugerencias, pero no se crearán eventos ni tareas automáticamente. Para agendar algo, usá las pantallas normales de MyPlanU."
-                   TextColor="#DDDDDD"
+                   TextColor="#E0E0E0"
                    FontSize="12"
                    HorizontalTextAlignment="Center" />
         </Frame>
@@ -25,26 +33,64 @@
         <CollectionView x:Name="MessagesCollectionView" Grid.Row="1" ItemsSource="{Binding Mensajes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Margin="0,4" Padding="8" HasShadow="False" CornerRadius="10" BackgroundColor="#222222">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Rol}" FontAttributes="Bold" FontSize="12" TextColor="#AAAAAA" />
-                            <Label Text="{Binding Texto}" FontSize="14" TextColor="White" LineBreakMode="WordWrap" />
-                        </VerticalStackLayout>
-                    </Frame>
+                    <Grid Padding="5">
+                        <Frame Padding="12" 
+                               CornerRadius="15" 
+                               HasShadow="False"
+                               BorderColor="Transparent">
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="User">
+                                    <Setter Property="BackgroundColor" Value="#5e17eb" />
+                                    <Setter Property="HorizontalOptions" Value="End" />
+                                    <Setter Property="Margin" Value="50,0,0,0" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Assistant">
+                                    <Setter Property="BackgroundColor" Value="#50FFFFFF" />
+                                    <Setter Property="HorizontalOptions" Value="Start" />
+                                    <Setter Property="Margin" Value="0,0,50,0" />
+                                </DataTrigger>
+                            </Frame.Triggers>
+                            
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Rol}" FontAttributes="Bold" FontSize="10" TextColor="#CCCCCC" Margin="0,0,0,2"/>
+                                <Label Text="{Binding Texto}" FontSize="14" TextColor="White" LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,0,0,10">
-            <Entry Grid.Column="0" Text="{Binding MensajeEntrada}" Placeholder="Escribe un mensaje..." ReturnType="Send" />
-            <Button Grid.Column="1" Text="Enviar" Command="{Binding EnviarMensajeCommand}" />
-        </Grid>
+        <Frame Grid.Row="2" BackgroundColor="#50000000" CornerRadius="25" Padding="5" BorderColor="Transparent">
+            <Grid ColumnDefinitions="*,Auto">
+                <Entry Grid.Column="0" 
+                       Text="{Binding MensajeEntrada}" 
+                       Placeholder="Escribe un mensaje..." 
+                       PlaceholderColor="#CCCCCC"
+                       TextColor="White"
+                       BackgroundColor="Transparent"
+                       ReturnType="Send" 
+                       Margin="10,0"/>
+                
+                <Button Grid.Column="1" 
+                        Text="➤" 
+                        Command="{Binding EnviarMensajeCommand}" 
+                        BackgroundColor="#2fffa3"
+                        TextColor="#5e17eb"
+                        CornerRadius="20"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Padding="0"/>
+            </Grid>
+        </Frame>
 
         <Button Grid.Row="3" 
                 Text="Abrir PROMPTY completo" 
                 Command="{Binding StartGuiCommand}"
-                BackgroundColor="#444444"
+                BackgroundColor="#50FFFFFF"
                 TextColor="White"
+                CornerRadius="20"
+                HeightRequest="45"
                 HorizontalOptions="Fill" />
     </Grid>
 </ContentPage>
