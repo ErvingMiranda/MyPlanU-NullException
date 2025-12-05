@@ -1,15 +1,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MyPlanU.App.Pages.RegistroPage"
-             Title="Registro">
-
-    <!-- Fondo degradado consistente -->
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#5e17eb" Offset="0.0" />
-            <GradientStop Color="#2fffa3" Offset="1.0" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+             Title="Registro"
+             Style="{StaticResource BasePageStyle}">
 
     <ScrollView>
         <Grid Padding="30">

@@ -39,6 +39,13 @@ public partial class CambiarPasswordViewModel : ObservableObject
             return;
         }
 
+        string errorValidacion = ValidationHelper.ValidarContrasena(NewPassword);
+        if (!string.IsNullOrEmpty(errorValidacion))
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", errorValidacion, "OK");
+            return;
+        }
+
         if (App.CurrentUser == null)
         {
             await Application.Current.MainPage.DisplayAlert("Error", "No hay sesión activa", "OK");
