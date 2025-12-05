@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace MyPlanU.Backend.Services;
 
@@ -9,65 +10,105 @@ public class PromptyLauncher
 
     public async Task StartPromptyApiAsync()
     {
-        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
-            ? "start_prompty_api.bat" 
+        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? "start_prompty_api.bat"
             : "start_prompty_api.sh";
-            
+
         await RunScriptAsync(scriptName);
     }
 
     public async Task StartPromptyGuiAsync()
     {
-        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
-            ? "start_prompty_gui.bat" 
+        string scriptName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? "start_prompty_gui.bat"
             : "start_prompty_gui.sh"; // Asumiendo que existe o se creará
-            
+
         await RunScriptAsync(scriptName);
     }
 
-    private Task RunScriptAsync(string scriptName)
+    private async Task RunScriptAsync(string scriptName)
     {
-        return Task.Run(() =>
+        string promptyBasePath = DetectPromptyBasePath();
+        string fullPath = Path.Combine(promptyBasePath, SCRIPTS_FOLDER, scriptName);
+
+        if (!File.Exists(fullPath))
         {
-            string promptyBasePath = DetectPromptyBasePath();
-            string fullPath = Path.Combine(promptyBasePath, SCRIPTS_FOLDER, scriptName);
+            string errorMsg = $"[PromptyLauncher] ERROR CRÍTICO: No se encontró el script en: {fullPath}";
+            Console.WriteLine(errorMsg);
+            throw new FileNotFoundException(errorMsg, fullPath);
+        }
 
-            try
+        var process = new Process();
+        try
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // Verificación básica
-                if (!File.Exists(fullPath))
+                process.StartInfo = new ProcessStartInfo
                 {
-                    Console.WriteLine($"[PromptyLauncher] ADVERTENCIA: No se encontró el script en: {fullPath}");
-                }
-
-                var psi = new ProcessStartInfo
-                {
-                    FileName = fullPath,
-                    UseShellExecute = true,
-                    CreateNoWindow = false,
-                    WorkingDirectory = Path.GetDirectoryName(fullPath)
+                    FileName = "cmd.exe",
+                    Arguments = $"/c \"{fullPath}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.GetDirectoryName(fullPath) ?? promptyBasePath
                 };
-
-                // En Linux/Mac, a veces es mejor invocar bash explícitamente si UseShellExecute falla o para asegurar terminal
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    // Asegurar permisos de ejecución (intento best-effort)
-                    try 
-                    { 
-                        File.SetUnixFileMode(fullPath, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute); 
-                    } 
-                    catch { /* Ignorar si falla o no soportado */ }
-                }
-
-                Console.WriteLine($"[PromptyLauncher] Iniciando proceso: {fullPath}");
-                Process.Start(psi);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"[PromptyLauncher] Error al iniciar {scriptName}: {ex.Message}");
-                throw;
+                // Asegurar permisos de ejecución en UNIX
+                try { File.SetUnixFileMode(fullPath, UnixFileMode.UserExecute | UnixFileMode.UserRead | UnixFileMode.UserWrite); } catch { /* Ignorar si falla */ }
+                process.StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"'{fullPath}'\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.GetDirectoryName(fullPath) ?? promptyBasePath
+                };
             }
-        });
+
+            var outputBuilder = new StringBuilder();
+            var errorBuilder = new StringBuilder();
+
+            process.OutputDataReceived += (sender, args) => { if (args.Data != null) outputBuilder.AppendLine(args.Data); };
+            process.ErrorDataReceived += (sender, args) => { if (args.Data != null) errorBuilder.AppendLine(args.Data); };
+
+            Console.WriteLine($"[PromptyLauncher] Iniciando proceso: {process.StartInfo.FileName} {process.StartInfo.Arguments}");
+            process.Start();
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            // No esperamos a que el proceso termine (await process.WaitForExitAsync())
+            // porque es un servidor que debe quedar corriendo en segundo plano.
+            // Damos un pequeño margen para capturar errores de arranque inmediato.
+            await Task.Delay(2000);
+
+            if (process.HasExited)
+            {
+                string errorOutput = errorBuilder.ToString();
+                if (process.ExitCode != 0 || !string.IsNullOrWhiteSpace(errorOutput))
+                {
+                    throw new InvalidOperationException(
+                        $"[PromptyLauncher] El script '{scriptName}' falló al iniciar con código {process.ExitCode}. " +
+                        $"Error: {errorOutput}. " +
+                        $"Salida: {outputBuilder.ToString()}");
+                }
+            }
+
+            Console.WriteLine($"[PromptyLauncher] El proceso para '{scriptName}' se ha iniciado correctamente en segundo plano (PID: {process.Id}).");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[PromptyLauncher] Excepción al iniciar {scriptName}: {ex.Message}");
+            throw;
+        }
+        // No hacemos 'dispose' del proceso si queremos que siga corriendo.
+        // Será responsabilidad del sistema operativo gestionarlo.
     }
 
     private static string DetectPromptyBasePath()
