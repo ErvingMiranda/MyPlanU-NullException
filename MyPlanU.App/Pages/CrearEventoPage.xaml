@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              x:Class="MyPlanU.App.Pages.CrearEventoPage"
-             Title="Crear Evento"
+             Title="{Binding PageTitle}"
              Style="{StaticResource BasePageStyle}">
 
     <ScrollView>
         <Grid Padding="20">
             <VerticalStackLayout Spacing="15">
-                <Label Text="Nuevo Evento" 
+                <Label Text="{Binding HeaderTitle}" 
                        FontSize="28" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center" 

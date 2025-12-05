@@ -34,15 +34,6 @@
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="20" Spacing="20">
 
-                <Button Text="+ Agregar Evento"
-                        Command="{Binding AgregarEventoCommand}"
-                        BackgroundColor="#2fffa3"
-                        TextColor="#5e17eb"
-                        FontAttributes="Bold"
-                        CornerRadius="25"
-                        HorizontalOptions="Fill"
-                        HeightRequest="50" />
-
                 <CollectionView ItemsSource="{Binding Actividades}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Actividad">
@@ -91,6 +82,15 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <Button Text="+ Agregar Evento"
+                        Command="{Binding AgregarEventoCommand}"
+                        BackgroundColor="#2fffa3"
+                        TextColor="#5e17eb"
+                        FontAttributes="Bold"
+                        CornerRadius="25"
+                        HorizontalOptions="Fill"
+                        HeightRequest="50" />
 
             </VerticalStackLayout>
         </ScrollView>
