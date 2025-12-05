@@ -50,6 +50,24 @@ Para preparar el entorno de Python:
 
 ---
 
+## ✨ Funcionalidades
+
+### Actuales
+*   **Gestión de Usuarios**: Registro e inicio de sesión seguro.
+*   **Gestión de Eventos**: Crear, editar, eliminar y listar eventos académicos.
+*   **Integración con PROMPTY Lite**: Chat con asistente de IA para consultas rápidas.
+*   **Configuración Básica**:
+    *   Cambio de tema (Claro/Oscuro).
+    *   Interruptor de notificaciones (UI).
+
+### En Desarrollo (Próximamente)
+*   Edición de perfil de usuario.
+*   Cambio de contraseña.
+*   Sincronización de notificaciones con el sistema operativo.
+*   Creación automática de eventos desde el chat de IA.
+
+---
+
 ## 🔑 Configuración del Token de Hugging Face
 
 Por razones de seguridad, **este repositorio NO incluye claves de API**. Para utilizar las funciones inteligentes de PROMPTY, necesitas tu propio token de Hugging Face (es gratuito).

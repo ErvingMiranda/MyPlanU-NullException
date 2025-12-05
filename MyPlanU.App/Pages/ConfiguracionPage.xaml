@@ -28,14 +28,14 @@
                         
                         <Grid ColumnDefinitions="*, Auto">
                             <Label Text="Notificaciones" TextColor="White" VerticalOptions="Center"/>
-                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White"/>
+                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="{Binding IsNotificacionesEnabled}"/>
                         </Grid>
                         
                         <BoxView HeightRequest="1" Color="#30FFFFFF"/>
 
                         <Grid ColumnDefinitions="*, Auto">
                             <Label Text="Modo Oscuro" TextColor="White" VerticalOptions="Center"/>
-                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="True"/>
+                            <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="{Binding IsModoOscuroEnabled}"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Frame>
@@ -51,7 +51,8 @@
                                 BorderColor="White" 
                                 BorderWidth="1" 
                                 CornerRadius="20"
-                                HeightRequest="40"/>
+                                HeightRequest="40"
+                                Command="{Binding EditarPerfilCommand}"/>
 
                         <Button Text="Cambiar Contraseña" 
                                 BackgroundColor="Transparent" 
@@ -60,7 +61,8 @@
                                 BorderColor="White" 
                                 BorderWidth="1" 
                                 CornerRadius="20"
-                                HeightRequest="40"/>
+                                HeightRequest="40"
+                                Command="{Binding CambiarPasswordCommand}"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -69,7 +71,8 @@
                         TextColor="White" 
                         CornerRadius="25" 
                         HeightRequest="50" 
-                        Margin="0,20,0,0"/>
+                        Margin="0,20,0,0"
+                        Command="{Binding CerrarSesionCommand}"/>
 
             </VerticalStackLayout>
         </Grid>
