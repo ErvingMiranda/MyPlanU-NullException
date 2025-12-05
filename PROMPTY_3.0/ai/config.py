@@ -16,7 +16,7 @@ class IAConfig:
     """Configuración necesaria para conectarse al proveedor de IA."""
 
     api_token: Optional[str] = None
-    model_id: str = "mistralai/Mistral-7B-Instruct-v0.3"
+    model_id: str = "meta-llama/Llama-3.2-3B-Instruct"
     base_url: Optional[str] = DEFAULT_BASE_URL
     timeout: float = 45.0
     max_new_tokens: int = 320
@@ -74,3 +74,15 @@ class IAConfig:
             max_new_tokens=max_new_tokens,
             temperature=temperature,
         )
+
+    @classmethod
+    def save_token(cls, token: str) -> None:
+        """Guarda el token en el archivo de configuración local."""
+        current_config = cls._load_local_config()
+        current_config["api_token"] = token
+        
+        # Aseguramos que el directorio exista (aunque debería, ya que estamos en el repo)
+        CONFIG_LOCAL_PATH.parent.mkdir(parents=True, exist_ok=True)
+        
+        with CONFIG_LOCAL_PATH.open("w", encoding="utf-8") as handler:
+            json.dump(current_config, handler, indent=2)

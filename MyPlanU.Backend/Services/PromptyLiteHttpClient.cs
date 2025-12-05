@@ -50,4 +50,87 @@ public class PromptyLiteHttpClient : IPromptyLiteClient
             return $"Error de conexión: {ex.Message}";
         }
     }
+
+    public async Task<bool> CheckHealthAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync("/health", ct);
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> HasValidTokenAsync(CancellationToken ct = default)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync("/api/config/token-status", ct);
+            if (!response.IsSuccessStatusCode) return false;
+
+            var body = await response.Content.ReadAsStringAsync(ct);
+            using var doc = JsonDocument.Parse(body);
+            if (doc.RootElement.TryGetProperty("has_token", out var prop))
+            {
+                return prop.GetBoolean();
+            }
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<(bool Success, string ErrorMessage)> SetTokenWithDetailsAsync(string token, CancellationToken ct = default)
+    {
+        try
+        {
+            var payload = new { api_token = token };
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("/api/config/set-token", content, ct);
+            if (!response.IsSuccessStatusCode) 
+                return (false, $"Error HTTP {response.StatusCode}");
+
+            var body = await response.Content.ReadAsStringAsync(ct);
+            using var doc = JsonDocument.Parse(body);
+            
+            bool ok = false;
+            string errorDetails = "Token inválido";
+
+            if (doc.RootElement.TryGetProperty("ok", out var prop))
+            {
+                ok = prop.GetBoolean();
+            }
+
+            if (!ok && doc.RootElement.TryGetProperty("details", out var detailsProp))
+            {
+                errorDetails = detailsProp.GetString() ?? errorDetails;
+            }
+            else if (!ok && doc.RootElement.TryGetProperty("error", out var errorProp))
+            {
+                errorDetails = errorProp.GetString() ?? errorDetails;
+            }
+
+            return (ok, ok ? "" : errorDetails);
+        }
+        catch (Exception ex)
+        {
+            return (false, $"Excepción: {ex.Message}");
+        }
+    }
+
+    // Mantener compatibilidad si alguien usa la versión vieja, o redirigir
+    public Task<bool> SetTokenAsync(string token, CancellationToken ct = default)
+    {
+        return Task.FromResult(false); // Deprecated in interface, removed from interface but kept here if needed by old code? 
+        // Actually I removed it from interface, so I can remove it here or rename.
+        // But wait, I removed SetTokenAsync from interface and added SetTokenWithDetailsAsync.
+        // So I should remove SetTokenAsync from here.
+    }
 }

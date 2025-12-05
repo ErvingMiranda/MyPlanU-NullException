@@ -6,4 +6,8 @@ namespace MyPlanU.Backend.Services;
 public interface IPromptyLiteClient
 {
     Task<string> AskAsync(string userMessage, CancellationToken ct = default);
+    Task<bool> CheckHealthAsync(CancellationToken ct = default);
+    Task<bool> HasValidTokenAsync(CancellationToken ct = default);
+    Task<(bool Success, string ErrorMessage)> SetTokenWithDetailsAsync(string token, CancellationToken ct = default);
 }
+
