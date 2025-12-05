@@ -37,17 +37,28 @@
                         <Frame Padding="12" 
                                CornerRadius="15" 
                                HasShadow="False"
-                               BorderColor="Transparent">
+                               BorderColor="Transparent"
+                               BackgroundColor="#50000000"> <!-- Default dark background for contrast -->
                             <Frame.Triggers>
-                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="User">
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Usuario">
                                     <Setter Property="BackgroundColor" Value="#5e17eb" />
                                     <Setter Property="HorizontalOptions" Value="End" />
                                     <Setter Property="Margin" Value="50,0,0,0" />
                                 </DataTrigger>
-                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Assistant">
-                                    <Setter Property="BackgroundColor" Value="#50FFFFFF" />
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="PROMPTY">
+                                    <Setter Property="BackgroundColor" Value="#50000000" />
                                     <Setter Property="HorizontalOptions" Value="Start" />
                                     <Setter Property="Margin" Value="0,0,50,0" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Sistema">
+                                    <Setter Property="BackgroundColor" Value="#808080" />
+                                    <Setter Property="HorizontalOptions" Value="Center" />
+                                    <Setter Property="Margin" Value="20,0,20,0" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Frame" Binding="{Binding Rol}" Value="Error">
+                                    <Setter Property="BackgroundColor" Value="#B00020" />
+                                    <Setter Property="HorizontalOptions" Value="Center" />
+                                    <Setter Property="Margin" Value="20,0,20,0" />
                                 </DataTrigger>
                             </Frame.Triggers>
                             
