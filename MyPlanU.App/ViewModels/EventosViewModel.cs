@@ -31,6 +31,11 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
         if (query.ContainsKey("Usuario"))
         {
             _usuario = query["Usuario"] as Usuario;
+            // Ensure global user is set (useful if app state was restored or navigated directly)
+            if (App.CurrentUser == null && _usuario != null)
+            {
+                App.CurrentUser = _usuario;
+            }
         }
         // Reload always when navigating back
         _ = LoadActividadesAsync();
