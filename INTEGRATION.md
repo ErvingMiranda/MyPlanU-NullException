@@ -34,20 +34,26 @@ Su objetivo es asegurar coherencia entre equipos y facilitar la integración de 
 
 ---
 
-## 2. Paquetes NuGet recomendados
+## 2. Paquetes NuGet utilizados
 
 ### Para `MyPlanU.App` (MAUI)
-- `CommunityToolkit.Maui`
-- `CommunityToolkit.Mvvm`
-- `SQLitePCLRaw.bundle_e_sqlite3`
-- `sqlite-net-pcl`
+- `Microsoft.Maui.Controls` (10.0.11)
+- `Microsoft.Maui.Controls.Compatibility` (10.0.11)
+- `Microsoft.Maui.Essentials` (10.0.11)
+- `CommunityToolkit.Maui` (13.0.0)
+- `CommunityToolkit.Mvvm` (8.4.0)
+- `SQLitePCLRaw.bundle_e_sqlite3` (3.0.2)
+- `sqlite-net-pcl` (1.10.196-beta)
+- `Microsoft.Extensions.Logging.Debug` (10.0.0)
+- `Microsoft.Extensions.Http` (8.0.0)
 
 ### Para `MyPlanU.Backend` (Class Library)
-- `SQLitePCLRaw.bundle_e_sqlite3`
-- `sqlite-net-pcl`
-- `Microsoft.Extensions.DependencyInjection`
-- `Microsoft.Extensions.Logging`
-- `Microsoft.Extensions.Configuration` *(si aplica)*
+- `CommunityToolkit.Mvvm` (8.4.0)
+- `SQLitePCLRaw.bundle_e_sqlite3` (3.0.2)
+- `sqlite-net-pcl` (1.10.196-beta)
+- `Microsoft.Extensions.DependencyInjection` (10.0.0)
+- `Microsoft.Extensions.Logging` (10.0.0)
+- `Microsoft.Extensions.Configuration` (10.0.0)
 
 **Reglas:**
 - Usar siempre las versiones más nuevas y compatibles.
@@ -64,15 +70,23 @@ MyPlanU.sln
 ├─ global.json
 ├─ MyPlanU.App/               # Proyecto MAUI principal
 │  ├─ App.xaml / App.xaml.cs
+│  ├─ AppShell.xaml / AppShell.xaml.cs
 │  ├─ MauiProgram.cs
 │  ├─ Pages/
 │  │  ├─ LoginPage.xaml(.cs)
+│  │  ├─ RegistroPage.xaml(.cs)
 │  │  ├─ EventosPage.xaml(.cs)
-│  │  └─ ConfiguracionPage.xaml(.cs)
+│  │  ├─ CrearEventoPage.xaml(.cs)
+│  │  ├─ ConfiguracionPage.xaml(.cs)
+│  │  └─ PromptyPage.xaml(.cs)
 │  ├─ ViewModels/
 │  │  ├─ LoginViewModel.cs
+│  │  ├─ RegistroViewModel.cs
 │  │  ├─ EventosViewModel.cs
-│  │  └─ ConfiguracionViewModel.cs
+│  │  ├─ CrearEventoViewModel.cs
+│  │  ├─ ConfiguracionViewModel.cs
+│  │  ├─ PromptyViewModel.cs
+│  │  └─ ValidationHelper.cs
 │  └─ Platforms/              # Generado automáticamente por MAUI
 │
 └─ MyPlanU.Backend/           # Lógica de negocio y acceso a datos
@@ -82,26 +96,28 @@ MyPlanU.sln
    │  ├─ PromptyConfig.cs
    │  ├─ Actividad.cs
    │  ├─ Recordatorio.cs
-   │  └─ ActividadCompartida.cs
+   │  ├─ ActividadCompartida.cs
+   │  ├─ ChatMessage.cs
+   │  ├─ PromptyChatRequest.cs
+   │  └─ PromptyChatResponse.cs
    ├─ Data/
    │  ├─ SQLiteContext.cs
    │  └─ Repositories/
-   │     ├─ IUserRepository.cs / UserRepository.cs
-   │     ├─ IActividadRepository.cs / ActividadRepository.cs
-   │     ├─ IRecordatorioRepository.cs / RecordatorioRepository.cs
-   │     └─ IActividadCompartidaRepository.cs / ActividadCompartidaRepository.cs
-   └─ Business/
-      ├─ AuthService.cs
-      ├─ ActividadService.cs
-      ├─ AmistadService.cs
-      ├─ PromptyService.cs
-      ├─ RecordatorioService.cs
-      └─ ActividadCompartidaService.cs
+   │     └─ (Repositorios implementados o integrados en servicios)
+   ├─ Business/
+   │  ├─ AuthService.cs
+   │  ├─ ActividadService.cs
+   │  ├─ RecordatorioService.cs
+   │  └─ ActividadCompartidaService.cs
+   └─ Services/
+      ├─ IPromptyLiteClient.cs
+      ├─ PromptyLiteHttpClient.cs
+      └─ PromptyLauncher.cs
 ```
 
 ### Reglas arquitectónicas
-- `MyPlanU.App` **solo** usa servicios (Business).
-- Business usa repositorios (Data).
+- `MyPlanU.App` **solo** usa servicios (Business/Services).
+- Business usa repositorios (Data) o acceso a datos directo vía SQLiteContext.
 - Data usa SQLite.
 - La UI **nunca** toca la base de datos directamente.
 - Namespaces recomendados:
@@ -109,6 +125,7 @@ MyPlanU.sln
   - `MyPlanU.Backend.Models`
   - `MyPlanU.Backend.Data`
   - `MyPlanU.Backend.Business`
+  - `MyPlanU.Backend.Services`
 
 ---
 
@@ -127,13 +144,13 @@ Ej.: `usuarioActual`, `email`, `eventoSeleccionado`.
 Ej.: `_repositorioUsuarios`.
 
 **Páginas MAUI:**  
-`LoginPage.xaml`, `EventosPage.xaml`, `ConfiguracionPage.xaml`.
+`LoginPage.xaml`, `EventosPage.xaml`, `ConfiguracionPage.xaml`, `RegistroPage.xaml`, `PromptyPage.xaml`.
 
 ---
 
 ## 5. Modelo de datos oficial
 
-El sistema usa seis entidades principales. Los nombres aquí son los oficiales y se reflejarán tanto en la BD como en las clases C#.
+El sistema usa las siguientes entidades principales.
 
 ### 5.1. Usuario
 - `id_usuario` (PK)  
@@ -230,6 +247,11 @@ Puede asociarse opcionalmente a una Actividad.
 
 Permite compartir actividades con otros usuarios y administrar permisos.
 
+### 5.7. Modelos de Chat (Prompty)
+- `ChatMessage`: Representa un mensaje en el chat (Role, Content).
+- `PromptyChatRequest`: Estructura para enviar peticiones al servicio de IA.
+- `PromptyChatResponse`: Estructura de respuesta del servicio de IA.
+
 ---
 
 ## 6. Flujo de navegación
@@ -237,14 +259,15 @@ Permite compartir actividades con otros usuarios y administrar permisos.
 Flujo estándar:
 
 1. La aplicación inicia en **LoginPage**.  
-2. Si las credenciales son correctas → **EventosPage**.  
-3. Desde **EventosPage**, el usuario puede:
-   - Abrir PROMPTY.  
-   - Ir a **ConfiguracionPage** (placeholder por ahora).  
+2. Opción de ir a **RegistroPage** para crear cuenta.
+3. Si las credenciales son correctas → **EventosPage** (Dashboard principal).  
+4. Desde **EventosPage**, el usuario puede:
+   - Crear un nuevo evento → **CrearEventoPage**.
+   - Abrir el asistente IA → **PromptyPage**.  
+   - Ir a **ConfiguracionPage**.  
    - Cerrar sesión → vuelve a Login.  
-   - Salir del sistema.
 
-La navegación será implementada con el modelo recomendado de `.NET MAUI Shell` o `NavigationPage`.
+La navegación está implementada con `.NET MAUI Shell` (`AppShell`).
 
 ---
 
