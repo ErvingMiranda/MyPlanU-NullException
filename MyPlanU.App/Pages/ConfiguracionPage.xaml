@@ -12,7 +12,7 @@
             <VerticalStackLayout Spacing="20">
                 <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center" Margin="0,0,0,10">
                     <Button Text="❮" 
-                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                            TextColor="White"
                             BackgroundColor="#30000000"
                             CornerRadius="20"
                             HeightRequest="40"
@@ -30,44 +30,44 @@
                            FontAttributes="Bold" 
                            HorizontalOptions="Center" 
                            VerticalOptions="Center"
-                           TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+                           TextColor="White" />
                 </Grid>
 
-                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#50000000}" 
+                <Frame BackgroundColor="#50000000" 
                        CornerRadius="20" 
                        Padding="20"
-                       BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=Transparent}"
-                       HasShadow="{AppThemeBinding Light=True, Dark=False}">
+                       BorderColor="Transparent"
+                       HasShadow="False">
                     <VerticalStackLayout Spacing="15">
-                        <Label Text="General" TextColor="{AppThemeBinding Light=#5e17eb, Dark=#2fffa3}" FontAttributes="Bold" FontSize="18"/>
+                        <Label Text="General" TextColor="#2fffa3" FontAttributes="Bold" FontSize="18"/>
                         
                         <Grid ColumnDefinitions="*, Auto">
-                            <Label Text="Notificaciones" TextColor="{AppThemeBinding Light=Black, Dark=White}" VerticalOptions="Center"/>
+                            <Label Text="Notificaciones" TextColor="White" VerticalOptions="Center"/>
                             <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="{Binding IsNotificacionesEnabled}"/>
                         </Grid>
                         
-                        <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#30FFFFFF}"/>
+                        <BoxView HeightRequest="1" Color="#30FFFFFF"/>
 
                         <Grid ColumnDefinitions="*, Auto">
-                            <Label Text="Modo Oscuro" TextColor="{AppThemeBinding Light=Black, Dark=White}" VerticalOptions="Center"/>
+                            <Label Text="Modo Oscuro" TextColor="White" VerticalOptions="Center"/>
                             <Switch Grid.Column="1" OnColor="#2fffa3" ThumbColor="White" IsToggled="{Binding IsModoOscuroEnabled}"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Frame>
 
-                <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#50000000}" 
+                <Frame BackgroundColor="#50000000" 
                        CornerRadius="20" 
                        Padding="20"
-                       BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=Transparent}"
-                       HasShadow="{AppThemeBinding Light=True, Dark=False}">
+                       BorderColor="Transparent"
+                       HasShadow="False">
                     <VerticalStackLayout Spacing="15">
-                        <Label Text="Cuenta" TextColor="{AppThemeBinding Light=#5e17eb, Dark=#2fffa3}" FontAttributes="Bold" FontSize="18"/>
+                        <Label Text="Cuenta" TextColor="#2fffa3" FontAttributes="Bold" FontSize="18"/>
                         
                         <Button Text="Editar Perfil" 
                                 BackgroundColor="Transparent" 
-                                TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                                TextColor="White" 
                                 HorizontalOptions="Start" 
-                                BorderColor="{AppThemeBinding Light=Black, Dark=White}" 
+                                BorderColor="White" 
                                 BorderWidth="1" 
                                 CornerRadius="20"
                                 HeightRequest="40"
@@ -75,9 +75,9 @@
 
                         <Button Text="Cambiar Contraseña" 
                                 BackgroundColor="Transparent" 
-                                TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                                TextColor="White" 
                                 HorizontalOptions="Start" 
-                                BorderColor="{AppThemeBinding Light=Black, Dark=White}" 
+                                BorderColor="White" 
                                 BorderWidth="1" 
                                 CornerRadius="20"
                                 HeightRequest="40"

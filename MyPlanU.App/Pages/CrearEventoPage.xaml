@@ -49,12 +49,15 @@
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Etiquetas" TextColor="White" FontSize="14" FontAttributes="Bold" />
-                            <Picker Title="Selecciona una etiqueta"
-                                    ItemsSource="{Binding EtiquetasDisponibles}"
-                                    SelectedItem="{Binding EtiquetaSeleccionadaPicker}"
-                                    TextColor="White"
-                                    TitleColor="#E0E0E0"
-                                    BackgroundColor="Transparent" />
+                            <Frame Padding="0" BackgroundColor="#30000000" CornerRadius="10" BorderColor="Transparent">
+                                <Picker Title="Selecciona una etiqueta"
+                                        ItemsSource="{Binding EtiquetasDisponibles}"
+                                        SelectedItem="{Binding EtiquetaSeleccionadaPicker}"
+                                        TextColor="White"
+                                        TitleColor="#E0E0E0"
+                                        BackgroundColor="Transparent" 
+                                        Margin="10,0"/>
+                            </Frame>
                         </VerticalStackLayout>
 
                         <HorizontalStackLayout IsVisible="{Binding IsNuevaEtiquetaVisible}" Spacing="10">
