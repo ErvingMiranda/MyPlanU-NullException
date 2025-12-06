@@ -18,6 +18,7 @@
 		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
 	</PropertyGroup>
 
+
 	<ItemGroup>
 		<!-- MAUI base, versión alineada con Toolkit -->
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.11" />
