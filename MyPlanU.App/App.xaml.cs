@@ -1,4 +1,3 @@
-
 using MyPlanU.Backend.Models;
 #if WINDOWS
 using Microsoft.UI;
@@ -8,7 +7,7 @@ using Windows.System;
 
 namespace MyPlanU.App;
 
-public partial class App : Application
+public partial class App : Application  
 {
     public static Usuario? CurrentUser { get; set; }
 
