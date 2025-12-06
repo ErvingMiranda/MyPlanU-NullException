@@ -175,7 +175,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task LogoutAsync()
     {
-        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+        await Shell.Current.GoToAsync($"//{nameof(LoginPage)}?Logout=true");
     }
 
     [RelayCommand]

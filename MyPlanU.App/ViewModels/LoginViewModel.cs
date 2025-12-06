@@ -5,7 +5,7 @@ using MyPlanU.App.Pages;
 
 namespace MyPlanU.App.ViewModels;
 
-public partial class LoginViewModel : ObservableObject
+public partial class LoginViewModel : ObservableObject, IQueryAttributable
 {
     private readonly AuthService _authService;
 
@@ -14,6 +14,15 @@ public partial class LoginViewModel : ObservableObject
 
     [ObservableProperty]
     private string password = string.Empty;
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("Logout"))
+        {
+            Email = string.Empty;
+            Password = string.Empty;
+        }
+    }
 
     public LoginViewModel()
     {
