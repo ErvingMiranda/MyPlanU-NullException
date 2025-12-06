@@ -4,16 +4,34 @@
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              x:Class="MyPlanU.App.Pages.ConfiguracionPage"
              Title="Configuración"
-             Style="{StaticResource BasePageStyle}">
+             Style="{StaticResource BasePageStyle}"
+             Shell.NavBarIsVisible="False">
 
     <ScrollView>
         <Grid Padding="20">
             <VerticalStackLayout Spacing="20">
-                <Label Text="Ajustes" 
-                       FontSize="34" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Center" 
-                       TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+                <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center" Margin="0,0,0,10">
+                    <Button Text="❮" 
+                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                            BackgroundColor="#30000000"
+                            CornerRadius="20"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            Padding="0"
+                            FontSize="20"
+                            Command="{Binding GoBackCommand}" 
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            ZIndex="1"/>
+                            
+                    <Label Text="Ajustes" 
+                           Grid.Column="0" Grid.ColumnSpan="2"
+                           FontSize="34" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}" />
+                </Grid>
 
                 <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#50000000}" 
                        CornerRadius="20" 

@@ -121,4 +121,10 @@ public partial class PromptyViewModel : ObservableObject
 
         IsSending = false;
     }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }

@@ -12,11 +12,13 @@ public class RegistroViewModel
 
     // COMMAND PARA EL BOTÓN REGISTRARSE
     public ICommand RegistrarCommand { get; }
+    public ICommand GoBackCommand { get; }
 
     public RegistroViewModel()
     {
         // Command de MAUI (nativo, sin librerías extra)
         RegistrarCommand = new Command(async () => await Registrar());
+        GoBackCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
     }
 
     private async Task Registrar()

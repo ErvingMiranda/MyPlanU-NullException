@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MyPlanU.App.Pages.RegistroPage"
              Title="Registro"
-             Style="{StaticResource BasePageStyle}">
+             Style="{StaticResource BasePageStyle}"
+             Shell.NavBarIsVisible="False">
 
     <ScrollView>
         <Grid Padding="30">
@@ -37,11 +38,28 @@
                                 Spacing="15"
                                 VerticalOptions="Center">
 
-                                <Label Text="Crear Cuenta"
-                                       FontSize="34"
-                                       FontAttributes="Bold"
-                                       HorizontalOptions="Center"
-                                       TextColor="White" />
+                                <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center" Margin="0,0,0,10">
+                                    <Button Text="❮" 
+                                            TextColor="White"
+                                            BackgroundColor="#30000000"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            WidthRequest="40"
+                                            Padding="0"
+                                            FontSize="20"
+                                            Command="{Binding GoBackCommand}" 
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center"
+                                            ZIndex="1"/>
+                                            
+                                    <Label Text="Crear Cuenta"
+                                           Grid.Column="0" Grid.ColumnSpan="2"
+                                           FontSize="34"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           TextColor="White" />
+                                </Grid>
 
                                 <Frame BackgroundColor="#50000000"
                                        CornerRadius="20"

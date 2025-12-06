@@ -5,7 +5,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MyPlanU.App.Pages.PromptyPage"
              Title="PROMPTY"
-             Style="{StaticResource BasePageStyle}">
+             Style="{StaticResource BasePageStyle}"
+             Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -13,17 +14,41 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto" Padding="16" RowSpacing="10">
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Padding="16" RowSpacing="10">
+
+        <!-- Custom Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *" VerticalOptions="Center" Margin="0,0,0,10">
+            <Button Text="❮" 
+                    TextColor="White"
+                    BackgroundColor="#30000000"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    WidthRequest="40"
+                    Padding="0"
+                    FontSize="20"
+                    Command="{Binding GoBackCommand}" 
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    ZIndex="1"/>
+                    
+            <Label Text="PROMPTY" 
+                   Grid.Column="0" Grid.ColumnSpan="2"
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center"
+                   TextColor="White" />
+        </Grid>
         
         <!-- Header explicativo PROMPTY Lite -->
-        <Frame Grid.Row="0" BackgroundColor="#50000000" Padding="15" CornerRadius="15" BorderColor="Transparent">
+        <Frame Grid.Row="1" BackgroundColor="#50000000" Padding="15" CornerRadius="15" BorderColor="Transparent">
             <Label Text="Esta es la versión PROMPTY Lite: podés hacer preguntas y recibir sugerencias, pero no se crearán eventos ni tareas automáticamente. Para agendar algo, usá las pantallas normales de MyPlanU."
                    TextColor="#E0E0E0"
                    FontSize="12"
                    HorizontalTextAlignment="Center" />
         </Frame>
 
-        <CollectionView x:Name="MessagesCollectionView" Grid.Row="1" ItemsSource="{Binding Mensajes}">
+        <CollectionView x:Name="MessagesCollectionView" Grid.Row="2" ItemsSource="{Binding Mensajes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="5">
@@ -65,7 +90,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Frame Grid.Row="2" BackgroundColor="#50000000" CornerRadius="25" Padding="5" BorderColor="Transparent">
+        <Frame Grid.Row="3" BackgroundColor="#50000000" CornerRadius="25" Padding="5" BorderColor="Transparent">
             <Grid ColumnDefinitions="*,Auto">
                 <Entry Grid.Column="0" 
                        Text="{Binding MensajeEntrada}" 
@@ -88,7 +113,7 @@
             </Grid>
         </Frame>
 
-        <Button Grid.Row="3" 
+        <Button Grid.Row="4" 
                 Text="Abrir PROMPTY completo" 
                 Command="{Binding StartGuiCommand}"
                 BackgroundColor="#50FFFFFF"

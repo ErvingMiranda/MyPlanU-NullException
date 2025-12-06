@@ -53,4 +53,10 @@ public partial class ConfiguracionViewModel : ObservableObject
             await Shell.Current.GoToAsync("//LoginPage");
         }
     }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }

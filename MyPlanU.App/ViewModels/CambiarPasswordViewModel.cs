@@ -64,4 +64,10 @@ public partial class CambiarPasswordViewModel : ObservableObject
             await Application.Current.MainPage.DisplayAlert("Error", "La contraseña actual es incorrecta", "OK");
         }
     }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }

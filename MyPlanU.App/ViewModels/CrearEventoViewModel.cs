@@ -197,4 +197,10 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
 
         await Shell.Current.GoToAsync("..");
     }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
 }
