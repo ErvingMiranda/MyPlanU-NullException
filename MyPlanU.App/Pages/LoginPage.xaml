@@ -47,12 +47,14 @@
                         <VerticalStackLayout Spacing="10">
 
                             <Entry x:Name="EmailEntry" Placeholder="Correo"
+                                   Text="{Binding Email}"
                                    TextColor="White"
                                    PlaceholderColor="#E0E0E0"
                                    BackgroundColor="Transparent" />
 
                             <Entry x:Name="PasswordEntry" Placeholder="Contraseña"
                                    IsPassword="True"
+                                   Text="{Binding Password}"
                                    TextColor="White"
                                    PlaceholderColor="#E0E0E0"
                                    BackgroundColor="Transparent" />
@@ -63,10 +65,10 @@
                                     TextColor="White"
                                     CornerRadius="25"
                                     HeightRequest="48" 
-                                    Clicked="OnLoginClicked" />
+                                    Command="{Binding LoginCommand}" />
 
                             <Button Text="¿No tienes cuenta? Regístrate"
-                                    Clicked="OnRegisterClicked"
+                                    Command="{Binding GoToRegistroCommand}"
                                     BackgroundColor="Transparent"
                                     TextColor="White"
                                     FontAttributes="Bold"
