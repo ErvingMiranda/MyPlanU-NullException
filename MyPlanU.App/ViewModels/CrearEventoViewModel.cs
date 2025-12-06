@@ -19,6 +19,12 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     private string descripcion = string.Empty;
 
     [ObservableProperty]
+    private string pageTitle = "Crear Evento";
+
+    [ObservableProperty]
+    private string headerTitle = "Nuevo Evento";
+
+    [ObservableProperty]
     private ObservableCollection<string> etiquetasSeleccionadas = new();
 
     [ObservableProperty]
@@ -113,6 +119,8 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             _actividadExistente = query["Actividad"] as Actividad;
             if (_actividadExistente != null)
             {
+                PageTitle = "Editar Evento";
+                HeaderTitle = "Editar Evento";
                 Titulo = _actividadExistente.Titulo;
                 Descripcion = _actividadExistente.Descripcion;
                 
@@ -187,6 +195,12 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             await _actividadService.SaveActividadAsync(nuevaActividad);
         }
 
+        await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
         await Shell.Current.GoToAsync("..");
     }
 }

@@ -45,7 +45,46 @@ public partial class PromptyViewModel : ObservableObject
             catch (Exception ex)
             {
                 Mensajes.Add(new ChatMessage { Rol = "Error", Texto = $"No se pudo iniciar la API: {ex.Message}" });
+                return; // No podemos continuar si la API no arranca
             }
+        }
+
+        // Verificar Token
+        bool hasToken = await _promptyClient.HasValidTokenAsync();
+        if (!hasToken)
+        {
+            await SolicitarTokenAsync();
+        }
+    }
+
+    private async Task SolicitarTokenAsync()
+    {
+        var token = await Application.Current.MainPage.DisplayPromptAsync(
+            "Configuración de PROMPTY",
+            "Ingresa tu token de Hugging Face para usar la IA:",
+            "Guardar",
+            "Cancelar",
+            "hf_..."
+        );
+
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            var (success, error) = await _promptyClient.SetTokenWithDetailsAsync(token);
+            if (success)
+            {
+                Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Token configurado correctamente. ¡Ya puedes hablar con PROMPTY!" });
+            }
+            else
+            {
+                Mensajes.Add(new ChatMessage { Rol = "Error", Texto = $"Error al guardar token: {error}" });
+                // Opción de reintentar
+                bool retry = await Application.Current.MainPage.DisplayAlert("Error", "El token no es válido o hubo un error. ¿Reintentar?", "Sí", "No");
+                if (retry) await SolicitarTokenAsync();
+            }
+        }
+        else
+        {
+            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Se requiere un token para usar la IA. Configúralo más tarde." });
         }
     }
 
@@ -120,5 +159,11 @@ public partial class PromptyViewModel : ObservableObject
         });
 
         IsSending = false;
+    }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }

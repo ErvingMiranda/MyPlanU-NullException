@@ -5,7 +5,7 @@ using MyPlanU.App.Pages;
 
 namespace MyPlanU.App.ViewModels;
 
-public partial class LoginViewModel : ObservableObject
+public partial class LoginViewModel : ObservableObject, IQueryAttributable
 {
     private readonly AuthService _authService;
 
@@ -14,6 +14,19 @@ public partial class LoginViewModel : ObservableObject
 
     [ObservableProperty]
     private string password = string.Empty;
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.ContainsKey("Logout"))
+        {
+            Email = string.Empty;
+            Password = string.Empty;
+        }
+    }
+
+    public LoginViewModel()
+    {
+    }
 
     public LoginViewModel(AuthService authService)
     {
@@ -38,12 +51,13 @@ public partial class LoginViewModel : ObservableObject
         var usuario = await _authService.LoginAsync(Email, Password);
         if (usuario != null)
         {
+            App.CurrentUser = usuario;
             // Navigate to EventosPage passing the user
             var navigationParameter = new Dictionary<string, object>
             {
                 { "Usuario", usuario }
             };
-            await Shell.Current.GoToAsync(nameof(EventosPage), navigationParameter);
+            await Shell.Current.GoToAsync($"//{nameof(EventosPage)}", navigationParameter);
         }
         else
         {

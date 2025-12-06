@@ -31,4 +31,16 @@ public class AuthService
         await _usuarioRepository.SaveUsuarioAsync(usuario);
         return true;
     }
+
+    public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+    {
+        var usuario = await _usuarioRepository.GetUsuarioAsync(userId);
+        if (usuario == null) return false;
+
+        if (usuario.ContrasenaHash != currentPassword) return false;
+
+        usuario.ContrasenaHash = newPassword;
+        await _usuarioRepository.SaveUsuarioAsync(usuario);
+        return true;
+    }
 }

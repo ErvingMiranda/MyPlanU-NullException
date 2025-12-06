@@ -7,6 +7,7 @@ using MyPlanU.Backend.Services;
 using MyPlanU.App.Pages;
 using MyPlanU.App.ViewModels;
 using Microsoft.Maui.Storage;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace MyPlanU.App;
 
@@ -22,7 +23,24 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+			})
+            .ConfigureLifecycleEvents(events =>
+            {
+#if WINDOWS
+                events.AddWindows(windows => windows
+                    .OnWindowCreated(window =>
+                    {
+                        window.ExtendsContentIntoTitleBar = false;
+                        var handle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+                        var id = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(handle);
+                        var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(id);
+                        if (appWindow is not null)
+                        {
+                            appWindow.SetPresenter(Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen);
+                        }
+                    }));
+#endif
+            });
 
 #if DEBUG
 		builder.Logging.AddDebug();
@@ -68,6 +86,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<PromptyPage>();
         builder.Services.AddTransient<PromptyViewModel>();
+
+        builder.Services.AddTransient<CambiarPasswordPage>();
+        builder.Services.AddTransient<CambiarPasswordViewModel>();
 
 		return builder.Build();
 	}

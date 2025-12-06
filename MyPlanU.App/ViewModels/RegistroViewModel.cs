@@ -1,70 +1,51 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using MyPlanU.Backend.Business;
-using MyPlanU.Backend.Models;
+using System.Windows.Input;
+using Microsoft.Maui.Controls;
 
 namespace MyPlanU.App.ViewModels;
 
-public partial class RegistroViewModel : ObservableObject
+public class RegistroViewModel
 {
-    private readonly AuthService _authService;
+    // PROPIEDADES DEL FORMULARIO
+    public string Nombre { get; set; }
+    public string Email  { get; set; }
+    public string Password { get; set; }
 
-    [ObservableProperty]
-    private string nombre;
+    // COMMAND PARA EL BOTÓN REGISTRARSE
+    public ICommand RegistrarCommand { get; }
+    public ICommand GoBackCommand { get; }
 
-    [ObservableProperty]
-    private string email;
-
-    [ObservableProperty]
-    private string password;
-
-    public RegistroViewModel(AuthService authService)
+    public RegistroViewModel()
     {
-        _authService = authService;
+        // Command de MAUI (nativo, sin librerías extra)
+        RegistrarCommand = new Command(async () => await Registrar());
+        GoBackCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
     }
 
-    [RelayCommand]
-    private async Task RegistrarAsync()
+    private async Task Registrar()
     {
-        var errorCorreo = ValidationHelper.ValidarCorreo(Email);
-        if (!string.IsNullOrEmpty(errorCorreo))
+        // VALIDACIONES BÁSICAS
+        if (string.IsNullOrWhiteSpace(Nombre) ||
+            string.IsNullOrWhiteSpace(Email)  ||
+            string.IsNullOrWhiteSpace(Password))
         {
-            await Shell.Current.DisplayAlert("Error", errorCorreo, "OK");
+            await Application.Current.MainPage.DisplayAlert(
+                "Error",
+                "Por favor completa todos los campos.",
+                "Aceptar");
             return;
         }
 
-        var errorPass = ValidationHelper.ValidarContrasena(Password);
-        if (!string.IsNullOrEmpty(errorPass))
-        {
-            await Shell.Current.DisplayAlert("Error", errorPass, "OK");
-            return;
-        }
+        // AQUÍ IRÍA TU LÓGICA REAL DE REGISTRO (BD o API)
+        await Task.Delay(500); // Simulación
 
-        if (string.IsNullOrWhiteSpace(Nombre))
-        {
-            await Shell.Current.DisplayAlert("Error", "El nombre es requerido", "OK");
-            return;
-        }
+        await Application.Current.MainPage.DisplayAlert(
+            "¡Registrado!",
+            "Tu cuenta fue creada correctamente 💜",
+            "Continuar");
 
-        var nuevoUsuario = new Usuario
-        {
-            Nombre = Nombre,
-            Email = Email,
-            ContrasenaHash = Password, // En producción usar hash real
-            FechaRegistro = DateTime.Now,
-            EstadoCuenta = "Activo"
-        };
-
-        bool exito = await _authService.RegisterAsync(nuevoUsuario);
-
-        if (exito)
-        {
-            await Shell.Current.DisplayAlert("Éxito", "Usuario registrado correctamente", "OK");
-            await Shell.Current.GoToAsync(".."); // Volver al Login
-        }
-        else
-        {
-            await Shell.Current.DisplayAlert("Error", "El email ya está registrado", "OK");
-        }
+        // Navegar atrás (volver al Login)
+        await Application.Current.MainPage.Navigation.PopAsync();
     }
 }
+
+

@@ -1,32 +1,126 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              x:Class="MyPlanU.App.Pages.RegistroPage"
-             Title="Registro">
+             Title="Registro"
+             Style="{StaticResource BasePageStyle}"
+             Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20">
-            <Label Text="Crear Cuenta"
-                   Style="{StaticResource Headline}"
-                   HorizontalOptions="Center" />
+        <Grid Padding="30">
+            <VerticalStackLayout 
+                Spacing="15" 
+                VerticalOptions="Center">
 
-            <Label Text="Nombre" />
-            <Entry Placeholder="Tu nombre"
-                   Text="{Binding Nombre}" />
+                <!-- Contenido centrado encima del fondo -->
+                <Grid Padding="30">
+                    <VerticalStackLayout
+                      Spacing="15"
+                      VerticalOptions="Center">
 
-            <Label Text="Correo" />
-            <Entry Placeholder="tu@correo.com"
-                   Keyboard="Email"
-                   Text="{Binding Email}" />
+                        <!-- Contenido centrado encima del fondo -->
+                        <Grid Padding="30">
+                            <!-- Dos filas: logo en la parte superior (auto) y contenido centrado en el resto -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-            <Label Text="Contraseña" />
-            <Entry IsPassword="True"
-                   Text="{Binding Password}" />
+                            <Image Source="mylogo.png"
+                                   Grid.Row="0"
+                                   HeightRequest="120"
+                                   WidthRequest="120"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Start"
+                                   Margin="0,0,0,10" />
 
-            <Button Text="Registrarse"
-                    Command="{Binding RegistrarCommand}"
-                    Margin="0,20,0,0" />
-        </VerticalStackLayout>
+                            <VerticalStackLayout
+                                Grid.Row="1"
+                                Spacing="15"
+                                VerticalOptions="Center">
+
+                                <Grid ColumnDefinitions="Auto, *" VerticalOptions="Center" Margin="0,0,0,10">
+                                    <Button Text="❮" 
+                                            TextColor="White"
+                                            BackgroundColor="#30000000"
+                                            CornerRadius="20"
+                                            HeightRequest="40"
+                                            WidthRequest="40"
+                                            Padding="0"
+                                            FontSize="20"
+                                            Command="{Binding GoBackCommand}" 
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center"
+                                            ZIndex="1"/>
+                                            
+                                    <Label Text="Crear Cuenta"
+                                           Grid.Column="0" Grid.ColumnSpan="2"
+                                           FontSize="34"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           TextColor="White" />
+                                </Grid>
+
+                                <Frame BackgroundColor="#50000000"
+                                       CornerRadius="20"
+                                       Padding="20">
+
+                                    <VerticalStackLayout Spacing="15">
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Nombre" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Entry x:Name="NombreEntry"
+                                                   Placeholder="Tu nombre"
+                                                   TextColor="White"
+                                                   PlaceholderColor="#E0E0E0"
+                                                   BackgroundColor="Transparent" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Correo" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Entry x:Name="EmailEntry"
+                                                   Placeholder="tu@correo.com"
+                                                   Keyboard="Email"
+                                                   TextColor="White"
+                                                   PlaceholderColor="#E0E0E0"
+                                                   BackgroundColor="Transparent" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Contraseña" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Entry x:Name="PasswordEntry"
+                                                   Placeholder="Contraseña"
+                                                   IsPassword="True"
+                                                   TextColor="White"
+                                                   PlaceholderColor="#E0E0E0"
+                                                   BackgroundColor="Transparent" />
+                                        </VerticalStackLayout>
+
+                                        <Button Text="Registrarse"
+                                                Margin="0,20,0,0"
+                                                BackgroundColor="#5e17eb"
+                                                TextColor="White"
+                                                CornerRadius="25"
+                                                HeightRequest="48"
+                                                Clicked="OnRegistrarseClicked" />
+
+                                    </VerticalStackLayout>
+                                </Frame>
+
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
     </ScrollView>
+
 </ContentPage>
+
+
+
+
+
+
+
+

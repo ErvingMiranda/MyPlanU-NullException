@@ -3,33 +3,85 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              x:Class="MyPlanU.App.Pages.LoginPage"
-             Title="Login">
+             Title="Login"
+             Style="{StaticResource BasePageStyle}">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="25">
-            <Label Text="Iniciar Sesión"
-                   Style="{StaticResource Headline}"
-                   SemanticProperties.HeadingLevel="Level1" />
+    <!-- Contenido centrado encima del fondo -->
+    <Grid Padding="30">
+        <VerticalStackLayout
+            Spacing="15"
+            VerticalOptions="Center">
 
-            <Label Text="Correo" />
-            <Entry Placeholder="tu@correo.com"
-                   Keyboard="Email"
-                   Text="{Binding Email}" />
+            <!-- Contenido centrado encima del fondo -->
+            <Grid Padding="30">
+                <!-- Dos filas: logo en la parte superior (auto) y contenido centrado en el resto -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Label Text="Contraseña" />
-            <Entry IsPassword="True"
-                   Text="{Binding Password}" />
+                <Image Source="mylogo.png"
+                       Grid.Row="0"
+                       HeightRequest="120"
+                       WidthRequest="120"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       Margin="0,0,0,10" />
 
-            <Button Text="Iniciar Sesión"
-                    Command="{Binding LoginCommand}"
-                    HorizontalOptions="Fill" />
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    Spacing="15"
+                    VerticalOptions="Center">
 
-            <Button Text="¿No tienes cuenta? Regístrate"
-                    Command="{Binding GoToRegistroCommand}"
-                    BackgroundColor="Transparent"
-                    TextColor="{StaticResource Primary}"
-                    HorizontalOptions="Center" />
+
+                    <Label Text="Iniciar Sesión"
+                           FontSize="34"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="White" />
+
+                    <Frame BackgroundColor="#50000000"
+                           CornerRadius="20"
+                           Padding="20">
+
+                        <VerticalStackLayout Spacing="10">
+
+                            <Entry x:Name="EmailEntry" Placeholder="Correo"
+                                   Text="{Binding Email}"
+                                   TextColor="White"
+                                   PlaceholderColor="#E0E0E0"
+                                   BackgroundColor="Transparent" />
+
+                            <Entry x:Name="PasswordEntry" Placeholder="Contraseña"
+                                   IsPassword="True"
+                                   Text="{Binding Password}"
+                                   TextColor="White"
+                                   PlaceholderColor="#E0E0E0"
+                                   BackgroundColor="Transparent" />
+
+                            <Button Text="Ingresar"
+                                    Margin="0,20,0,0"
+                                    BackgroundColor="#5e17eb"
+                                    TextColor="White"
+                                    CornerRadius="25"
+                                    HeightRequest="48" 
+                                    Command="{Binding LoginCommand}" />
+
+                            <Button Text="¿No tienes cuenta? Regístrate"
+                                    Command="{Binding GoToRegistroCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    Margin="0,10,0,0" />
+
+
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+
+            </Grid>
 
         </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>

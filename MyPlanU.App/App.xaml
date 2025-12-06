@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MyPlanU.App"
              x:Class="MyPlanU.App.App">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Gradiente Modo Claro (Original) -->
+            <LinearGradientBrush x:Key="LightGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#5e17eb" Offset="0.0" />
+                <GradientStop Color="#2fffa3" Offset="1.0" />
+            </LinearGradientBrush>
+
+            <!-- Gradiente Modo Oscuro (Azul oscuro a Rojo oscuro/Negro) -->
+            <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#020024" Offset="0.0" />
+                <GradientStop Color="#7d0909" Offset="1.0" />
+            </LinearGradientBrush>
+
+            <!-- Estilo global de fondo adaptable -->
+            <Style x:Key="BasePageStyle" TargetType="ContentPage">
+                <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource LightGradient}, Dark={StaticResource DarkGradient}}" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
+
 </Application>
+
