@@ -44,7 +44,7 @@
                                 <VerticalStackLayout Spacing="8">
                                     <Grid ColumnDefinitions="*, Auto">
                                         <Label Grid.Column="0" Text="{Binding Titulo}" FontSize="20" FontAttributes="Bold" TextColor="White" LineBreakMode="TailTruncation"/>
-                                        <Label Grid.Column="1" Text="{Binding Etiquetas}" FontSize="12" FontAttributes="Italic" TextColor="#2fffa3" IsVisible="{Binding Etiquetas, Converter={StaticResource IsNotNullOrEmptyConverter}}" VerticalOptions="Center"/>
+                                        <Label Grid.Column="1" Text="{Binding Etiquetas}" Margin="0,0,5,0" FontSize="12" FontAttributes="Italic" TextColor="#2fffa3" IsVisible="{Binding Etiquetas, Converter={StaticResource IsNotNullOrEmptyConverter}}" VerticalOptions="Center"/>
                                     </Grid>
                                     
                                     <Label Text="{Binding Descripcion}" FontSize="14" TextColor="#E0E0E0" MaxLines="2" LineBreakMode="TailTruncation"/>
