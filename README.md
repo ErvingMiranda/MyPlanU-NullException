@@ -58,10 +58,10 @@ Para preparar el entorno de Python:
 *   **Integración con PROMPTY Lite**: Chat con asistente de IA para consultas rápidas.
 *   **Configuración Básica**:
     *   Cambio de tema (Claro/Oscuro).
+    *   Cambio de contraseña.
 
 ### En Desarrollo (Próximamente)
 *   Edición de perfil de usuario.
-*   Cambio de contraseña.
 *   Sistema de Notificaciones y Alertas.
 *   Creación automática de eventos desde el chat de IA.
 
@@ -98,6 +98,12 @@ Es necesario que este servicio esté corriendo para que la app pueda hablar con 
 
 **En Windows:**
 *   Ve a la carpeta `PROMPTY_3.0/scripts`.
+*   Ejecuta `start_prompty_api.bat`.
+
+**En Linux/Mac:**
+*   Ve a la carpeta `PROMPTY_3.0/scripts`.
+*   Ejecuta `chmod +x start_prompty_api.sh` (si es necesario).
+*   Ejecuta `./start_prompty_api.sh`.
 *   Ejecuta `start_prompty_api.bat`.
 
 **En Linux/Mac (o terminal manual):**

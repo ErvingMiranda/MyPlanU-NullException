@@ -7,9 +7,10 @@ Este proyecto incluye dos scripts pensados para facilitar la integración con My
 - (Opcional) Crear un entorno virtual en `PROMPTY_3.0\venv` e instalar las dependencias. Los scripts lo activarán automáticamente si existe.
 
 ## Levantar la API (PROMPTY Lite)
-1. Navega a `PROMPTY_3.0\scripts` y haz doble clic en `start_prompty_api.bat`.
-2. El script cambia a la raíz del proyecto, activa `venv` si está disponible y lanza el servidor FastAPI con uvicorn (`api.server:app`) en el puerto 8000.
-3. Accede a la API en `http://localhost:8000`. El endpoint `/health` devuelve `{ "status": "ok" }`.
+1. Navega a `PROMPTY_3.0\scripts`.
+2. En Windows, haz doble clic en `start_prompty_api.bat`. En Linux/Mac, ejecuta `./start_prompty_api.sh`.
+3. El script cambia a la raíz del proyecto, activa `venv` si está disponible y lanza el servidor FastAPI con uvicorn (`api.server:app`) en el puerto 8000.
+4. Accede a la API en `http://localhost:8000`. El endpoint `/health` devuelve `{ "status": "ok" }`.
 
 ## Arrancar la interfaz gráfica (PROMPTY completo)
 1. Desde `PROMPTY_3.0\scripts`, ejecuta `start_prompty_gui.bat` (doble clic).

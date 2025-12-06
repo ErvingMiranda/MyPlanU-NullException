@@ -78,6 +78,7 @@ MyPlanU.sln
 │  │  ├─ EventosPage.xaml(.cs)
 │  │  ├─ CrearEventoPage.xaml(.cs)
 │  │  ├─ ConfiguracionPage.xaml(.cs)
+│  │  ├─ CambiarPasswordPage.xaml(.cs)
 │  │  └─ PromptyPage.xaml(.cs)
 │  ├─ ViewModels/
 │  │  ├─ LoginViewModel.cs
@@ -85,6 +86,7 @@ MyPlanU.sln
 │  │  ├─ EventosViewModel.cs
 │  │  ├─ CrearEventoViewModel.cs
 │  │  ├─ ConfiguracionViewModel.cs
+│  │  ├─ CambiarPasswordViewModel.cs
 │  │  ├─ PromptyViewModel.cs
 │  │  └─ ValidationHelper.cs
 │  └─ Platforms/              # Generado automáticamente por MAUI
@@ -98,6 +100,8 @@ MyPlanU.sln
    │  ├─ Recordatorio.cs
    │  ├─ ActividadCompartida.cs
    │  ├─ ChatMessage.cs
+   │  ├─ PromptyChatRequest.cs
+   │  ├─ PromptyChatResponse.cs
    │  ├─ PromptyChatRequest.cs
    │  └─ PromptyChatResponse.cs
    ├─ Data/
