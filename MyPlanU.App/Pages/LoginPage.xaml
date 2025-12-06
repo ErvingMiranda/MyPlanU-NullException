@@ -20,15 +20,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!-- Dos columnas en la fila superior para situar la imagen a la derecha -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
                 <Image Source="mylogo.png"
                        Grid.Row="0"
-                       Grid.Column="1"
                        HeightRequest="120"
                        WidthRequest="120"
                        HorizontalOptions="Center"
@@ -37,7 +30,6 @@
 
                 <VerticalStackLayout
                     Grid.Row="1"
-                    Grid.ColumnSpan="2"
                     Spacing="15"
                     VerticalOptions="Center">
 
