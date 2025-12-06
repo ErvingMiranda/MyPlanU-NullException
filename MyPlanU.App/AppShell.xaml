@@ -16,4 +16,9 @@
         Title="Registro"
         ContentTemplate="{DataTemplate pages:RegistroPage}"
         Route="RegistroPage" />
+
+    <ShellContent
+        Title="Eventos"
+        ContentTemplate="{DataTemplate pages:EventosPage}"
+        Route="EventosPage" />
 </Shell>
