@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
+             xmlns:models="clr-namespace:MyPlanU.Backend.Business;assembly=MyPlanU.Backend"
+             x:Class="MyPlanU.App.Pages.AmigosPage"
+             Title="Amigos">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!-- Agregar Amigo -->
+            <Label Text="Agregar Amigo" FontSize="Large" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="10">
+                <Entry Placeholder="Email del amigo" Text="{Binding EmailDestino}" WidthRequest="200" />
+                <Button Text="Enviar" Command="{Binding EnviarSolicitudCommand}" />
+            </HorizontalStackLayout>
+
+            <BoxView HeightRequest="1" Color="Gray" />
+
+            <!-- Solicitudes Entrantes -->
+            <Label Text="Solicitudes Recibidas" FontSize="Medium" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding SolicitudesEntrantes}" HeightRequest="150">
+                <CollectionView.EmptyView>
+                    <Label Text="No tienes solicitudes pendientes." TextColor="Gray" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AmigoInfo">
+                        <Frame Padding="10" Margin="0,5">
+                            <Grid ColumnDefinitions="*, Auto, Auto">
+                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" />
+                                <Button Grid.Column="1" Text="Aceptar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=AceptarSolicitudCommand}" CommandParameter="{Binding .}" Margin="5,0" />
+                                <Button Grid.Column="2" Text="Rechazar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=RechazarSolicitudCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="1" Color="Gray" />
+
+            <!-- Solicitudes Salientes -->
+            <Label Text="Solicitudes Enviadas" FontSize="Medium" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding SolicitudesSalientes}" HeightRequest="100">
+                <CollectionView.EmptyView>
+                    <Label Text="No has enviado solicitudes pendientes." TextColor="Gray" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AmigoInfo">
+                        <Frame Padding="10" Margin="0,5">
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" />
+                                <Label Text=" (Pendiente)" TextColor="Gray" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="1" Color="Gray" />
+
+            <!-- Lista de Amigos -->
+            <Label Text="Mis Amigos" FontSize="Medium" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding Amigos}" HeightRequest="300">
+                <CollectionView.EmptyView>
+                    <Label Text="Aún no tienes amigos agregados." TextColor="Gray" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AmigoInfo">
+                        <Frame Padding="10" Margin="0,5">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Usuario.Nombre}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Usuario.Email}" FontSize="Small" TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="Eliminar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EliminarAmigoCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -58,6 +58,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ActividadService>();
         builder.Services.AddSingleton<RecordatorioService>();
         builder.Services.AddSingleton<ActividadCompartidaService>();
+        builder.Services.AddSingleton<AmistadService>();
         builder.Services.AddSingleton<PromptyLauncher>();
 
         // Prompty Client
@@ -89,6 +90,9 @@ public static class MauiProgram
 
         builder.Services.AddTransient<CambiarPasswordPage>();
         builder.Services.AddTransient<CambiarPasswordViewModel>();
+
+        builder.Services.AddTransient<AmigosPage>();
+        builder.Services.AddTransient<AmigosViewModel>();
 
 		return builder.Build();
 	}

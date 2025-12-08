@@ -24,6 +24,7 @@
                    VerticalOptions="Center"/>
             
             <HorizontalStackLayout Grid.Column="1" Spacing="10">
+                <Button Text="Amigos" Command="{Binding GoToAmigosCommand}" BackgroundColor="#50FFFFFF" TextColor="White" CornerRadius="15" HeightRequest="35" Padding="10,0"/>
                 <Button Text="Prompty" Command="{Binding OpenPromptyCommand}" BackgroundColor="#50FFFFFF" TextColor="White" CornerRadius="15" HeightRequest="35" Padding="10,0"/>
                 <Button Text="Config" Command="{Binding GoToConfigCommand}" BackgroundColor="#50FFFFFF" TextColor="White" CornerRadius="15" HeightRequest="35" Padding="10,0"/>
                 <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="#50FFFFFF" TextColor="White" CornerRadius="15" HeightRequest="35" Padding="10,0"/>

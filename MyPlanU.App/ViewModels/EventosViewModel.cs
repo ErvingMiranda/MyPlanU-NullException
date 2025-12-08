@@ -167,6 +167,12 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
+    private async Task GoToAmigosAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(AmigosPage));
+    }
+
+    [RelayCommand]
     private async Task GoToConfigAsync()
     {
         await Shell.Current.GoToAsync(nameof(ConfiguracionPage));
