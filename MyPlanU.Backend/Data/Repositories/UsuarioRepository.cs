@@ -25,6 +25,19 @@ public class UsuarioRepository : IUsuarioRepository
         return await _context.Connection.Table<Usuario>().Where(i => i.Email == email).FirstOrDefaultAsync();
     }
 
+    public async Task<List<Usuario>> SearchUsuariosAsync(string searchText, int currentUserId)
+    {
+        await InitAsync();
+        // Search by Apodo (LIKE) or Email (Exact)
+        // Exclude current user
+        // SQLite-net-pcl supports Contains for LIKE behavior
+        var lowerText = searchText.ToLower();
+        return await _context.Connection.Table<Usuario>()
+            .Where(u => u.IdUsuario != currentUserId && 
+                       (u.Email == searchText || u.Apodo.ToLower().Contains(lowerText)))
+            .ToListAsync();
+    }
+
     public async Task<int> SaveUsuarioAsync(Usuario usuario)
     {
         await InitAsync();

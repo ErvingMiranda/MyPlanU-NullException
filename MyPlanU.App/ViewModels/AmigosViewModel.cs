@@ -9,17 +9,55 @@ namespace MyPlanU.App.ViewModels;
 public partial class AmigosViewModel : ObservableObject
 {
     private readonly AmistadService _amistadService;
+    private readonly UserService _userService;
     
     [ObservableProperty]
     private string emailDestino = string.Empty;
 
+    [ObservableProperty]
+    private string searchText = string.Empty;
+
     public ObservableCollection<AmigoInfo> Amigos { get; } = new();
     public ObservableCollection<AmigoInfo> SolicitudesEntrantes { get; } = new();
     public ObservableCollection<AmigoInfo> SolicitudesSalientes { get; } = new();
+    public ObservableCollection<Usuario> SearchResults { get; } = new();
 
-    public AmigosViewModel(AmistadService amistadService)
+    public AmigosViewModel(AmistadService amistadService, UserService userService)
     {
         _amistadService = amistadService;
+        _userService = userService;
+    }
+
+    [RelayCommand]
+    public async Task SearchUsuariosAsync()
+    {
+        if (App.CurrentUser == null) return;
+        SearchResults.Clear();
+        if (string.IsNullOrWhiteSpace(SearchText)) return;
+
+        var results = await _userService.SearchUsuariosAsync(SearchText, App.CurrentUser.IdUsuario);
+        foreach (var u in results)
+        {
+            SearchResults.Add(u);
+        }
+    }
+
+    [RelayCommand]
+    public async Task EnviarSolicitudDesdeBusquedaAsync(Usuario usuario)
+    {
+        if (usuario == null) return;
+        if (App.CurrentUser == null) return;
+
+        bool success = await _amistadService.EnviarSolicitud(App.CurrentUser.IdUsuario, usuario.Email);
+        if (success)
+        {
+            await Shell.Current.DisplayAlert("Éxito", $"Solicitud enviada a {usuario.Apodo}", "OK");
+            await LoadDataAsync();
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Info", "No se pudo enviar (Ya son amigos o solicitud pendiente)", "OK");
+        }
     }
 
     [RelayCommand]

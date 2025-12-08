@@ -11,6 +11,8 @@ namespace MyPlanU.App.ViewModels;
 public partial class EventosViewModel : ObservableObject, IQueryAttributable
 {
     private readonly ActividadService _actividadService;
+    private readonly ActividadCompartidaService _actividadCompartidaService;
+    private readonly AmistadService _amistadService;
     private readonly IPromptyLiteClient _promptyClient;
     private readonly PromptyLauncher _promptyLauncher;
     private Usuario? _usuario;
@@ -18,12 +20,22 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private ObservableCollection<Actividad> actividades;
 
-    public EventosViewModel(ActividadService actividadService, IPromptyLiteClient promptyClient, PromptyLauncher promptyLauncher)
+    [ObservableProperty]
+    private ObservableCollection<Actividad> actividadesCompartidasConmigo;
+
+    public EventosViewModel(ActividadService actividadService, 
+                            ActividadCompartidaService actividadCompartidaService,
+                            AmistadService amistadService,
+                            IPromptyLiteClient promptyClient, 
+                            PromptyLauncher promptyLauncher)
     {
         _actividadService = actividadService;
+        _actividadCompartidaService = actividadCompartidaService;
+        _amistadService = amistadService;
         _promptyClient = promptyClient;
         _promptyLauncher = promptyLauncher;
         Actividades = new ObservableCollection<Actividad>();
+        ActividadesCompartidasConmigo = new ObservableCollection<Actividad>();
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -44,11 +56,55 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     private async Task LoadActividadesAsync()
     {
         if (_usuario == null) return;
+        
+        // Mis actividades
         var list = await _actividadService.GetActividadesPorUsuarioAsync(_usuario.IdUsuario);
         Actividades.Clear();
         foreach (var item in list)
         {
             Actividades.Add(item);
+        }
+
+        // Actividades compartidas conmigo
+        var compartidas = await _actividadCompartidaService.ObtenerActividadesCompartidasConmigoAsync(_usuario.IdUsuario);
+        ActividadesCompartidasConmigo.Clear();
+        foreach (var item in compartidas)
+        {
+            ActividadesCompartidasConmigo.Add(item);
+        }
+    }
+
+    [RelayCommand]
+    private async Task CompartirActividadAsync(Actividad? actividad)
+    {
+        if (actividad == null || _usuario == null) return;
+
+        // 1. Obtener amigos
+        var amigos = await _amistadService.ObtenerAmigosConfirmados(_usuario.IdUsuario);
+        if (amigos.Count == 0)
+        {
+            await Shell.Current.DisplayAlert("Info", "No tienes amigos para compartir. Agrega amigos primero.", "OK");
+            return;
+        }
+
+        // 2. Mostrar lista para seleccionar
+        var nombresAmigos = amigos.Select(a => a.Usuario.Apodo ?? a.Usuario.Nombre).ToArray();
+        string seleccion = await Shell.Current.DisplayActionSheet($"Compartir '{actividad.Titulo}' con:", "Cancelar", null, nombresAmigos);
+
+        if (seleccion == "Cancelar" || seleccion == null) return;
+
+        var amigoSeleccionado = amigos.FirstOrDefault(a => (a.Usuario.Apodo ?? a.Usuario.Nombre) == seleccion);
+        if (amigoSeleccionado != null)
+        {
+            bool success = await _actividadCompartidaService.CompartirActividadAsync(actividad.IdActividad, _usuario.IdUsuario, amigoSeleccionado.Usuario.IdUsuario, "Lectura");
+            if (success)
+            {
+                await Shell.Current.DisplayAlert("Éxito", "Actividad compartida correctamente.", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo compartir (quizás ya está compartida).", "OK");
+            }
         }
     }
 

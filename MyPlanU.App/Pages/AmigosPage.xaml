@@ -9,11 +9,27 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
             <!-- Agregar Amigo -->
-            <Label Text="Agregar Amigo" FontSize="Large" FontAttributes="Bold" />
+            <Label Text="Buscar Usuarios" FontSize="Large" FontAttributes="Bold" />
             <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Email del amigo" Text="{Binding EmailDestino}" WidthRequest="200" />
-                <Button Text="Enviar" Command="{Binding EnviarSolicitudCommand}" />
+                <Entry Placeholder="Apodo o Email" Text="{Binding SearchText}" WidthRequest="200" />
+                <Button Text="Buscar" Command="{Binding SearchUsuariosCommand}" />
             </HorizontalStackLayout>
+            
+            <CollectionView ItemsSource="{Binding SearchResults}" HeightRequest="150">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="0,5">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Apodo}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Email}" FontSize="Small" TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="Enviar Solicitud" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EnviarSolicitudDesdeBusquedaCommand}" CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <BoxView HeightRequest="1" Color="Gray" />
 

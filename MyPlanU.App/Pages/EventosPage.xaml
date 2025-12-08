@@ -59,6 +59,15 @@
                                     <BoxView HeightRequest="1" Color="#30FFFFFF" Margin="0,5"/>
 
                                     <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                                        <Button Text="Compartir"
+                                                BackgroundColor="#502196F3"
+                                                TextColor="White"
+                                                CornerRadius="15"
+                                                HeightRequest="35"
+                                                Padding="15,0"
+                                                FontSize="12"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventosViewModel}}, Path=CompartirActividadCommand}"
+                                                CommandParameter="{Binding .}" />
                                         <Button Text="Editar"
                                                 BackgroundColor="#50FFFFFF"
                                                 TextColor="White"
@@ -77,6 +86,35 @@
                                                 FontSize="12"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventosViewModel}}, Path=EliminarEventoCommand}"
                                                 CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Actividades Compartidas Conmigo -->
+                <Label Text="Compartidas Conmigo" FontSize="22" FontAttributes="Bold" TextColor="White" Margin="0,20,0,10" IsVisible="{Binding ActividadesCompartidasConmigo.Count, Converter={toolkit:IntToBoolConverter}}" />
+                
+                <CollectionView ItemsSource="{Binding ActividadesCompartidasConmigo}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Actividad">
+                            <Frame Padding="15" Margin="0,0,0,15"
+                                   BackgroundColor="#50FFC107"
+                                   BorderColor="Transparent"
+                                   CornerRadius="20">
+                                <VerticalStackLayout Spacing="8">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Label Grid.Column="0" Text="{Binding Titulo}" FontSize="20" FontAttributes="Bold" TextColor="White" LineBreakMode="TailTruncation"/>
+                                        <Label Grid.Column="1" Text="Compartido" Margin="0,0,5,0" FontSize="12" FontAttributes="Italic" TextColor="White" VerticalOptions="Center"/>
+                                    </Grid>
+                                    
+                                    <Label Text="{Binding Descripcion}" FontSize="14" TextColor="#E0E0E0" MaxLines="2" LineBreakMode="TailTruncation"/>
+                                    
+                                    <HorizontalStackLayout Spacing="15">
+                                        <Label Text="{Binding FechaInicio, StringFormat='{0:MMM dd, HH:mm}'}" FontSize="12" TextColor="#EEEEEE" />
+                                        <Label Text="-" FontSize="12" TextColor="#EEEEEE" />
+                                        <Label Text="{Binding FechaFin, StringFormat='{0:MMM dd, HH:mm}'}" FontSize="12" TextColor="#EEEEEE" />
                                     </HorizontalStackLayout>
                                 </VerticalStackLayout>
                             </Frame>

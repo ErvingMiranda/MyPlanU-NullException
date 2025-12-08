@@ -55,6 +55,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IActividadCompartidaRepository, ActividadCompartidaRepository>();
 
         builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<UserService>();
         builder.Services.AddSingleton<ActividadService>();
         builder.Services.AddSingleton<RecordatorioService>();
         builder.Services.AddSingleton<ActividadCompartidaService>();
