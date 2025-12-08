@@ -27,7 +27,7 @@ public class ActividadCompartidaService
 
         // 1. Validar que el propietario sea el dueño de la actividad
         var actividad = await _actividadRepository.GetActividadAsync(idActividad);
-        if (actividad == null || actividad.IdUsuario != idUsuarioPropietario)
+        if (actividad == null || actividad.IdUsuarioCreador != idUsuarioPropietario)
         {
             return false;
         }
