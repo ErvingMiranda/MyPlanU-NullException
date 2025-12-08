@@ -51,7 +51,7 @@ public partial class AmigosViewModel : ObservableObject
         bool success = await _amistadService.EnviarSolicitud(App.CurrentUser.IdUsuario, usuario.Email);
         if (success)
         {
-            await Shell.Current.DisplayAlert("Éxito", $"Solicitud enviada a {usuario.Apodo}", "OK");
+            await Shell.Current.DisplayAlert("Éxito", "Solicitud enviada con éxito", "OK");
             await LoadDataAsync();
         }
         else
@@ -99,9 +99,16 @@ public partial class AmigosViewModel : ObservableObject
         }
         else
         {
-            await Shell.Current.DisplayAlert("Error", "No se pudo enviar la solicitud (Usuario no existe, ya son amigos o solicitud pendiente)", "OK");
+            await Shell.Current.DisplayAlert("Info", "No se pudo enviar (Ya son amigos o solicitud pendiente)", "OK");
         }
     }
+
+    [RelayCommand]
+    private async Task GoBack()
+    {
+        await Shell.Current.GoToAsync("..");
+    }
+}
 
     [RelayCommand]
     public async Task AceptarSolicitudAsync(AmigoInfo info)

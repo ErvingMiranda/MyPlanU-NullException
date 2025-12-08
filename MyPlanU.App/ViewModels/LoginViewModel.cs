@@ -52,6 +52,7 @@ public partial class LoginViewModel : ObservableObject, IQueryAttributable
         if (usuario != null)
         {
             App.CurrentUser = usuario;
+            await Shell.Current.DisplayAlert("Éxito", "Inicio de sesión exitoso", "OK");
             // Navigate to EventosPage passing the user
             var navigationParameter = new Dictionary<string, object>
             {

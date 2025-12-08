@@ -11,10 +11,23 @@
         <VerticalStackLayout Padding="20" Spacing="20">
             
             <!-- Header -->
-            <Label Text="Gestión de Amigos" 
-                   FontSize="28" 
-                   FontAttributes="Bold" 
-                   TextColor="White" />
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Text="Volver" 
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=GoBackCommand}" 
+                        BackgroundColor="#50FFFFFF" 
+                        TextColor="White" 
+                        CornerRadius="10" 
+                        HeightRequest="35" 
+                        FontSize="12" 
+                        HorizontalOptions="Start" />
+                
+                <Label Grid.Column="1" 
+                       Text="Gestión de Amigos" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       TextColor="White" 
+                       HorizontalOptions="Center" />
+            </Grid>
 
             <!-- Buscar Usuarios -->
             <Frame BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15" Padding="15">
@@ -60,6 +73,35 @@
                     </CollectionView>
                 </VerticalStackLayout>
             </Frame>
+
+            <!-- Lista de Amigos -->
+            <Label Text="Mis Amigos" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
+            <CollectionView ItemsSource="{Binding Amigos}" HeightRequest="300">
+                <CollectionView.EmptyView>
+                    <Label Text="Aún no tienes amigos agregados." TextColor="#CCCCCC" FontAttributes="Italic" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AmigoInfo">
+                        <Frame Padding="10" Margin="0,5" BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding Usuario.Nombre}" FontAttributes="Bold" TextColor="White" />
+                                    <Label Text="{Binding Usuario.Email}" FontSize="Small" TextColor="#DDDDDD" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" 
+                                        Text="Eliminar" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EliminarAmigoCommand}" 
+                                        CommandParameter="{Binding .}" 
+                                        BackgroundColor="#FF6B6B"
+                                        TextColor="White"
+                                        CornerRadius="15"
+                                        HeightRequest="35"
+                                        FontSize="12" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <!-- Solicitudes Entrantes -->
             <Label Text="Solicitudes Recibidas" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
@@ -110,35 +152,6 @@
                                 <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" TextColor="White" />
                                 <Label Text=" (Pendiente)" TextColor="#AAAAAA" VerticalOptions="Center" FontAttributes="Italic" />
                             </HorizontalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <!-- Lista de Amigos -->
-            <Label Text="Mis Amigos" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
-            <CollectionView ItemsSource="{Binding Amigos}" HeightRequest="300">
-                <CollectionView.EmptyView>
-                    <Label Text="Aún no tienes amigos agregados." TextColor="#CCCCCC" FontAttributes="Italic" />
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:AmigoInfo">
-                        <Frame Padding="10" Margin="0,5" BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15">
-                            <Grid ColumnDefinitions="*, Auto">
-                                <VerticalStackLayout VerticalOptions="Center">
-                                    <Label Text="{Binding Usuario.Nombre}" FontAttributes="Bold" TextColor="White" />
-                                    <Label Text="{Binding Usuario.Email}" FontSize="Small" TextColor="#DDDDDD" />
-                                </VerticalStackLayout>
-                                <Button Grid.Column="1" 
-                                        Text="Eliminar" 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EliminarAmigoCommand}" 
-                                        CommandParameter="{Binding .}" 
-                                        BackgroundColor="#FF6B6B"
-                                        TextColor="White"
-                                        CornerRadius="15"
-                                        HeightRequest="35"
-                                        FontSize="12" />
-                            </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

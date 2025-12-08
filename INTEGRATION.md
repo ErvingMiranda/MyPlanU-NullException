@@ -103,6 +103,94 @@ MyPlanU.sln
    │  ├─ ActividadCompartida.cs
    │  ├─ ChatMessage.cs
    │  ├─ PromptyChatRequest.cs
+   │  └─ ...
+   ├─ Data/
+   │  ├─ SQLiteContext.cs
+   │  └─ Repositories/
+   └─ Business/
+      ├─ AuthService.cs
+      ├─ UserService.cs
+      ├─ AmistadService.cs
+      ├─ ActividadService.cs
+      ├─ ActividadCompartidaService.cs
+      └─ ...
+```
+
+---
+
+## 4. Modelos de Datos (Entidades)
+
+### Usuario (`Usuario.cs`)
+```csharp
+public class Usuario
+{
+    [PrimaryKey, AutoIncrement]
+    public int IdUsuario { get; set; }
+    [Unique]
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+    public string Nombre { get; set; }
+    public string Apodo { get; set; }
+    public string Carrera { get; set; }
+    public string Universidad { get; set; }
+    public DateTime FechaRegistro { get; set; }
+    public string FotoPerfilPath { get; set; }
+}
+```
+
+### Actividad (`Actividad.cs`)
+```csharp
+public class Actividad
+{
+    [PrimaryKey, AutoIncrement]
+    public int IdActividad { get; set; }
+    [Indexed]
+    public int IdUsuarioCreador { get; set; }
+    public string Titulo { get; set; }
+    public string Descripcion { get; set; } // Opcional
+    public string Prioridad { get; set; }
+    public string Estado { get; set; }
+    public DateTime FechaCreacion { get; set; }
+    public DateTime FechaInicio { get; set; }
+    public DateTime FechaFin { get; set; }
+    public bool TodoElDia { get; set; }
+    public string Etiquetas { get; set; }
+}
+```
+
+### ActividadCompartida (`ActividadCompartida.cs`)
+```csharp
+public class ActividadCompartida
+{
+    [PrimaryKey, AutoIncrement]
+    public int IdCompartirActividad { get; set; }
+    [Indexed]
+    public int IdActividad { get; set; }
+    [Indexed]
+    public int IdUsuarioPropietario { get; set; }
+    [Indexed]
+    public int IdUsuarioDestino { get; set; }
+    public string RolCompartido { get; set; } // "Lectura", "Editor"
+    public string EstadoCompartir { get; set; } // "Activo", "Inactivo"
+    public DateTime FechaCompartida { get; set; }
+    public DateTime FechaActualizacion { get; set; }
+}
+```
+
+---
+
+## 5. Lógica de Negocio Clave
+
+### Compartir Eventos
+El sistema soporta dos modos de compartir:
+1.  **Copia (Independiente)**: Se crea un nuevo registro `Actividad` para el usuario destino, copiando los datos del original. Son eventos independientes.
+2.  **Compartido (Colaborativo)**: Se crea un registro en `ActividadCompartida` vinculando el evento original con el usuario destino. Ambos acceden al mismo registro de `Actividad`.
+
+### Amigos
+- Las solicitudes de amistad deben ser aceptadas para que los usuarios aparezcan en la lista de "Mis Amigos".
+- La lista de amigos tiene prioridad visual sobre las solicitudes pendientes.
+
+---
    │  ├─ PromptyChatResponse.cs
    │  ├─ PromptyChatRequest.cs
    │  └─ PromptyChatResponse.cs

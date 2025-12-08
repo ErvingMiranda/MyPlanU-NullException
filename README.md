@@ -55,8 +55,15 @@ Para preparar el entorno de Python:
 ### Actuales
 *   **Gestión de Usuarios**: Registro e inicio de sesión seguro.
 *   **Gestión de Eventos**: Crear, editar, eliminar y listar eventos académicos.
+    *   **Descripción Opcional**: Agiliza la creación de eventos rápidos.
+    *   **Confirmaciones**: Mensajes claros de éxito al crear, editar o eliminar.
+    *   **Seguridad**: Confirmación antes de eliminar eventos importantes.
 *   **Sistema de Amigos**: Buscar usuarios, enviar solicitudes y gestionar amistades.
-*   **Compartir Actividades**: Compartir eventos con amigos y ver actividades compartidas contigo.
+    *   **Privacidad**: Mensajes de solicitud discretos.
+    *   **Organización**: Lista de amigos priorizada sobre solicitudes pendientes.
+*   **Compartir Actividades**:
+    *   **Modo Copia (Independiente)**: Envía una copia del evento a un amigo para que lo gestione por su cuenta.
+    *   **Modo Compartido (Colaborativo)**: Comparte el evento real para que ambos puedan editarlo y ver los cambios en tiempo real.
 *   **Integración con PROMPTY Lite**: Chat con asistente de IA para consultas rápidas.
 *   **Configuración Básica**:
     *   Cambio de tema (Claro/Oscuro).
@@ -141,20 +148,30 @@ El uso de PROMPTY Lite dentro de MyPlanU ha sido autorizado por los creadores or
 
 ---
 
-## 👥 Créditos
+## 👥 Créditos e Historia
 
-Este proyecto es posible gracias al esfuerzo conjunto de dos equipos de desarrollo:
+Este proyecto es la culminación del esfuerzo de tres equipos diferentes a lo largo del tiempo, uniendo tecnologías y visiones, con **Erving Miranda** como hilo conductor en todos ellos (11 colaboradores en total).
 
-### Equipo NullException (Creadores de MyPlanU)
+### 1. Equipo PROMPTY (Tecnología de IA Original)
+Creadores del asistente de escritorio PROMPTY 3.0, cuya tecnología "Lite" impulsa la inteligencia de esta aplicación.
+*   **Owen Bravo**
+*   **María Carrasco**
+*   **Liang Zúñiga**
+*   **Erving Miranda**
+
+### 2. Equipo FluxBoard (Prototipo Móvil - Hackathon Nicaragua 2025)
+Desarrollaron la primera versión móvil de la agenda (sin IA) para la competencia Hackathon Nicaragua 2025.
+*   **Garry Johann Velasquez Cruz** (Líder y diseñador)
+*   **Erving Josué Miranda Ríos** (Programador)
+*   **Sonia del Carmen Pérez Valdivia** (Marketing)
+*   **Mirna Samanta Ulloa** (Marketing)
+*   **Gerson Isaías Ramírez** (Marketing)
+
+### 3. Equipo NullException (Desarrolladores de MyPlanU Actual)
+El equipo actual que ha integrado todo, creando la versión definitiva de MyPlanU con la potencia de PROMPTY.
 *   **Erving Miranda**
 *   **Fernando Zapata**
 *   **Mery López**
 *   **Osman Cerpas**
 
-### Equipo PROMPTY (Tecnología de IA)
-*   **Owen Bravo**
-*   **María Carrasco**
-*   **Liang Zúñiga**
-*   **Erving Miranda** (Integración y adaptación de IA)
-
-**MyPlanU** combina la gestión de productividad académica con la potencia de **PROMPTY**, un asistente de escritorio en Python, para ofrecer una experiencia única a los estudiantes.
+**MyPlanU** combina la gestión de productividad académica con la potencia de **PROMPTY** para ofrecer una experiencia única a los estudiantes.

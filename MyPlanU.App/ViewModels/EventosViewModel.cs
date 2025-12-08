@@ -211,7 +211,12 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     private async Task EliminarEventoAsync(Actividad? actividad)
     {
         if (actividad == null) return;
+
+        bool confirm = await Shell.Current.DisplayAlert("Confirmar", "¿Estás seguro de que quieres borrar este evento?", "Sí", "No");
+        if (!confirm) return;
+
         await _actividadService.DeleteActividadAsync(actividad);
+        await Shell.Current.DisplayAlert("Éxito", "Evento eliminado con éxito", "OK");
         await LoadActividadesAsync();
     }
 
@@ -316,8 +321,12 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    private void ExitApp()
+    private async Task ExitApp()
     {
-        Application.Current.Quit();
+        bool confirm = await Shell.Current.DisplayAlert("Salir", "¿Seguro que quieres salir?", "Sí", "No");
+        if (confirm)
+        {
+            Application.Current.Quit();
+        }
     }
 }

@@ -176,6 +176,7 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             _actividadExistente.FechaFin = fin;
             
             await _actividadService.SaveActividadAsync(_actividadExistente);
+            await Shell.Current.DisplayAlert("Éxito", "Evento actualizado con éxito", "OK");
         }
         else
         {
@@ -193,6 +194,7 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
                 Prioridad = "Normal"
             };
             await _actividadService.SaveActividadAsync(nuevaActividad);
+            await Shell.Current.DisplayAlert("Éxito", "Evento creado con éxito", "OK");
         }
 
         await Shell.Current.GoToAsync("..");
