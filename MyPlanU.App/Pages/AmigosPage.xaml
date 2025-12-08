@@ -4,91 +4,140 @@
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              xmlns:models="clr-namespace:MyPlanU.Backend.Business;assembly=MyPlanU.Backend"
              x:Class="MyPlanU.App.Pages.AmigosPage"
-             Title="Amigos">
+             Title="Amigos"
+             Style="{StaticResource BasePageStyle}">
     
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <!-- Agregar Amigo -->
-            <Label Text="Buscar Usuarios" FontSize="Large" FontAttributes="Bold" />
-            <HorizontalStackLayout Spacing="10">
-                <Entry Placeholder="Apodo o Email" Text="{Binding SearchText}" WidthRequest="200" />
-                <Button Text="Buscar" Command="{Binding SearchUsuariosCommand}" />
-            </HorizontalStackLayout>
+        <VerticalStackLayout Padding="20" Spacing="20">
             
-            <CollectionView ItemsSource="{Binding SearchResults}" HeightRequest="150">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10" Margin="0,5">
-                            <Grid ColumnDefinitions="*, Auto">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Apodo}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Email}" FontSize="Small" TextColor="Gray" />
-                                </VerticalStackLayout>
-                                <Button Grid.Column="1" Text="Enviar Solicitud" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EnviarSolicitudDesdeBusquedaCommand}" CommandParameter="{Binding .}" />
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <!-- Header -->
+            <Label Text="Gestión de Amigos" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   TextColor="White" />
 
-            <BoxView HeightRequest="1" Color="Gray" />
+            <!-- Buscar Usuarios -->
+            <Frame BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Buscar Usuarios" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                        <Entry Placeholder="Apodo o Email" 
+                               Text="{Binding SearchText}" 
+                               TextColor="White" 
+                               PlaceholderColor="#CCCCCC"
+                               BackgroundColor="#30FFFFFF" />
+                        <Button Grid.Column="1" 
+                                Text="Buscar" 
+                                Command="{Binding SearchUsuariosCommand}" 
+                                BackgroundColor="#2fffa3" 
+                                TextColor="#5e17eb" 
+                                FontAttributes="Bold"
+                                CornerRadius="10" />
+                    </Grid>
+                    
+                    <CollectionView ItemsSource="{Binding SearchResults}" HeightRequest="150">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="10" Margin="0,5" BackgroundColor="#30FFFFFF" BorderColor="Transparent" CornerRadius="10">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <VerticalStackLayout VerticalOptions="Center">
+                                            <Label Text="{Binding Apodo}" FontAttributes="Bold" TextColor="White" />
+                                            <Label Text="{Binding Email}" FontSize="Small" TextColor="#DDDDDD" />
+                                        </VerticalStackLayout>
+                                        <Button Grid.Column="1" 
+                                                Text="Enviar Solicitud" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EnviarSolicitudDesdeBusquedaCommand}" 
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#50FFFFFF"
+                                                TextColor="White"
+                                                CornerRadius="15"
+                                                HeightRequest="35"
+                                                FontSize="12" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
 
             <!-- Solicitudes Entrantes -->
-            <Label Text="Solicitudes Recibidas" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="Solicitudes Recibidas" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
             <CollectionView ItemsSource="{Binding SolicitudesEntrantes}" HeightRequest="150">
                 <CollectionView.EmptyView>
-                    <Label Text="No tienes solicitudes pendientes." TextColor="Gray" />
+                    <Label Text="No tienes solicitudes pendientes." TextColor="#CCCCCC" FontAttributes="Italic" />
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:AmigoInfo">
-                        <Frame Padding="10" Margin="0,5">
+                        <Frame Padding="10" Margin="0,5" BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15">
                             <Grid ColumnDefinitions="*, Auto, Auto">
-                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" />
-                                <Button Grid.Column="1" Text="Aceptar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=AceptarSolicitudCommand}" CommandParameter="{Binding .}" Margin="5,0" />
-                                <Button Grid.Column="2" Text="Rechazar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=RechazarSolicitudCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" />
+                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" TextColor="White" />
+                                <Button Grid.Column="1" 
+                                        Text="Aceptar" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=AceptarSolicitudCommand}" 
+                                        CommandParameter="{Binding .}" 
+                                        Margin="5,0"
+                                        BackgroundColor="#2fffa3"
+                                        TextColor="#5e17eb"
+                                        CornerRadius="15"
+                                        HeightRequest="35"
+                                        FontSize="12" />
+                                <Button Grid.Column="2" 
+                                        Text="Rechazar" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=RechazarSolicitudCommand}" 
+                                        CommandParameter="{Binding .}" 
+                                        BackgroundColor="#FF6B6B"
+                                        TextColor="White"
+                                        CornerRadius="15"
+                                        HeightRequest="35"
+                                        FontSize="12" />
                             </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <BoxView HeightRequest="1" Color="Gray" />
-
             <!-- Solicitudes Salientes -->
-            <Label Text="Solicitudes Enviadas" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="Solicitudes Enviadas" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
             <CollectionView ItemsSource="{Binding SolicitudesSalientes}" HeightRequest="100">
                 <CollectionView.EmptyView>
-                    <Label Text="No has enviado solicitudes pendientes." TextColor="Gray" />
+                    <Label Text="No has enviado solicitudes pendientes." TextColor="#CCCCCC" FontAttributes="Italic" />
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:AmigoInfo">
-                        <Frame Padding="10" Margin="0,5">
+                        <Frame Padding="10" Margin="0,5" BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15">
                             <HorizontalStackLayout>
-                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" />
-                                <Label Text=" (Pendiente)" TextColor="Gray" VerticalOptions="Center" />
+                                <Label Text="{Binding Usuario.Email}" VerticalOptions="Center" TextColor="White" />
+                                <Label Text=" (Pendiente)" TextColor="#AAAAAA" VerticalOptions="Center" FontAttributes="Italic" />
                             </HorizontalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <BoxView HeightRequest="1" Color="Gray" />
-
             <!-- Lista de Amigos -->
-            <Label Text="Mis Amigos" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="Mis Amigos" FontSize="20" FontAttributes="Bold" TextColor="White" Margin="0,10,0,0" />
             <CollectionView ItemsSource="{Binding Amigos}" HeightRequest="300">
                 <CollectionView.EmptyView>
-                    <Label Text="Aún no tienes amigos agregados." TextColor="Gray" />
+                    <Label Text="Aún no tienes amigos agregados." TextColor="#CCCCCC" FontAttributes="Italic" />
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:AmigoInfo">
-                        <Frame Padding="10" Margin="0,5">
+                        <Frame Padding="10" Margin="0,5" BackgroundColor="#50000000" BorderColor="Transparent" CornerRadius="15">
                             <Grid ColumnDefinitions="*, Auto">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Usuario.Nombre}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Usuario.Email}" FontSize="Small" TextColor="Gray" />
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding Usuario.Nombre}" FontAttributes="Bold" TextColor="White" />
+                                    <Label Text="{Binding Usuario.Email}" FontSize="Small" TextColor="#DDDDDD" />
                                 </VerticalStackLayout>
-                                <Button Grid.Column="1" Text="Eliminar" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EliminarAmigoCommand}" CommandParameter="{Binding .}" BackgroundColor="Red" />
+                                <Button Grid.Column="1" 
+                                        Text="Eliminar" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AmigosViewModel}}, Path=EliminarAmigoCommand}" 
+                                        CommandParameter="{Binding .}" 
+                                        BackgroundColor="#FF6B6B"
+                                        TextColor="White"
+                                        CornerRadius="15"
+                                        HeightRequest="35"
+                                        FontSize="12" />
                             </Grid>
                         </Frame>
                     </DataTemplate>
