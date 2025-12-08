@@ -152,8 +152,8 @@ El uso de PROMPTY Lite dentro de MyPlanU ha sido autorizado por los creadores or
 
 Este proyecto es la culminación del esfuerzo de tres equipos diferentes a lo largo del tiempo, uniendo tecnologías y visiones, con **Erving Miranda** como hilo conductor en todos ellos (11 colaboradores en total).
 
-### 1. Equipo PROMPTY (Tecnología de IA Original)
-Creadores del asistente de escritorio PROMPTY 3.0, cuya tecnología "Lite" impulsa la inteligencia de esta aplicación.
+### 1. Equipo PROMPTY (Tecnología de IA Original - Introducción a la Programación UAM)
+Creadores del asistente de escritorio PROMPTY 3.0 como proyecto para la asignatura de **Introducción a la Programación** en la **UAM (Universidad Americana)**. Su tecnología "Lite" impulsa la inteligencia de esta aplicación.
 *   **Erving Miranda**
 *   **Liang Zúñiga**
 *   **María Carrasco**
@@ -167,11 +167,17 @@ Desarrollaron la primera versión móvil de la agenda (sin IA) para la competenc
 *   **Mirna Samanta Ulloa**
 *   **Sonia Pérez**
 
-### 3. Equipo NullException (Desarrolladores de MyPlanU Actual)
-El equipo actual que ha integrado todo, creando la versión definitiva de MyPlanU con la potencia de PROMPTY.
+### 3. Equipo NullException (Desarrolladores de MyPlanU Actual - Programación Estructurada UAM)
+El equipo actual que ha integrado todo, creando la versión definitiva de MyPlanU con la potencia de PROMPTY como proyecto para la asignatura de **Programación Estructurada** en la **UAM (Universidad Americana)**.
 *   **Erving Miranda**
 *   **Fernando Zapata**
 *   **Mery López**
 *   **Osman Cerpas**
 
 **MyPlanU** combina la gestión de productividad académica con la potencia de **PROMPTY** para ofrecer una experiencia única a los estudiantes.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia **Creative Commons Attribution 4.0 International (CC BY 4.0)**. Consulta el archivo `LICENSE` para más detalles.
