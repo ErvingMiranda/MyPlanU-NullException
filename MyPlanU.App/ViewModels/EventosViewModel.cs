@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyPlanU.Backend.Business;
+using MyPlanU.Backend.Data.Repositories;
 using MyPlanU.Backend.Models;
 using MyPlanU.Backend.Services;
 using MyPlanU.App.Pages;
@@ -13,6 +14,7 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     private readonly ActividadService _actividadService;
     private readonly ActividadCompartidaService _actividadCompartidaService;
     private readonly AmistadService _amistadService;
+    private readonly IUsuarioRepository _usuarioRepository;
     private readonly IPromptyLiteClient _promptyClient;
     private readonly PromptyLauncher _promptyLauncher;
     private Usuario? _usuario;
@@ -26,12 +28,14 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     public EventosViewModel(ActividadService actividadService, 
                             ActividadCompartidaService actividadCompartidaService,
                             AmistadService amistadService,
+                            IUsuarioRepository usuarioRepository,
                             IPromptyLiteClient promptyClient, 
                             PromptyLauncher promptyLauncher)
     {
         _actividadService = actividadService;
         _actividadCompartidaService = actividadCompartidaService;
         _amistadService = amistadService;
+        _usuarioRepository = usuarioRepository;
         _promptyClient = promptyClient;
         _promptyLauncher = promptyLauncher;
         Actividades = new ObservableCollection<Actividad>();
@@ -79,6 +83,20 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
     {
         if (actividad == null || _usuario == null) return;
 
+        string action = await Shell.Current.DisplayActionSheet($"Gestionar '{actividad.Titulo}'", "Cancelar", null, "Compartir con amigo", "Ver compartidos / Dejar de compartir");
+
+        if (action == "Compartir con amigo")
+        {
+            await CompartirConAmigo(actividad);
+        }
+        else if (action == "Ver compartidos / Dejar de compartir")
+        {
+            await DejarDeCompartirActividadAsync(actividad);
+        }
+    }
+
+    private async Task CompartirConAmigo(Actividad actividad)
+    {
         // 1. Obtener amigos
         var amigos = await _amistadService.ObtenerAmigosConfirmados(_usuario.IdUsuario);
         if (amigos.Count == 0)
@@ -99,11 +117,55 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
             bool success = await _actividadCompartidaService.CompartirActividadAsync(actividad.IdActividad, _usuario.IdUsuario, amigoSeleccionado.Usuario.IdUsuario, "Lectura");
             if (success)
             {
-                await Shell.Current.DisplayAlert("Éxito", "Actividad compartida correctamente.", "OK");
+                await Shell.Current.DisplayAlert("Éxito", $"Actividad compartida con {amigoSeleccionado.Usuario.Apodo ?? amigoSeleccionado.Usuario.Nombre}", "OK");
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "No se pudo compartir (quizás ya está compartida).", "OK");
+                await Shell.Current.DisplayAlert("Info", "Ya estás compartiendo esta actividad con este usuario o hubo un error.", "OK");
+            }
+        }
+    }
+
+    private async Task DejarDeCompartirActividadAsync(Actividad actividad)
+    {
+        // Obtener relaciones
+        var relaciones = await _actividadCompartidaService.ObtenerRelacionesDeActividadAsync(actividad.IdActividad);
+        if (relaciones.Count == 0)
+        {
+            await Shell.Current.DisplayAlert("Info", "No estás compartiendo esta actividad con nadie.", "OK");
+            return;
+        }
+
+        // Obtener nombres de usuarios
+        var opciones = new List<string>();
+        var relacionMap = new Dictionary<string, ActividadCompartida>();
+
+        foreach (var rel in relaciones)
+        {
+            var u = await _usuarioRepository.GetUsuarioAsync(rel.IdUsuarioDestino);
+            if (u != null)
+            {
+                string nombre = u.Apodo ?? u.Nombre ?? u.Email;
+                string key = $"{nombre} ({u.Email})";
+                opciones.Add(key);
+                relacionMap[key] = rel;
+            }
+        }
+
+        string seleccion = await Shell.Current.DisplayActionSheet($"Dejar de compartir '{actividad.Titulo}' con:", "Cancelar", null, opciones.ToArray());
+
+        if (seleccion == "Cancelar" || seleccion == null) return;
+
+        if (relacionMap.TryGetValue(seleccion, out var relacion))
+        {
+            bool success = await _actividadCompartidaService.DejarDeCompartirActividadAsync(relacion.IdCompartirActividad);
+            if (success)
+            {
+                await Shell.Current.DisplayAlert("Éxito", $"Has dejado de compartir con {seleccion}", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo realizar la acción.", "OK");
             }
         }
     }

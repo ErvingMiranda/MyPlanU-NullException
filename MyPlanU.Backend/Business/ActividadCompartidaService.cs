@@ -105,4 +105,28 @@ public class ActividadCompartidaService
         }
         return actividades;
     }
+
+    public async Task<bool> DejarDeCompartirActividadAsync(int idCompartirActividad)
+    {
+        await InitAsync();
+        var compartida = await _context.Connection.Table<ActividadCompartida>()
+            .Where(ac => ac.IdCompartirActividad == idCompartirActividad)
+            .FirstOrDefaultAsync();
+
+        if (compartida == null) return false;
+
+        compartida.EstadoCompartir = "Inactivo";
+        compartida.FechaActualizacion = DateTime.UtcNow;
+        
+        await _context.Connection.UpdateAsync(compartida);
+        return true;
+    }
+
+    public async Task<List<ActividadCompartida>> ObtenerRelacionesDeActividadAsync(int idActividad)
+    {
+        await InitAsync();
+        return await _context.Connection.Table<ActividadCompartida>()
+            .Where(ac => ac.IdActividad == idActividad && ac.EstadoCompartir == "Activo")
+            .ToListAsync();
+    }
 }

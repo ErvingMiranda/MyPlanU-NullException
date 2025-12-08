@@ -276,6 +276,14 @@ Flujo estándar:
    - Ir a **ConfiguracionPage**.  
    - Cerrar sesión → vuelve a Login.  
 
+### Flujo de Compartir Actividades
+Desde **EventosPage**:
+1. El usuario selecciona "Compartir" en una actividad propia.
+2. Se despliega un menú de gestión:
+   - **Compartir con amigo**: Muestra lista de amigos confirmados para seleccionar.
+   - **Ver compartidos / Dejar de compartir**: Muestra usuarios con acceso y permite revocarlo.
+3. Las actividades compartidas por otros aparecen en una sección diferenciada "Compartidas Conmigo".
+
 La navegación está implementada con `.NET MAUI Shell` (`AppShell`).
 
 ---

@@ -55,13 +55,15 @@ Para preparar el entorno de Python:
 ### Actuales
 *   **Gestión de Usuarios**: Registro e inicio de sesión seguro.
 *   **Gestión de Eventos**: Crear, editar, eliminar y listar eventos académicos.
+*   **Sistema de Amigos**: Buscar usuarios, enviar solicitudes y gestionar amistades.
+*   **Compartir Actividades**: Compartir eventos con amigos y ver actividades compartidas contigo.
 *   **Integración con PROMPTY Lite**: Chat con asistente de IA para consultas rápidas.
 *   **Configuración Básica**:
     *   Cambio de tema (Claro/Oscuro).
     *   Cambio de contraseña.
+    *   Edición de perfil.
 
 ### En Desarrollo (Próximamente)
-*   Edición de perfil de usuario.
 *   Sistema de Notificaciones y Alertas.
 *   Creación automática de eventos desde el chat de IA.
 

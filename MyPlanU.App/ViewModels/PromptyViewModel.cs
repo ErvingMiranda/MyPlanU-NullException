@@ -107,8 +107,9 @@ public partial class PromptyViewModel : ObservableObject
     {
         try
         {
+            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Iniciando Prompty… listo para ayudarte." });
             await _promptyLauncher.StartPromptyGuiAsync();
-            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Iniciando GUI de PROMPTY..." });
+            Mensajes.Add(new ChatMessage { Rol = "Sistema", Texto = "Prompty terminó su sesión. Seguimos en modo Lite." });
         }
         catch (Exception ex)
         {

@@ -14,7 +14,7 @@ public class PromptyLauncher
             ? "start_prompty_api.bat"
             : "start_prompty_api.sh";
 
-        await RunScriptAsync(scriptName);
+        await RunScriptAsync(scriptName, waitForExit: false);
     }
 
     public async Task StartPromptyGuiAsync()
@@ -23,10 +23,10 @@ public class PromptyLauncher
             ? "start_prompty_gui.bat"
             : "start_prompty_gui.sh"; // Asumiendo que existe o se creará
 
-        await RunScriptAsync(scriptName);
+        await RunScriptAsync(scriptName, waitForExit: true);
     }
 
-    private async Task RunScriptAsync(string scriptName)
+    private async Task RunScriptAsync(string scriptName, bool waitForExit)
     {
         string promptyBasePath = DetectPromptyBasePath();
         string fullPath = Path.Combine(promptyBasePath, SCRIPTS_FOLDER, scriptName);
@@ -82,20 +82,27 @@ public class PromptyLauncher
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 
-            // No esperamos a que el proceso termine (await process.WaitForExitAsync())
-            // porque es un servidor que debe quedar corriendo en segundo plano.
-            // Damos un pequeño margen para capturar errores de arranque inmediato.
-            await Task.Delay(2000);
-
-            if (process.HasExited)
+            if (waitForExit)
             {
-                string errorOutput = errorBuilder.ToString();
-                if (process.ExitCode != 0 || !string.IsNullOrWhiteSpace(errorOutput))
+                await process.WaitForExitAsync();
+            }
+            else
+            {
+                // No esperamos a que el proceso termine (await process.WaitForExitAsync())
+                // porque es un servidor que debe quedar corriendo en segundo plano.
+                // Damos un pequeño margen para capturar errores de arranque inmediato.
+                await Task.Delay(2000);
+
+                if (process.HasExited)
                 {
-                    throw new InvalidOperationException(
-                        $"[PromptyLauncher] El script '{scriptName}' falló al iniciar con código {process.ExitCode}. " +
-                        $"Error: {errorOutput}. " +
-                        $"Salida: {outputBuilder.ToString()}");
+                    string errorOutput = errorBuilder.ToString();
+                    if (process.ExitCode != 0 || !string.IsNullOrWhiteSpace(errorOutput))
+                    {
+                        throw new InvalidOperationException(
+                            $"[PromptyLauncher] El script '{scriptName}' falló al iniciar con código {process.ExitCode}. " +
+                            $"Error: {errorOutput}. " +
+                            $"Salida: {outputBuilder.ToString()}");
+                    }
                 }
             }
 
