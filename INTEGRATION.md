@@ -79,7 +79,8 @@ MyPlanU.sln
 │  │  ├─ CrearEventoPage.xaml(.cs)
 │  │  ├─ ConfiguracionPage.xaml(.cs)
 │  │  ├─ CambiarPasswordPage.xaml(.cs)
-│  │  └─ PromptyPage.xaml(.cs)
+│  │  ├─ PromptyPage.xaml(.cs)
+│  │  └─ AmigosPage.xaml(.cs)
 │  ├─ ViewModels/
 │  │  ├─ LoginViewModel.cs
 │  │  ├─ RegistroViewModel.cs
@@ -88,6 +89,7 @@ MyPlanU.sln
 │  │  ├─ ConfiguracionViewModel.cs
 │  │  ├─ CambiarPasswordViewModel.cs
 │  │  ├─ PromptyViewModel.cs
+│  │  ├─ AmigosViewModel.cs
 │  │  └─ ValidationHelper.cs
 │  └─ Platforms/              # Generado automáticamente por MAUI
 │
@@ -110,9 +112,11 @@ MyPlanU.sln
    │     └─ (Repositorios implementados o integrados en servicios)
    ├─ Business/
    │  ├─ AuthService.cs
+   │  ├─ UserService.cs
    │  ├─ ActividadService.cs
    │  ├─ RecordatorioService.cs
-   │  └─ ActividadCompartidaService.cs
+   │  ├─ ActividadCompartidaService.cs
+   │  └─ AmistadService.cs
    └─ Services/
       ├─ IPromptyLiteClient.cs
       ├─ PromptyLiteHttpClient.cs

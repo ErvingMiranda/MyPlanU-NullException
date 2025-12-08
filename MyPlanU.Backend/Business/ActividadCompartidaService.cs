@@ -2,6 +2,9 @@ using MyPlanU.Backend.Data;
 using MyPlanU.Backend.Data.Repositories;
 using MyPlanU.Backend.Models;
 using SQLite;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyPlanU.Backend.Business;
 
