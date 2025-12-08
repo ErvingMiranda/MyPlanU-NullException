@@ -92,7 +92,15 @@ public static class MauiProgram
         builder.Services.AddTransient<CambiarPasswordPage>();
         builder.Services.AddTransient<CambiarPasswordViewModel>();
 
+        builder.Services.AddTransient<RecuperarPasswordPage>();
+        builder.Services.AddTransient<RecuperarPasswordViewModel>();
+
+        builder.Services.AddTransient<EditarPerfilPage>();
+        builder.Services.AddTransient<EditarPerfilViewModel>();
+
         builder.Services.AddTransient<AmigosPage>();
+
+
         builder.Services.AddTransient<AmigosViewModel>();
 
 		return builder.Build();

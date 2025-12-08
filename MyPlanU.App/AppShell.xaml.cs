@@ -13,6 +13,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(PromptyPage), typeof(PromptyPage));
         Routing.RegisterRoute(nameof(CrearEventoPage), typeof(CrearEventoPage));
         Routing.RegisterRoute(nameof(CambiarPasswordPage), typeof(CambiarPasswordPage));
+        Routing.RegisterRoute(nameof(RecuperarPasswordPage), typeof(RecuperarPasswordPage));
+        Routing.RegisterRoute(nameof(EditarPerfilPage), typeof(EditarPerfilPage));
         Routing.RegisterRoute(nameof(AmigosPage), typeof(AmigosPage));
 	}
 }

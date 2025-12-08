@@ -64,4 +64,16 @@ public partial class LoginViewModel : ObservableObject, IQueryAttributable
             await Shell.Current.DisplayAlert("Error", "Credenciales inválidas", "OK");
         }
     }
+
+    [RelayCommand]
+    private void Exit()
+    {
+        Application.Current.Quit();
+    }
+
+    [RelayCommand]
+    private async Task ForgotPasswordAsync()
+    {
+        await Shell.Current.GoToAsync("RecuperarPasswordPage");
+    }
 }

@@ -73,7 +73,8 @@
                                                    Placeholder="Tu nombre"
                                                    TextColor="White"
                                                    PlaceholderColor="#E0E0E0"
-                                                   BackgroundColor="Transparent" />
+                                                   BackgroundColor="Transparent"
+                                                   Text="{Binding Nombre}" />
                                         </VerticalStackLayout>
 
                                         <VerticalStackLayout Spacing="5">
@@ -83,7 +84,8 @@
                                                    Keyboard="Email"
                                                    TextColor="White"
                                                    PlaceholderColor="#E0E0E0"
-                                                   BackgroundColor="Transparent" />
+                                                   BackgroundColor="Transparent"
+                                                   Text="{Binding Email}" />
                                         </VerticalStackLayout>
 
                                         <VerticalStackLayout Spacing="5">
@@ -93,7 +95,29 @@
                                                    IsPassword="True"
                                                    TextColor="White"
                                                    PlaceholderColor="#E0E0E0"
-                                                   BackgroundColor="Transparent" />
+                                                   BackgroundColor="Transparent"
+                                                   Text="{Binding Password}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Pregunta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Picker x:Name="PreguntaPicker"
+                                                    Title="Selecciona una pregunta"
+                                                    TitleColor="#E0E0E0"
+                                                    TextColor="White"
+                                                    BackgroundColor="Transparent"
+                                                    ItemsSource="{Binding PreguntasDisponibles}"
+                                                    SelectedItem="{Binding PreguntaSeguridad}" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Spacing="5">
+                                            <Label Text="Respuesta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Entry x:Name="RespuestaEntry"
+                                                   Placeholder="Tu respuesta"
+                                                   TextColor="White"
+                                                   PlaceholderColor="#E0E0E0"
+                                                   BackgroundColor="Transparent"
+                                                   Text="{Binding RespuestaSeguridad}" />
                                         </VerticalStackLayout>
 
                                         <Button Text="Registrarse"
@@ -102,7 +126,7 @@
                                                 TextColor="White"
                                                 CornerRadius="25"
                                                 HeightRequest="48"
-                                                Clicked="OnRegistrarseClicked" />
+                                                Command="{Binding RegistrarCommand}" />
 
                                     </VerticalStackLayout>
                                 </Frame>

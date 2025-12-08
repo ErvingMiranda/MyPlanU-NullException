@@ -17,4 +17,6 @@ public class Usuario
     public string ZonaHoraria { get; set; }
     public DateTime FechaRegistro { get; set; }
     public string EstadoCuenta { get; set; }
+    public string PreguntaSeguridad { get; set; }
+    public string RespuestaSeguridad { get; set; }
 }

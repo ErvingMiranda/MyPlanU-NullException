@@ -34,7 +34,7 @@ public partial class ConfiguracionViewModel : ObservableObject
     [RelayCommand]
     private async Task EditarPerfilAsync()
     {
-        await Application.Current.MainPage.DisplayAlert("Editar Perfil", "Esta funcionalidad estará disponible próximamente.", "OK");
+        await Shell.Current.GoToAsync(nameof(Pages.EditarPerfilPage));
     }
 
     [RelayCommand]

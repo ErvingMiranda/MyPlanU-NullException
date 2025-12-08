@@ -43,4 +43,32 @@ public class AuthService
         await _usuarioRepository.SaveUsuarioAsync(usuario);
         return true;
     }
+
+    public async Task<string?> GetSecurityQuestionAsync(string email)
+    {
+        var usuario = await _usuarioRepository.GetUsuarioByEmailAsync(email);
+        return usuario?.PreguntaSeguridad;
+    }
+
+    public async Task<bool> VerifySecurityAnswerAsync(string email, string answer)
+    {
+        var usuario = await _usuarioRepository.GetUsuarioByEmailAsync(email);
+        if (usuario == null) return false;
+        return string.Equals(usuario.RespuestaSeguridad, answer, StringComparison.OrdinalIgnoreCase);
+    }
+
+    public async Task<bool> ResetPasswordAsync(string email, string newPassword)
+    {
+        var usuario = await _usuarioRepository.GetUsuarioByEmailAsync(email);
+        if (usuario == null) return false;
+        usuario.ContrasenaHash = newPassword;
+        await _usuarioRepository.SaveUsuarioAsync(usuario);
+        return true;
+    }
+
+    public async Task<bool> UpdateProfileAsync(Usuario usuario)
+    {
+        await _usuarioRepository.SaveUsuarioAsync(usuario);
+        return true;
+    }
 }
