@@ -161,11 +161,11 @@ Creadores del asistente de escritorio PROMPTY 3.0, cuya tecnología "Lite" impul
 
 ### 2. Equipo FluxBoard (Prototipo Móvil - Hackathon Nicaragua 2025)
 Desarrollaron la primera versión móvil de la agenda (sin IA) para la competencia Hackathon Nicaragua 2025.
-*   **Garry Johann Velasquez Cruz**
+*   **Garry Velasquez**
 *   **Erving Josué Miranda Ríos**
-*   **Sonia del Carmen Pérez Valdivia**
+*   **Sonia Pérez**
 *   **Mirna Samanta Ulloa**
-*   **Gerson Isaías Ramírez**
+*   **Gerson Ramírez**
 
 ### 3. Equipo NullException (Desarrolladores de MyPlanU Actual)
 El equipo actual que ha integrado todo, creando la versión definitiva de MyPlanU con la potencia de PROMPTY.
