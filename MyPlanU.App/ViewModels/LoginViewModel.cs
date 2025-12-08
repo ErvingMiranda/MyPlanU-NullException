@@ -66,9 +66,13 @@ public partial class LoginViewModel : ObservableObject, IQueryAttributable
     }
 
     [RelayCommand]
-    private void Exit()
+    private async Task Exit()
     {
-        Application.Current.Quit();
+        bool confirm = await Shell.Current.DisplayAlert("Salir", "¿Seguro que quieres salir?", "Sí", "No");
+        if (confirm)
+        {
+            Application.Current.Quit();
+        }
     }
 
     [RelayCommand]

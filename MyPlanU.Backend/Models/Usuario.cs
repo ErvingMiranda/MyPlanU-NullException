@@ -14,7 +14,6 @@ public class Usuario
     public string ContrasenaHash { get; set; }
     public string AvatarUrl { get; set; }
     public string Pais { get; set; }
-    public string ZonaHoraria { get; set; }
     public DateTime FechaRegistro { get; set; }
     public string EstadoCuenta { get; set; }
     public string PreguntaSeguridad { get; set; }

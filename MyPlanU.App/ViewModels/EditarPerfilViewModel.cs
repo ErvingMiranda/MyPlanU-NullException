@@ -23,27 +23,34 @@ public partial class EditarPerfilViewModel : ObservableObject
     private string pais;
 
     [ObservableProperty]
-    private string zonaHoraria;
+    private string preguntaSeguridad;
 
     [ObservableProperty]
-    private string preguntaSeguridad;
+    private string preguntaPersonalizada;
 
     [ObservableProperty]
     private string respuestaSeguridad;
 
+    [ObservableProperty]
+    private bool isCustomQuestionVisible;
+
     public List<string> PreguntasDisponibles { get; } = new List<string>
     {
-        "¿Cuál es el nombre de tu primera mascota?",
-        "¿En qué ciudad naciste?",
-        "¿Cuál es el nombre de tu madre?",
         "¿Cuál es tu comida favorita?",
-        "¿Cuál es el nombre de tu mejor amigo de la infancia?"
+        "¿Cuál es tu color favorito?",
+        "¿Cómo se llama tu mejor amigo?",
+        "Escribir mi propia pregunta..."
     };
 
     public EditarPerfilViewModel(AuthService authService)
     {
         _authService = authService;
         LoadUserData();
+    }
+
+    partial void OnPreguntaSeguridadChanged(string value)
+    {
+        IsCustomQuestionVisible = value == "Escribir mi propia pregunta...";
     }
 
     private void LoadUserData()
@@ -55,8 +62,18 @@ public partial class EditarPerfilViewModel : ObservableObject
             Apellido = _currentUser.Apellido;
             Apodo = _currentUser.Apodo;
             Pais = _currentUser.Pais;
-            ZonaHoraria = _currentUser.ZonaHoraria;
-            PreguntaSeguridad = _currentUser.PreguntaSeguridad;
+            
+            // Check if current question is in the list
+            if (PreguntasDisponibles.Contains(_currentUser.PreguntaSeguridad))
+            {
+                PreguntaSeguridad = _currentUser.PreguntaSeguridad;
+            }
+            else
+            {
+                // It's a custom question
+                PreguntaSeguridad = "Escribir mi propia pregunta...";
+                PreguntaPersonalizada = _currentUser.PreguntaSeguridad;
+            }
         }
     }
 
@@ -69,10 +86,21 @@ public partial class EditarPerfilViewModel : ObservableObject
         _currentUser.Apellido = Apellido;
         _currentUser.Apodo = Apodo;
         _currentUser.Pais = Pais;
-        _currentUser.ZonaHoraria = ZonaHoraria;
         
         if (!string.IsNullOrWhiteSpace(PreguntaSeguridad))
-            _currentUser.PreguntaSeguridad = PreguntaSeguridad;
+        {
+            string preguntaFinal = PreguntaSeguridad;
+            if (IsCustomQuestionVisible)
+            {
+                if (string.IsNullOrWhiteSpace(PreguntaPersonalizada))
+                {
+                    await Shell.Current.DisplayAlert("Error", "Por favor escribe tu pregunta personalizada.", "OK");
+                    return;
+                }
+                preguntaFinal = PreguntaPersonalizada;
+            }
+            _currentUser.PreguntaSeguridad = preguntaFinal;
+        }
             
         if (!string.IsNullOrWhiteSpace(RespuestaSeguridad))
             _currentUser.RespuestaSeguridad = RespuestaSeguridad;

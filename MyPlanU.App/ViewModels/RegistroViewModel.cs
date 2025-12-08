@@ -1,44 +1,56 @@
-using System.Windows.Input;
-using Microsoft.Maui.Controls;
-
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MyPlanU.Backend.Business;
 using MyPlanU.Backend.Models;
 
 namespace MyPlanU.App.ViewModels;
 
-public class RegistroViewModel
+public partial class RegistroViewModel : ObservableObject
 {
     private readonly AuthService _authService;
 
     // PROPIEDADES DEL FORMULARIO
-    public string Nombre { get; set; }
-    public string Email  { get; set; }
-    public string Password { get; set; }
-    public string PreguntaSeguridad { get; set; }
-    public string RespuestaSeguridad { get; set; }
+    [ObservableProperty]
+    private string nombre;
+
+    [ObservableProperty]
+    private string email;
+
+    [ObservableProperty]
+    private string password;
+
+    [ObservableProperty]
+    private string preguntaSeguridad;
+
+    [ObservableProperty]
+    private string preguntaPersonalizada;
+
+    [ObservableProperty]
+    private string respuestaSeguridad;
+
+    [ObservableProperty]
+    private bool isCustomQuestionVisible;
 
     public List<string> PreguntasDisponibles { get; } = new List<string>
     {
-        "¿Cuál es el nombre de tu primera mascota?",
-        "¿En qué ciudad naciste?",
-        "¿Cuál es el nombre de tu madre?",
         "¿Cuál es tu comida favorita?",
-        "¿Cuál es el nombre de tu mejor amigo de la infancia?"
+        "¿Cuál es tu color favorito?",
+        "¿Cómo se llama tu mejor amigo?",
+        "Escribir mi propia pregunta..."
     };
-
-    // COMMAND PARA EL BOTÓN REGISTRARSE
-    public ICommand RegistrarCommand { get; }
-    public ICommand GoBackCommand { get; }
 
     public RegistroViewModel(AuthService authService)
     {
         _authService = authService;
-        // Command de MAUI (nativo, sin librerías extra)
-        RegistrarCommand = new Command(async () => await Registrar());
-        GoBackCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
     }
 
-    private async Task Registrar()
+    partial void OnPreguntaSeguridadChanged(string value)
+    {
+        IsCustomQuestionVisible = value == "Escribir mi propia pregunta...";
+    }
+
+    [RelayCommand]
+    private async Task RegistrarAsync()
     {
         // VALIDACIONES BÁSICAS
         if (string.IsNullOrWhiteSpace(Nombre) ||
@@ -47,11 +59,22 @@ public class RegistroViewModel
             string.IsNullOrWhiteSpace(PreguntaSeguridad) ||
             string.IsNullOrWhiteSpace(RespuestaSeguridad))
         {
-            await Application.Current.MainPage.DisplayAlert(
+            await Shell.Current.DisplayAlert(
                 "Error",
                 "Por favor completa todos los campos, incluyendo la pregunta de seguridad.",
                 "Aceptar");
             return;
+        }
+
+        string preguntaFinal = PreguntaSeguridad;
+        if (IsCustomQuestionVisible)
+        {
+            if (string.IsNullOrWhiteSpace(PreguntaPersonalizada))
+            {
+                await Shell.Current.DisplayAlert("Error", "Por favor escribe tu pregunta personalizada.", "OK");
+                return;
+            }
+            preguntaFinal = PreguntaPersonalizada;
         }
 
         var nuevoUsuario = new Usuario
@@ -59,7 +82,7 @@ public class RegistroViewModel
             Nombre = Nombre,
             Email = Email,
             ContrasenaHash = Password, // En producción, hashear esto
-            PreguntaSeguridad = PreguntaSeguridad,
+            PreguntaSeguridad = preguntaFinal,
             RespuestaSeguridad = RespuestaSeguridad,
             FechaRegistro = DateTime.Now,
             EstadoCuenta = "Activo"
@@ -69,21 +92,27 @@ public class RegistroViewModel
 
         if (exito)
         {
-            await Application.Current.MainPage.DisplayAlert(
+            await Shell.Current.DisplayAlert(
                 "¡Registrado!",
                 "Tu cuenta fue creada correctamente 💜",
                 "Continuar");
 
             // Navegar atrás (volver al Login)
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await Shell.Current.GoToAsync("..");
         }
         else
         {
-            await Application.Current.MainPage.DisplayAlert(
+            await Shell.Current.DisplayAlert(
                 "Error",
                 "El correo ya está registrado o hubo un problema.",
                 "Aceptar");
         }
+    }
+
+    [RelayCommand]
+    private async Task GoBackAsync()
+    {
+        await Shell.Current.GoToAsync("..");
     }
 }
 

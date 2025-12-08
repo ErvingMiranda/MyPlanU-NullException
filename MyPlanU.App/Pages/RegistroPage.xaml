@@ -110,6 +110,15 @@
                                                     SelectedItem="{Binding PreguntaSeguridad}" />
                                         </VerticalStackLayout>
 
+                                        <VerticalStackLayout Spacing="5" IsVisible="{Binding IsCustomQuestionVisible}">
+                                            <Label Text="Escribe tu pregunta" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                                            <Entry Placeholder="¿Cuál es tu pregunta?"
+                                                   TextColor="White"
+                                                   PlaceholderColor="#E0E0E0"
+                                                   BackgroundColor="Transparent"
+                                                   Text="{Binding PreguntaPersonalizada}" />
+                                        </VerticalStackLayout>
+
                                         <VerticalStackLayout Spacing="5">
                                             <Label Text="Respuesta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
                                             <Entry x:Name="RespuestaEntry"

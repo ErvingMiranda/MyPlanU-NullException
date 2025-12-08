@@ -169,9 +169,10 @@ El sistema usa las siguientes entidades principales.
 - `contrasena_hash`  
 - `avatar_url`  
 - `pais`  
-- `zona_horaria`  
 - `fecha_registro`  
 - `estado_cuenta`
+- `pregunta_seguridad`
+- `respuesta_seguridad`
 
 Relaciones:
 - 1:1 con PROMPTY  

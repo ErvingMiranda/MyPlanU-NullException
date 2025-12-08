@@ -77,15 +77,6 @@
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Zona Horaria" TextColor="White" FontSize="14" FontAttributes="Bold"/>
-                            <Entry Placeholder="Zona Horaria"
-                                   Text="{Binding ZonaHoraria}"
-                                   TextColor="White"
-                                   PlaceholderColor="#E0E0E0"
-                                   BackgroundColor="Transparent" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Spacing="5">
                             <Label Text="Pregunta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
                             <Picker Title="Selecciona una pregunta"
                                     TitleColor="#E0E0E0"
@@ -93,6 +84,15 @@
                                     BackgroundColor="Transparent"
                                     ItemsSource="{Binding PreguntasDisponibles}"
                                     SelectedItem="{Binding PreguntaSeguridad}" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5" IsVisible="{Binding IsCustomQuestionVisible}">
+                            <Label Text="Escribe tu pregunta" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="¿Cuál es tu pregunta?"
+                                   TextColor="White"
+                                   PlaceholderColor="#E0E0E0"
+                                   BackgroundColor="Transparent"
+                                   Text="{Binding PreguntaPersonalizada}" />
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="5">
