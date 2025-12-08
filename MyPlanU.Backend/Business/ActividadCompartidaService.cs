@@ -129,4 +129,29 @@ public class ActividadCompartidaService
             .Where(ac => ac.IdActividad == idActividad && ac.EstadoCompartir == "Activo")
             .ToListAsync();
     }
+
+    public async Task<bool> CopiarActividadParaUsuarioAsync(int idActividad, int idUsuarioDestino)
+    {
+        await InitAsync();
+        var actividad = await _actividadRepository.GetActividadAsync(idActividad);
+        if (actividad == null) return false;
+
+        var nuevaActividad = new Actividad
+        {
+            IdUsuarioCreador = idUsuarioDestino,
+            Titulo = actividad.Titulo,
+            Descripcion = actividad.Descripcion,
+            Prioridad = actividad.Prioridad,
+            Estado = actividad.Estado,
+            FechaCreacion = DateTime.Now,
+            FechaInicio = actividad.FechaInicio,
+            FechaFin = actividad.FechaFin,
+            TodoElDia = actividad.TodoElDia,
+            NotaRapida = actividad.NotaRapida,
+            Etiquetas = actividad.Etiquetas
+        };
+        
+        await _actividadRepository.SaveActividadAsync(nuevaActividad);
+        return true;
+    }
 }

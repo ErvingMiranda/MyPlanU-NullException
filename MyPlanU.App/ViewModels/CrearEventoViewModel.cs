@@ -149,9 +149,9 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     [RelayCommand]
     private async Task GuardarAsync()
     {
-        if (string.IsNullOrWhiteSpace(Titulo) || string.IsNullOrWhiteSpace(Descripcion))
+        if (string.IsNullOrWhiteSpace(Titulo))
         {
-            await Shell.Current.DisplayAlert("Error", "Complete título y descripción", "OK");
+            await Shell.Current.DisplayAlert("Error", "El título es obligatorio", "OK");
             return;
         }
 

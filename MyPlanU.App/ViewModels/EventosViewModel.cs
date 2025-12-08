@@ -114,14 +114,27 @@ public partial class EventosViewModel : ObservableObject, IQueryAttributable
         var amigoSeleccionado = amigos.FirstOrDefault(a => (a.Usuario.Apodo ?? a.Usuario.Nombre) == seleccion);
         if (amigoSeleccionado != null)
         {
-            bool success = await _actividadCompartidaService.CompartirActividadAsync(actividad.IdActividad, _usuario.IdUsuario, amigoSeleccionado.Usuario.IdUsuario, "Lectura");
-            if (success)
+            string modo = await Shell.Current.DisplayActionSheet("¿Cómo quieres compartir?", "Cancelar", null, "Copia (Independiente)", "Compartido (Colaborativo)");
+
+            if (modo == "Copia (Independiente)")
             {
-                await Shell.Current.DisplayAlert("Éxito", $"Actividad compartida con {amigoSeleccionado.Usuario.Apodo ?? amigoSeleccionado.Usuario.Nombre}", "OK");
+                bool success = await _actividadCompartidaService.CopiarActividadParaUsuarioAsync(actividad.IdActividad, amigoSeleccionado.Usuario.IdUsuario);
+                if (success)
+                    await Shell.Current.DisplayAlert("Éxito", $"Copia creada para {amigoSeleccionado.Usuario.Apodo ?? amigoSeleccionado.Usuario.Nombre}", "OK");
+                else
+                    await Shell.Current.DisplayAlert("Error", "No se pudo crear la copia", "OK");
             }
-            else
+            else if (modo == "Compartido (Colaborativo)")
             {
-                await Shell.Current.DisplayAlert("Info", "Ya estás compartiendo esta actividad con este usuario o hubo un error.", "OK");
+                bool success = await _actividadCompartidaService.CompartirActividadAsync(actividad.IdActividad, _usuario.IdUsuario, amigoSeleccionado.Usuario.IdUsuario, "Editor");
+                if (success)
+                {
+                    await Shell.Current.DisplayAlert("Éxito", $"Actividad compartida con {amigoSeleccionado.Usuario.Apodo ?? amigoSeleccionado.Usuario.Nombre}", "OK");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Info", "Ya estás compartiendo esta actividad con este usuario o hubo un error.", "OK");
+                }
             }
         }
     }
