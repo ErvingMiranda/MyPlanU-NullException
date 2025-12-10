@@ -41,11 +41,11 @@ La solución sigue una arquitectura limpia dividida en capas para asegurar mante
 ### Para PROMPTY 3.0 (IA)
 PROMPTY funciona como un servicio local en Python. No es necesario para compilar la app, pero sí para usar las funciones de IA.
 
-*   **Python 3.10+** instalado.
+*   **Python 3.13+** instalado.
 *   **uv** (Gestor de paquetes de Python rápido).
 
 Para preparar el entorno de Python:
-1.  Abre una terminal en la carpeta `PROMPTY_3.0`.
+1.  Abre una terminal en la raíz del proyecto (donde se encuentra `pyproject.toml`).
 2.  Ejecuta `uv sync` para instalar todas las dependencias necesarias en un entorno virtual.
 
 ---
