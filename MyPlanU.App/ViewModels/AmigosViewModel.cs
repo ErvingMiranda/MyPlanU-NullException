@@ -108,7 +108,7 @@ public partial class AmigosViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync("..");
     }
-}
+
 
     [RelayCommand]
     public async Task AceptarSolicitudAsync(AmigoInfo info)
