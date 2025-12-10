@@ -25,7 +25,7 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
-                            <Image Source="{AppThemeBinding Light=mylogo.png, Dark=mylogoWhite.jpg}"
+                            <Image Source="{AppThemeBinding Light=mylogo.png, Dark=mylogowhite.png}"
                                    Grid.Row="0"
                                    HeightRequest="200"
                                    WidthRequest="200"
