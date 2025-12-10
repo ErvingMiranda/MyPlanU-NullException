@@ -84,8 +84,7 @@ public partial class RegistroViewModel : ObservableObject
             ContrasenaHash = Password, // En producción, hashear esto
             PreguntaSeguridad = preguntaFinal,
             RespuestaSeguridad = RespuestaSeguridad,
-            FechaRegistro = DateTime.Now,
-            EstadoCuenta = "Activo"
+            FechaRegistro = DateTime.Now
         };
 
         bool exito = await _authService.RegisterAsync(nuevoUsuario);

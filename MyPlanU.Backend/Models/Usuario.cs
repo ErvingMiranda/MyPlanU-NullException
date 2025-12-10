@@ -13,14 +13,8 @@ public class Usuario
     public string Email { get; set; }
     public string ContrasenaHash { get; set; }
     
-    [Obsolete("Propiedad no utilizada en la lógica actual. Pendiente de implementación o eliminación.")]
-    public string AvatarUrl { get; set; }
-    
     public string Pais { get; set; }
     public DateTime FechaRegistro { get; set; }
-    
-    [Obsolete("Se asigna 'Activo' por defecto pero no se valida en ninguna parte.")]
-    public string EstadoCuenta { get; set; }
     
     public string PreguntaSeguridad { get; set; }
     public string RespuestaSeguridad { get; set; }

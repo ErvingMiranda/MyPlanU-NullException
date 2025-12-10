@@ -255,10 +255,8 @@ El sistema usa las siguientes entidades principales.
 - `apodo`  
 - `email`  
 - `contrasena_hash`  
-- `avatar_url`  
 - `pais`  
 - `fecha_registro`  
-- `estado_cuenta`
 - `pregunta_seguridad`
 - `respuesta_seguridad`
 
@@ -274,7 +272,6 @@ Relaciones:
 - `id_amistad` (PK)  
 - `id_usuario_principal` (FK → Usuario)  
 - `id_usuario_amigo` (FK → Usuario)  
-- `alias`  
 - `estado_solicitud`  
 - `fecha_creacion`  
 - `fecha_actualizacion`
@@ -283,20 +280,22 @@ Es la tabla para solicitudes de amistad y contactos.
 
 ---
 
-### 5.3. PROMPTY (configuración)
+### 5.3. Prompty (configuración y modelos de chat)
+
+#### a) Configuración de Prompty
 - `id_prompty` (PK)  
 - `id_usuario` (FK → Usuario) [UNIQUE: relación 1:1]  
 - `nombre_asistente`  
-- `wake_word`  
 - `activo`  
-- `voz_nombre`  
-- `velocidad_voz`  
-- `volumen_voz`  
-- `tono_voz`  
 - `fecha_creacion`  
 - `fecha_actualizacion`
 
 Guarda preferencias del asistente del usuario.
+
+#### b) Modelos de chat de Prompty
+- `ChatMessage`: Representa un mensaje en el chat (Role, Content).
+- `PromptyChatRequest`: Estructura para enviar peticiones al servicio de IA.
+- `PromptyChatResponse`: Estructura de respuesta del servicio de IA.
 
 ---
 
@@ -314,6 +313,8 @@ Guarda preferencias del asistente del usuario.
 - `fecha_completado`  
 - `nota_rapida`  
 - `id_recordatorio` (FK → Recordatorio) [opcional]
+
+*Nota: La integración con Recordatorio está en desarrollo y se utilizará en versiones futuras para notificaciones/recordatorios.*
 
 Relacionado con Recordatorio y con ActividadCompartida.
 
@@ -343,11 +344,6 @@ Puede asociarse opcionalmente a una Actividad.
 - `fecha_actualizacion`
 
 Permite compartir actividades con otros usuarios y administrar permisos.
-
-### 5.7. Modelos de Chat (Prompty)
-- `ChatMessage`: Representa un mensaje en el chat (Role, Content).
-- `PromptyChatRequest`: Estructura para enviar peticiones al servicio de IA.
-- `PromptyChatResponse`: Estructura de respuesta del servicio de IA.
 
 ---
 

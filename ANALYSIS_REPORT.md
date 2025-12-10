@@ -117,3 +117,27 @@ Se procederá a marcar con `[Obsolete]` las propiedades detectadas como no usada
 1.  **Usuario.cs**: `AvatarUrl`, `EstadoCuenta`.
 2.  **Amistad.cs**: `Alias`.
 3.  **PromptyConfig.cs**: `WakeWord`, `VozNombre`, `VelocidadVoz`, `VolumenVoz`, `TonoVoz`.
+
+## Ejecución de Limpieza (Refactorización)
+
+**Fecha:** 10 de Diciembre de 2025
+
+Se ha realizado una limpieza completa del modelo de dominio y la documentación, eliminando definitivamente las propiedades marcadas anteriormente como obsoletas o no usadas.
+
+**Cambios realizados:**
+
+1.  **Eliminación de código:**
+    *   `Usuario.cs`: Eliminadas `AvatarUrl` y `EstadoCuenta`.
+    *   `Amistad.cs`: Eliminada `Alias`.
+    *   `PromptyConfig.cs`: Eliminadas `WakeWord`, `VozNombre`, `VelocidadVoz`, `VolumenVoz`, `TonoVoz`.
+    *   Se eliminaron las referencias en `RegistroViewModel.cs`.
+
+2.  **Base de Datos:**
+    *   Se generó la migración `Migration001_RemoveUnusedFields` para actualizar el esquema de SQLite (recreación de tablas para eliminar columnas).
+
+3.  **Documentación (`INTEGRATION.md`):**
+    *   Actualizadas las definiciones de las entidades para reflejar los campos eliminados.
+    *   Unificada la sección de Prompty (Configuración y Modelos de Chat) en el punto 5.3.
+    *   Agregada nota sobre el estado de integración de `Recordatorio`.
+
+Este documento (`ANALYSIS_REPORT.md`) queda como registro histórico del análisis previo a la limpieza.
