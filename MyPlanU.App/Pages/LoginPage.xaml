@@ -37,8 +37,8 @@
 
                 <Image Source="mylogo.png"
                        Grid.Row="0"
-                       HeightRequest="120"
-                       WidthRequest="120"
+                       HeightRequest="150"
+                       WidthRequest="150"
                        HorizontalOptions="Center"
                        VerticalOptions="Start"
                        Margin="0,0,0,10" />
