@@ -126,15 +126,16 @@ public class Usuario
 {
     [PrimaryKey, AutoIncrement]
     public int IdUsuario { get; set; }
+    public string Nombre { get; set; }
+    public string Apellido { get; set; }
+    public string Apodo { get; set; }
     [Unique]
     public string Email { get; set; }
-    public string PasswordHash { get; set; }
-    public string Nombre { get; set; }
-    public string Apodo { get; set; }
-    public string Carrera { get; set; }
-    public string Universidad { get; set; }
+    public string ContrasenaHash { get; set; }
+    public string Pais { get; set; }
     public DateTime FechaRegistro { get; set; }
-    public string FotoPerfilPath { get; set; }
+    public string PreguntaSeguridad { get; set; }
+    public string RespuestaSeguridad { get; set; }
 }
 ```
 
@@ -147,14 +148,17 @@ public class Actividad
     [Indexed]
     public int IdUsuarioCreador { get; set; }
     public string Titulo { get; set; }
-    public string Descripcion { get; set; } // Opcional
+    public string Descripcion { get; set; }
     public string Prioridad { get; set; }
     public string Estado { get; set; }
     public DateTime FechaCreacion { get; set; }
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
     public bool TodoElDia { get; set; }
-    public string Etiquetas { get; set; }
+    public DateTime? FechaCompletado { get; set; }
+    public string NotaRapida { get; set; }
+    public string Etiquetas { get; set; } // Almacenado como "Tag1|Tag2|Tag3"
+    public int? IdRecordatorio { get; set; }
 }
 ```
 
@@ -304,14 +308,13 @@ Guarda preferencias del asistente del usuario.
 - `id_usuario_creador` (FK → Usuario)  
 - `titulo`  
 - `descripcion`  
-- `prioridad`  
-- `estado`  
 - `fecha_creacion`  
 - `fecha_inicio`  
 - `fecha_fin`  
 - `todo_el_dia`  
 - `fecha_completado`  
 - `nota_rapida`  
+- `etiquetas`
 - `id_recordatorio` (FK → Recordatorio) [opcional]
 
 *Nota: La integración con Recordatorio está en desarrollo y se utilizará en versiones futuras para notificaciones/recordatorios.*
