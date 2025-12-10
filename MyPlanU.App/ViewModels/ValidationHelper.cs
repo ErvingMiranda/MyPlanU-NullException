@@ -29,10 +29,11 @@ public static class ValidationHelper
         bool tieneMayus = valor.Any(char.IsUpper);
         bool tieneMinus = valor.Any(char.IsLower);
         bool tieneNumero = valor.Any(char.IsDigit);
+        bool tieneSimbolo = valor.Any(ch => !char.IsLetterOrDigit(ch));
         
-        if (tieneMayus && tieneMinus && tieneNumero)
+        if (tieneMayus && tieneMinus && tieneNumero && tieneSimbolo)
             return string.Empty;
 
-        return "Debe incluir mayúscula, minúscula y número.";
+        return "Debe incluir mayúscula, minúscula, número y un símbolo.";
     }
 }

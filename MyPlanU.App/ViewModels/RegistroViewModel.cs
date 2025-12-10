@@ -66,6 +66,13 @@ public partial class RegistroViewModel : ObservableObject
             return;
         }
 
+        string errorPass = ValidationHelper.ValidarContrasena(Password);
+        if (!string.IsNullOrEmpty(errorPass))
+        {
+            await Shell.Current.DisplayAlert("Error", errorPass, "OK");
+            return;
+        }
+
         string preguntaFinal = PreguntaSeguridad;
         if (IsCustomQuestionVisible)
         {

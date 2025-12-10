@@ -80,6 +80,13 @@ public partial class RecuperarPasswordViewModel : ObservableObject
             return;
         }
 
+        string errorPass = ValidationHelper.ValidarContrasena(NewPassword);
+        if (!string.IsNullOrEmpty(errorPass))
+        {
+            await Shell.Current.DisplayAlert("Error", errorPass, "OK");
+            return;
+        }
+
         bool success = await _authService.ResetPasswordAsync(Email, NewPassword);
         if (success)
         {
