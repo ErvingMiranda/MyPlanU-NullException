@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyPlanU.Backend.Business;
@@ -20,6 +21,15 @@ public partial class RegistroViewModel : ObservableObject
     private string password;
 
     [ObservableProperty]
+    private bool isPasswordHidden = true;
+
+    [RelayCommand]
+    private void TogglePasswordVisibility()
+    {
+        IsPasswordHidden = !IsPasswordHidden;
+    }
+
+    [ObservableProperty]
     private string preguntaSeguridad;
 
     [ObservableProperty]
@@ -31,12 +41,13 @@ public partial class RegistroViewModel : ObservableObject
     [ObservableProperty]
     private bool isCustomQuestionVisible;
 
-    public List<string> PreguntasDisponibles { get; } = new List<string>
+    public ObservableCollection<string> PreguntasDisponibles { get; } = new ObservableCollection<string>
     {
         "¿Cuál es tu comida favorita?",
         "¿Cuál es tu color favorito?",
         "¿Cómo se llama tu mejor amigo?",
-        "Escribir mi propia pregunta..."
+        "Escribir mi propia pregunta...",
+        "Eliminar..."
     };
 
     public RegistroViewModel(AuthService authService)
@@ -46,7 +57,40 @@ public partial class RegistroViewModel : ObservableObject
 
     partial void OnPreguntaSeguridadChanged(string value)
     {
-        IsCustomQuestionVisible = value == "Escribir mi propia pregunta...";
+        if (value == "Escribir mi propia pregunta...")
+        {
+            IsCustomQuestionVisible = true;
+        }
+        else if (value == "Eliminar...")
+        {
+            IsCustomQuestionVisible = false;
+            EliminarPreguntaDisponibleAsync();
+            PreguntaSeguridad = null;
+        }
+        else
+        {
+            IsCustomQuestionVisible = false;
+        }
+    }
+
+    private async void EliminarPreguntaDisponibleAsync()
+    {
+        var questionsToDelete = PreguntasDisponibles
+            .Where(q => q != "Escribir mi propia pregunta..." && q != "Eliminar...")
+            .ToArray();
+
+        if (questionsToDelete.Length == 0)
+        {
+            await Shell.Current.DisplayAlert("Aviso", "No hay preguntas para eliminar.", "OK");
+            return;
+        }
+
+        string result = await Shell.Current.DisplayActionSheet("Eliminar pregunta", "Cancelar", null, questionsToDelete);
+
+        if (result != "Cancelar" && !string.IsNullOrEmpty(result))
+        {
+            PreguntasDisponibles.Remove(result);
+        }
     }
 
     [RelayCommand]

@@ -30,7 +30,7 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private ObservableCollection<string> etiquetasDisponibles = new()
     {
-        "Trabajo", "Personal", "Urgente", "Importante", "Crear nueva..."
+        "Trabajo", "Personal", "Urgente", "Importante", "Crear nueva...", "Eliminar..."
     };
 
     [ObservableProperty]
@@ -64,6 +64,12 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
         if (value == "Crear nueva...")
         {
             IsNuevaEtiquetaVisible = true;
+            EtiquetaSeleccionadaPicker = null;
+        }
+        else if (value == "Eliminar...")
+        {
+            EliminarEtiquetaDisponibleAsync();
+            EtiquetaSeleccionadaPicker = null;
         }
         else if (!string.IsNullOrEmpty(value))
         {
@@ -77,15 +83,44 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
         }
     }
 
+    private async void EliminarEtiquetaDisponibleAsync()
+    {
+        var tagsToDelete = EtiquetasDisponibles
+            .Where(t => t != "Crear nueva..." && t != "Eliminar...")
+            .ToArray();
+
+        if (tagsToDelete.Length == 0)
+        {
+            await Shell.Current.DisplayAlert("Aviso", "No hay etiquetas para eliminar.", "OK");
+            return;
+        }
+
+        string result = await Shell.Current.DisplayActionSheet("Eliminar etiqueta", "Cancelar", null, tagsToDelete);
+
+        if (result != "Cancelar" && !string.IsNullOrEmpty(result))
+        {
+            EtiquetasDisponibles.Remove(result);
+            if (EtiquetasSeleccionadas.Contains(result))
+            {
+                EtiquetasSeleccionadas.Remove(result);
+            }
+        }
+    }
+
     [RelayCommand]
     private void AgregarNuevaEtiqueta()
     {
         if (!string.IsNullOrWhiteSpace(NuevaEtiquetaTexto))
         {
             // Insert before "Crear nueva..."
+            // "Crear nueva..." is at Count - 2 now because of "Eliminar..."
+            // Or just find the index of "Crear nueva..."
+            int index = EtiquetasDisponibles.IndexOf("Crear nueva...");
+            if (index == -1) index = EtiquetasDisponibles.Count;
+            
             if (!EtiquetasDisponibles.Contains(NuevaEtiquetaTexto))
             {
-                EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, NuevaEtiquetaTexto);
+                EtiquetasDisponibles.Insert(index, NuevaEtiquetaTexto);
             }
             
             if (!EtiquetasSeleccionadas.Contains(NuevaEtiquetaTexto))
@@ -95,15 +130,6 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
 
             NuevaEtiquetaTexto = string.Empty;
             IsNuevaEtiquetaVisible = false;
-        }
-    }
-
-    [RelayCommand]
-    private void EliminarEtiqueta(string etiqueta)
-    {
-        if (EtiquetasSeleccionadas.Contains(etiqueta))
-        {
-            EtiquetasSeleccionadas.Remove(etiqueta);
         }
     }
 
@@ -133,7 +159,10 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
                         EtiquetasSeleccionadas.Add(tag);
                         if (!EtiquetasDisponibles.Contains(tag))
                         {
-                            EtiquetasDisponibles.Insert(EtiquetasDisponibles.Count - 1, tag);
+                            // Insert before "Crear nueva..."
+                            int index = EtiquetasDisponibles.IndexOf("Crear nueva...");
+                            if (index == -1) index = EtiquetasDisponibles.Count;
+                            EtiquetasDisponibles.Insert(index, tag);
                         }
                     }
                 }

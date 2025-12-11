@@ -116,6 +116,20 @@
                                         <Label Text="-" FontSize="12" TextColor="#EEEEEE" />
                                         <Label Text="{Binding FechaFin, StringFormat='{0:MMM dd, HH:mm}'}" FontSize="12" TextColor="#EEEEEE" />
                                     </HorizontalStackLayout>
+
+                                    <BoxView HeightRequest="1" Color="#30FFFFFF" Margin="0,5"/>
+
+                                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                                        <Button Text="Editar"
+                                                BackgroundColor="#50FFFFFF"
+                                                TextColor="White"
+                                                CornerRadius="15"
+                                                HeightRequest="35"
+                                                Padding="15,0"
+                                                FontSize="12"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EventosViewModel}}, Path=EditarEventoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
                             </Frame>
                         </DataTemplate>
