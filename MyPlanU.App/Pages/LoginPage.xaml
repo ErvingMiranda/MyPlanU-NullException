@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MyPlanU.App.Pages.LoginPage"
              Title="Login"
              Style="{StaticResource BasePageStyle}">
@@ -76,15 +77,24 @@
                                        PlaceholderColor="#E0E0E0"
                                        BackgroundColor="Transparent" />
                                 <Button Grid.Column="1"
-                                        Text="👁"
+                                        Text="Ver"
                                         Command="{Binding TogglePasswordVisibilityCommand}"
-                                        BackgroundColor="Transparent"
+                                        BackgroundColor="#5e17eb"
                                         TextColor="White"
-                                        FontSize="20"
-                                        WidthRequest="50"
-                                        HeightRequest="40"
+                                        CornerRadius="8"
+                                        HeightRequest="36"
+                                        WidthRequest="60"
                                         Padding="0"
-                                        VerticalOptions="Center"/>
+                                        FontSize="13"
+                                        FontAttributes="Bold"
+                                        VerticalOptions="Center"
+                                        Margin="8,0,0,0">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsPasswordHidden}" Value="False">
+                                            <Setter Property="Text" Value="Ocultar" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
 
                             <Button Text="Ingresar"

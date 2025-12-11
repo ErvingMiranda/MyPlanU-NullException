@@ -19,10 +19,7 @@ public partial class LoginViewModel : ObservableObject, IQueryAttributable
     private bool isPasswordHidden = true;
 
     [RelayCommand]
-    private void TogglePasswordVisibility()
-    {
-        IsPasswordHidden = !IsPasswordHidden;
-    }
+    private void TogglePasswordVisibility() => IsPasswordHidden = !IsPasswordHidden;
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
