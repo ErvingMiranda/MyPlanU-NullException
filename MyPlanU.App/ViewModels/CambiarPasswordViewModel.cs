@@ -12,10 +12,28 @@ public partial class CambiarPasswordViewModel : ObservableObject
     private string currentPassword = string.Empty;
 
     [ObservableProperty]
+    private bool isCurrentPasswordHidden = true;
+
+    [RelayCommand]
+    private void ToggleCurrentPasswordVisibility() => IsCurrentPasswordHidden = !IsCurrentPasswordHidden;
+
+    [ObservableProperty]
     private string newPassword = string.Empty;
 
     [ObservableProperty]
+    private bool isNewPasswordHidden = true;
+
+    [RelayCommand]
+    private void ToggleNewPasswordVisibility() => IsNewPasswordHidden = !IsNewPasswordHidden;
+
+    [ObservableProperty]
     private string confirmPassword = string.Empty;
+
+    [ObservableProperty]
+    private bool isConfirmPasswordHidden = true;
+
+    [RelayCommand]
+    private void ToggleConfirmPasswordVisibility() => IsConfirmPasswordHidden = !IsConfirmPasswordHidden;
 
     public CambiarPasswordViewModel(AuthService authService)
     {

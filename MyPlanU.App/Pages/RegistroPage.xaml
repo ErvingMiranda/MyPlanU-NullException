@@ -90,13 +90,26 @@
 
                                         <VerticalStackLayout Spacing="5">
                                             <Label Text="Contraseña" TextColor="White" FontSize="14" FontAttributes="Bold"/>
-                                            <Entry x:Name="PasswordEntry"
-                                                   Placeholder="Contraseña"
-                                                   IsPassword="True"
-                                                   TextColor="White"
-                                                   PlaceholderColor="#E0E0E0"
-                                                   BackgroundColor="Transparent"
-                                                   Text="{Binding Password}" />
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <Entry x:Name="PasswordEntry"
+                                                       Grid.Column="0"
+                                                       Placeholder="Contraseña"
+                                                       IsPassword="{Binding IsPasswordHidden}"
+                                                       TextColor="White"
+                                                       PlaceholderColor="#E0E0E0"
+                                                       BackgroundColor="Transparent"
+                                                       Text="{Binding Password}" />
+                                                <Button Grid.Column="1"
+                                                        Text="👁"
+                                                        Command="{Binding TogglePasswordVisibilityCommand}"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="White"
+                                                        FontSize="20"
+                                                        WidthRequest="50"
+                                                        HeightRequest="40"
+                                                        Padding="0"
+                                                        VerticalOptions="Center"/>
+                                            </Grid>
                                         </VerticalStackLayout>
 
                                         <VerticalStackLayout Spacing="5">

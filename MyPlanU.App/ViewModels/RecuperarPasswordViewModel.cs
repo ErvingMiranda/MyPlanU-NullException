@@ -21,6 +21,12 @@ public partial class RecuperarPasswordViewModel : ObservableObject
     private string newPassword;
 
     [ObservableProperty]
+    private bool isNewPasswordHidden = true;
+
+    [RelayCommand]
+    private void ToggleNewPasswordVisibility() => IsNewPasswordHidden = !IsNewPasswordHidden;
+
+    [ObservableProperty]
     private bool isQuestionVisible;
 
     [ObservableProperty]

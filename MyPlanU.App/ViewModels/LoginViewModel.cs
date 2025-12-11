@@ -15,6 +15,15 @@ public partial class LoginViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private string password = string.Empty;
 
+    [ObservableProperty]
+    private bool isPasswordHidden = true;
+
+    [RelayCommand]
+    private void TogglePasswordVisibility()
+    {
+        IsPasswordHidden = !IsPasswordHidden;
+    }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.ContainsKey("Logout"))

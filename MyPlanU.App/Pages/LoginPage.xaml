@@ -67,12 +67,25 @@
                                    PlaceholderColor="#E0E0E0"
                                    BackgroundColor="Transparent" />
 
-                            <Entry x:Name="PasswordEntry" Placeholder="Contraseña"
-                                   IsPassword="True"
-                                   Text="{Binding Password}"
-                                   TextColor="White"
-                                   PlaceholderColor="#E0E0E0"
-                                   BackgroundColor="Transparent" />
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Entry x:Name="PasswordEntry" Placeholder="Contraseña"
+                                       Grid.Column="0"
+                                       IsPassword="{Binding IsPasswordHidden}"
+                                       Text="{Binding Password}"
+                                       TextColor="White"
+                                       PlaceholderColor="#E0E0E0"
+                                       BackgroundColor="Transparent" />
+                                <Button Grid.Column="1"
+                                        Text="👁"
+                                        Command="{Binding TogglePasswordVisibilityCommand}"
+                                        BackgroundColor="Transparent"
+                                        TextColor="White"
+                                        FontSize="20"
+                                        WidthRequest="50"
+                                        HeightRequest="40"
+                                        Padding="0"
+                                        VerticalOptions="Center"/>
+                            </Grid>
 
                             <Button Text="Ingresar"
                                     Margin="0,20,0,0"

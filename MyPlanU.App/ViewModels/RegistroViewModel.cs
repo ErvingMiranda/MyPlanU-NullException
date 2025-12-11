@@ -20,6 +20,15 @@ public partial class RegistroViewModel : ObservableObject
     private string password;
 
     [ObservableProperty]
+    private bool isPasswordHidden = true;
+
+    [RelayCommand]
+    private void TogglePasswordVisibility()
+    {
+        IsPasswordHidden = !IsPasswordHidden;
+    }
+
+    [ObservableProperty]
     private string preguntaSeguridad;
 
     [ObservableProperty]
