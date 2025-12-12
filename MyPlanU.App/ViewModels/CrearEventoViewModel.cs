@@ -30,11 +30,14 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty]
     private ObservableCollection<string> etiquetasDisponibles = new()
     {
-        "Trabajo", "Personal", "Urgente", "Importante", "Crear nueva...", "Eliminar..."
+        "Trabajo", "Personal", "Urgente", "Importante", "Crear nueva..."
     };
 
     [ObservableProperty]
     private string etiquetaSeleccionadaPicker;
+
+    [ObservableProperty]
+    private bool isTagsDropdownVisible;
 
     [ObservableProperty]
     private bool isNuevaEtiquetaVisible;
@@ -59,16 +62,62 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
         _actividadService = actividadService;
     }
 
+    [RelayCommand]
+    private void ToggleTagsDropdown()
+    {
+        IsTagsDropdownVisible = !IsTagsDropdownVisible;
+    }
+
+    [RelayCommand]
+    private void SelectTag(string tag)
+    {
+        if (string.IsNullOrEmpty(tag)) return;
+
+        if (tag == "Crear nueva...")
+        {
+            IsNuevaEtiquetaVisible = true;
+        }
+        else
+        {
+            IsNuevaEtiquetaVisible = false;
+            if (!EtiquetasSeleccionadas.Contains(tag))
+            {
+                EtiquetasSeleccionadas.Add(tag);
+            }
+        }
+        IsTagsDropdownVisible = false;
+    }
+
+    [RelayCommand]
+    private void EliminarEtiqueta(string tag)
+    {
+        if (EtiquetasSeleccionadas.Contains(tag))
+        {
+            EtiquetasSeleccionadas.Remove(tag);
+        }
+    }
+
+    [RelayCommand]
+    private async Task EliminarEtiquetaDisponibleAsync(string tag)
+    {
+        if (tag == "Crear nueva...") return;
+
+        bool answer = await Shell.Current.DisplayAlert("Eliminar etiqueta", $"¿Estás seguro de que quieres eliminar '{tag}'?", "Sí", "No");
+        if (answer)
+        {
+            EtiquetasDisponibles.Remove(tag);
+            if (EtiquetasSeleccionadas.Contains(tag))
+            {
+                EtiquetasSeleccionadas.Remove(tag);
+            }
+        }
+    }
+
     partial void OnEtiquetaSeleccionadaPickerChanged(string value)
     {
         if (value == "Crear nueva...")
         {
             IsNuevaEtiquetaVisible = true;
-            EtiquetaSeleccionadaPicker = null;
-        }
-        else if (value == "Eliminar...")
-        {
-            EliminarEtiquetaDisponibleAsync();
             EtiquetaSeleccionadaPicker = null;
         }
         else if (!string.IsNullOrEmpty(value))
@@ -80,30 +129,6 @@ public partial class CrearEventoViewModel : ObservableObject, IQueryAttributable
             }
             // Reset picker to allow re-selecting same item if removed
             EtiquetaSeleccionadaPicker = null; 
-        }
-    }
-
-    private async void EliminarEtiquetaDisponibleAsync()
-    {
-        var tagsToDelete = EtiquetasDisponibles
-            .Where(t => t != "Crear nueva..." && t != "Eliminar...")
-            .ToArray();
-
-        if (tagsToDelete.Length == 0)
-        {
-            await Shell.Current.DisplayAlert("Aviso", "No hay etiquetas para eliminar.", "OK");
-            return;
-        }
-
-        string result = await Shell.Current.DisplayActionSheet("Eliminar etiqueta", "Cancelar", null, tagsToDelete);
-
-        if (result != "Cancelar" && !string.IsNullOrEmpty(result))
-        {
-            EtiquetasDisponibles.Remove(result);
-            if (EtiquetasSeleccionadas.Contains(result))
-            {
-                EtiquetasSeleccionadas.Remove(result);
-            }
         }
     }
 

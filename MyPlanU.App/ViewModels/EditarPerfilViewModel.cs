@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyPlanU.Backend.Business;
@@ -34,7 +35,10 @@ public partial class EditarPerfilViewModel : ObservableObject
     [ObservableProperty]
     private bool isCustomQuestionVisible;
 
-    public List<string> PreguntasDisponibles { get; } = new List<string>
+    [ObservableProperty]
+    private bool isQuestionsDropdownVisible;
+
+    public ObservableCollection<string> PreguntasDisponibles { get; } = new ObservableCollection<string>
     {
         "¿Cuál es tu comida favorita?",
         "¿Cuál es tu color favorito?",
@@ -48,9 +52,45 @@ public partial class EditarPerfilViewModel : ObservableObject
         LoadUserData();
     }
 
-    partial void OnPreguntaSeguridadChanged(string value)
+    [RelayCommand]
+    private void ToggleQuestionsDropdown()
     {
-        IsCustomQuestionVisible = value == "Escribir mi propia pregunta...";
+        IsQuestionsDropdownVisible = !IsQuestionsDropdownVisible;
+    }
+
+    [RelayCommand]
+    private void SelectQuestion(string question)
+    {
+        if (string.IsNullOrEmpty(question)) return;
+
+        PreguntaSeguridad = question;
+        IsQuestionsDropdownVisible = false;
+
+        if (question == "Escribir mi propia pregunta...")
+        {
+            IsCustomQuestionVisible = true;
+        }
+        else
+        {
+            IsCustomQuestionVisible = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task EliminarPreguntaDisponibleAsync(string question)
+    {
+        if (question == "Escribir mi propia pregunta...") return;
+
+        bool answer = await Shell.Current.DisplayAlert("Eliminar pregunta", $"¿Estás seguro de que quieres eliminar '{question}'?", "Sí", "No");
+        if (answer)
+        {
+            PreguntasDisponibles.Remove(question);
+            if (PreguntaSeguridad == question)
+            {
+                PreguntaSeguridad = null;
+                IsCustomQuestionVisible = false;
+            }
+        }
     }
 
     private void LoadUserData()
@@ -67,12 +107,14 @@ public partial class EditarPerfilViewModel : ObservableObject
             if (PreguntasDisponibles.Contains(_currentUser.PreguntaSeguridad))
             {
                 PreguntaSeguridad = _currentUser.PreguntaSeguridad;
+                IsCustomQuestionVisible = false;
             }
             else
             {
                 // It's a custom question
                 PreguntaSeguridad = "Escribir mi propia pregunta...";
                 PreguntaPersonalizada = _currentUser.PreguntaSeguridad;
+                IsCustomQuestionVisible = true;
             }
         }
     }

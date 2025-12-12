@@ -1,5 +1,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyPlanU.App.ViewModels"
              x:Class="MyPlanU.App.Pages.RegistroPage"
              Title="Registro"
              Style="{StaticResource BasePageStyle}"
@@ -100,27 +101,101 @@
                                                        BackgroundColor="Transparent"
                                                        Text="{Binding Password}" />
                                                 <Button Grid.Column="1"
-                                                        Text="👁"
+                                                        Text="Ver"
                                                         Command="{Binding TogglePasswordVisibilityCommand}"
-                                                        BackgroundColor="Transparent"
+                                                        BackgroundColor="#5e17eb"
                                                         TextColor="White"
-                                                        FontSize="20"
-                                                        WidthRequest="50"
-                                                        HeightRequest="40"
+                                                        CornerRadius="8"
+                                                        HeightRequest="36"
+                                                        WidthRequest="60"
                                                         Padding="0"
-                                                        VerticalOptions="Center"/>
+                                                        FontSize="13"
+                                                        FontAttributes="Bold"
+                                                        VerticalOptions="Center"
+                                                        Margin="8,0,0,0">
+                                                    <Button.Triggers>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding IsPasswordHidden}" Value="False">
+                                                            <Setter Property="Text" Value="Ocultar" />
+                                                        </DataTrigger>
+                                                    </Button.Triggers>
+                                                </Button>
                                             </Grid>
                                         </VerticalStackLayout>
 
                                         <VerticalStackLayout Spacing="5">
                                             <Label Text="Pregunta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
-                                            <Picker x:Name="PreguntaPicker"
-                                                    Title="Selecciona una pregunta"
-                                                    TitleColor="#E0E0E0"
-                                                    TextColor="White"
-                                                    BackgroundColor="Transparent"
-                                                    ItemsSource="{Binding PreguntasDisponibles}"
-                                                    SelectedItem="{Binding PreguntaSeguridad}" />
+                                            <Border Stroke="#2fffa3" 
+                                                    StrokeThickness="1" 
+                                                    StrokeShape="RoundRectangle 10" 
+                                                    BackgroundColor="#20FFFFFF" 
+                                                    HeightRequest="50"
+                                                    Padding="0">
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding ToggleQuestionsDropdownCommand}" />
+                                                </Border.GestureRecognizers>
+                                                <Border.Shadow>
+                                                    <Shadow Brush="Black" Offset="2,2" Opacity="0.2" Radius="5"/>
+                                                </Border.Shadow>
+                                                <Grid ColumnDefinitions="*, 50">
+                                                    <Label Grid.Column="0" 
+                                                           Text="{Binding PreguntaSeguridad, TargetNullValue='Selecciona una pregunta'}"
+                                                           VerticalOptions="Center" 
+                                                           Margin="15,0"
+                                                           TextColor="White"
+                                                           LineBreakMode="TailTruncation">
+                                                        <Label.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding PreguntaSeguridad}" Value="{x:Null}">
+                                                                <Setter Property="TextColor" Value="#E0E0E0" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                    </Label>
+                                                    <Grid Grid.Column="1" BackgroundColor="Black">
+                                                        <Label Text="▼" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="12"/>
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- Custom Dropdown List -->
+                                            <Border IsVisible="{Binding IsQuestionsDropdownVisible}"
+                                                    Stroke="#2fffa3"
+                                                    StrokeThickness="1"
+                                                    StrokeShape="RoundRectangle 10"
+                                                    BackgroundColor="#202020"
+                                                    MaximumHeightRequest="200"
+                                                    Padding="0"
+                                                    Margin="0,-5,0,0"
+                                                    ZIndex="100">
+                                                <CollectionView ItemsSource="{Binding PreguntasDisponibles}"
+                                                                VerticalScrollBarVisibility="Always">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Padding="15,10" BackgroundColor="Transparent" ColumnDefinitions="*, Auto">
+                                                                <Grid.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RegistroViewModel}}, Path=SelectQuestionCommand}"
+                                                                                          CommandParameter="{Binding .}" />
+                                                                </Grid.GestureRecognizers>
+                                                                <Label Grid.Column="0" Text="{Binding .}" TextColor="White" FontSize="14" VerticalOptions="Center" />
+                                                                <Button Grid.Column="1" 
+                                                                        Text="✕" 
+                                                                        TextColor="#FF6B6B" 
+                                                                        BackgroundColor="Transparent" 
+                                                                        FontSize="12"
+                                                                        HeightRequest="30"
+                                                                        WidthRequest="30"
+                                                                        Padding="0"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:RegistroViewModel}}, Path=EliminarPreguntaDisponibleCommand}"
+                                                                        CommandParameter="{Binding .}">
+                                                                    <Button.Triggers>
+                                                                        <DataTrigger TargetType="Button" Binding="{Binding .}" Value="Escribir mi propia pregunta...">
+                                                                            <Setter Property="IsVisible" Value="False" />
+                                                                        </DataTrigger>
+                                                                    </Button.Triggers>
+                                                                </Button>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </Border>
                                         </VerticalStackLayout>
 
                                         <VerticalStackLayout Spacing="5" IsVisible="{Binding IsCustomQuestionVisible}">
@@ -162,6 +237,111 @@
     </ScrollView>
 
 </ContentPage>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

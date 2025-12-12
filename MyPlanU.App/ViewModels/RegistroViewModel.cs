@@ -41,13 +41,15 @@ public partial class RegistroViewModel : ObservableObject
     [ObservableProperty]
     private bool isCustomQuestionVisible;
 
+    [ObservableProperty]
+    private bool isQuestionsDropdownVisible;
+
     public ObservableCollection<string> PreguntasDisponibles { get; } = new ObservableCollection<string>
     {
         "¿Cuál es tu comida favorita?",
         "¿Cuál es tu color favorito?",
         "¿Cómo se llama tu mejor amigo?",
-        "Escribir mi propia pregunta...",
-        "Eliminar..."
+        "Escribir mi propia pregunta..."
     };
 
     public RegistroViewModel(AuthService authService)
@@ -55,17 +57,23 @@ public partial class RegistroViewModel : ObservableObject
         _authService = authService;
     }
 
-    partial void OnPreguntaSeguridadChanged(string value)
+    [RelayCommand]
+    private void ToggleQuestionsDropdown()
     {
-        if (value == "Escribir mi propia pregunta...")
+        IsQuestionsDropdownVisible = !IsQuestionsDropdownVisible;
+    }
+
+    [RelayCommand]
+    private void SelectQuestion(string question)
+    {
+        if (string.IsNullOrEmpty(question)) return;
+
+        PreguntaSeguridad = question;
+        IsQuestionsDropdownVisible = false;
+
+        if (question == "Escribir mi propia pregunta...")
         {
             IsCustomQuestionVisible = true;
-        }
-        else if (value == "Eliminar...")
-        {
-            IsCustomQuestionVisible = false;
-            EliminarPreguntaDisponibleAsync();
-            PreguntaSeguridad = null;
         }
         else
         {
@@ -73,23 +81,20 @@ public partial class RegistroViewModel : ObservableObject
         }
     }
 
-    private async void EliminarPreguntaDisponibleAsync()
+    [RelayCommand]
+    private async Task EliminarPreguntaDisponibleAsync(string question)
     {
-        var questionsToDelete = PreguntasDisponibles
-            .Where(q => q != "Escribir mi propia pregunta..." && q != "Eliminar...")
-            .ToArray();
+        if (question == "Escribir mi propia pregunta...") return;
 
-        if (questionsToDelete.Length == 0)
+        bool answer = await Shell.Current.DisplayAlert("Eliminar pregunta", $"¿Estás seguro de que quieres eliminar '{question}'?", "Sí", "No");
+        if (answer)
         {
-            await Shell.Current.DisplayAlert("Aviso", "No hay preguntas para eliminar.", "OK");
-            return;
-        }
-
-        string result = await Shell.Current.DisplayActionSheet("Eliminar pregunta", "Cancelar", null, questionsToDelete);
-
-        if (result != "Cancelar" && !string.IsNullOrEmpty(result))
-        {
-            PreguntasDisponibles.Remove(result);
+            PreguntasDisponibles.Remove(question);
+            if (PreguntaSeguridad == question)
+            {
+                PreguntaSeguridad = null;
+                IsCustomQuestionVisible = false;
+            }
         }
     }
 

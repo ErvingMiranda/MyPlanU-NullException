@@ -78,12 +78,78 @@
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Pregunta de Seguridad" TextColor="White" FontSize="14" FontAttributes="Bold"/>
-                            <Picker Title="Selecciona una pregunta"
-                                    TitleColor="#E0E0E0"
-                                    TextColor="White"
-                                    BackgroundColor="Transparent"
-                                    ItemsSource="{Binding PreguntasDisponibles}"
-                                    SelectedItem="{Binding PreguntaSeguridad}" />
+                            <Border Stroke="#2fffa3" 
+                                    StrokeThickness="1" 
+                                    StrokeShape="RoundRectangle 10" 
+                                    BackgroundColor="#20FFFFFF" 
+                                    HeightRequest="50"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleQuestionsDropdownCommand}" />
+                                </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Offset="2,2" Opacity="0.2" Radius="5"/>
+                                </Border.Shadow>
+                                <Grid ColumnDefinitions="*, 50">
+                                    <Label Grid.Column="0" 
+                                           Text="{Binding PreguntaSeguridad, TargetNullValue='Selecciona una pregunta'}"
+                                           VerticalOptions="Center" 
+                                           Margin="15,0"
+                                           TextColor="White"
+                                           LineBreakMode="TailTruncation">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding PreguntaSeguridad}" Value="{x:Null}">
+                                                <Setter Property="TextColor" Value="#E0E0E0" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Grid Grid.Column="1" BackgroundColor="Black">
+                                        <Label Text="▼" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="12"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <!-- Custom Dropdown List -->
+                            <Border IsVisible="{Binding IsQuestionsDropdownVisible}"
+                                    Stroke="#2fffa3"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#202020"
+                                    MaximumHeightRequest="200"
+                                    Padding="0"
+                                    Margin="0,-5,0,0"
+                                    ZIndex="100">
+                                <CollectionView ItemsSource="{Binding PreguntasDisponibles}"
+                                                VerticalScrollBarVisibility="Always">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="15,10" BackgroundColor="Transparent" ColumnDefinitions="*, Auto">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditarPerfilViewModel}}, Path=SelectQuestionCommand}"
+                                                                          CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
+                                                <Label Grid.Column="0" Text="{Binding .}" TextColor="White" FontSize="14" VerticalOptions="Center" />
+                                                <Button Grid.Column="1" 
+                                                        Text="✕" 
+                                                        TextColor="#FF6B6B" 
+                                                        BackgroundColor="Transparent" 
+                                                        FontSize="12"
+                                                        HeightRequest="30"
+                                                        WidthRequest="30"
+                                                        Padding="0"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditarPerfilViewModel}}, Path=EliminarPreguntaDisponibleCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                    <Button.Triggers>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding .}" Value="Escribir mi propia pregunta...">
+                                                            <Setter Property="IsVisible" Value="False" />
+                                                        </DataTrigger>
+                                                    </Button.Triggers>
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="5" IsVisible="{Binding IsCustomQuestionVisible}">

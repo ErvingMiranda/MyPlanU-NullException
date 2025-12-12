@@ -49,15 +49,74 @@
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Etiquetas" TextColor="White" FontSize="14" FontAttributes="Bold" />
-                            <Frame Padding="0" BackgroundColor="#30000000" CornerRadius="10" BorderColor="Transparent">
-                                <Picker Title="Selecciona una etiqueta"
-                                        ItemsSource="{Binding EtiquetasDisponibles}"
-                                        SelectedItem="{Binding EtiquetaSeleccionadaPicker}"
-                                        TextColor="White"
-                                        TitleColor="#E0E0E0"
-                                        BackgroundColor="Transparent" 
-                                        Margin="10,0"/>
-                            </Frame>
+                            <Border Stroke="#2fffa3" 
+                                    StrokeThickness="1" 
+                                    StrokeShape="RoundRectangle 10" 
+                                    BackgroundColor="#20FFFFFF" 
+                                    HeightRequest="50"
+                                    Padding="0">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleTagsDropdownCommand}" />
+                                </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Offset="2,2" Opacity="0.2" Radius="5"/>
+                                </Border.Shadow>
+                                <Grid ColumnDefinitions="*, 50">
+                                    <Label Grid.Column="0" 
+                                           Text="Selecciona una etiqueta"
+                                           VerticalOptions="Center" 
+                                           Margin="15,0"
+                                           TextColor="#E0E0E0"
+                                           LineBreakMode="TailTruncation">
+                                    </Label>
+
+                                    <Grid Grid.Column="1" BackgroundColor="Black">
+                                        <Label Text="▼" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="12"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                            
+                            <!-- Custom Dropdown List -->
+                            <Border IsVisible="{Binding IsTagsDropdownVisible}"
+                                    Stroke="#2fffa3"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 10"
+                                    BackgroundColor="#202020"
+                                    MaximumHeightRequest="200"
+                                    Padding="0"
+                                    Margin="0,-5,0,0"
+                                    ZIndex="100">
+                                <CollectionView ItemsSource="{Binding EtiquetasDisponibles}"
+                                                VerticalScrollBarVisibility="Always">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="15,10" BackgroundColor="Transparent" ColumnDefinitions="*, Auto">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CrearEventoViewModel}}, Path=SelectTagCommand}"
+                                                                          CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
+                                                <Label Grid.Column="0" Text="{Binding .}" TextColor="White" FontSize="14" VerticalOptions="Center" />
+                                                <Button Grid.Column="1" 
+                                                        Text="✕" 
+                                                        TextColor="#FF6B6B" 
+                                                        BackgroundColor="Transparent" 
+                                                        FontSize="12"
+                                                        HeightRequest="30"
+                                                        WidthRequest="30"
+                                                        Padding="0"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CrearEventoViewModel}}, Path=EliminarEtiquetaDisponibleCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                    <Button.Triggers>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding .}" Value="Crear nueva...">
+                                                            <Setter Property="IsVisible" Value="False" />
+                                                        </DataTrigger>
+                                                    </Button.Triggers>
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
                         </VerticalStackLayout>
 
                         <HorizontalStackLayout IsVisible="{Binding IsNuevaEtiquetaVisible}" Spacing="10">
@@ -76,13 +135,14 @@
                         </HorizontalStackLayout>
 
                         <!-- Selected Tags List -->
-                        <CollectionView ItemsSource="{Binding EtiquetasSeleccionadas}" HeightRequest="60">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
+                        <FlexLayout BindableLayout.ItemsSource="{Binding EtiquetasSeleccionadas}"
+                                    Wrap="Wrap"
+                                    JustifyContent="Start"
+                                    Direction="Row"
+                                    AlignItems="Start">
+                            <BindableLayout.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame Padding="10,5" BackgroundColor="#30FFFFFF" CornerRadius="15" BorderColor="Transparent">
+                                    <Frame Padding="10,5" Margin="0,0,5,5" BackgroundColor="#30FFFFFF" CornerRadius="15" BorderColor="Transparent" HasShadow="False">
                                         <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
                                             <Label Text="{Binding .}" VerticalOptions="Center" TextColor="White" />
                                             <Button Text="✕" 
@@ -97,8 +157,8 @@
                                         </HorizontalStackLayout>
                                     </Frame>
                                 </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Descripción" TextColor="White" FontSize="14" FontAttributes="Bold"/>
@@ -112,15 +172,23 @@
 
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                             <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="Inicio" TextColor="White" FontAttributes="Bold" />
-                                <DatePicker Date="{Binding FechaInicio}" TextColor="White" BackgroundColor="Transparent" />
-                                <TimePicker Time="{Binding HoraInicio}" TextColor="White" BackgroundColor="Transparent" />
+                                <Label Text="Inicio" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Border StrokeThickness="0" BackgroundColor="#20FFFFFF" StrokeShape="RoundRectangle 10" Padding="10,0" HeightRequest="45">
+                                    <DatePicker Date="{Binding FechaInicio}" TextColor="White" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center" />
+                                </Border>
+                                <Border StrokeThickness="0" BackgroundColor="#20FFFFFF" StrokeShape="RoundRectangle 10" Padding="10,0" HeightRequest="45">
+                                    <TimePicker Time="{Binding HoraInicio}" TextColor="White" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center" />
+                                </Border>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Fin" TextColor="White" FontAttributes="Bold" />
-                                <DatePicker Date="{Binding FechaFin}" TextColor="White" BackgroundColor="Transparent" />
-                                <TimePicker Time="{Binding HoraFin}" TextColor="White" BackgroundColor="Transparent" />
+                                <Label Text="Fin" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+                                <Border StrokeThickness="0" BackgroundColor="#20FFFFFF" StrokeShape="RoundRectangle 10" Padding="10,0" HeightRequest="45">
+                                    <DatePicker Date="{Binding FechaFin}" TextColor="White" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center" />
+                                </Border>
+                                <Border StrokeThickness="0" BackgroundColor="#20FFFFFF" StrokeShape="RoundRectangle 10" Padding="10,0" HeightRequest="45">
+                                    <TimePicker Time="{Binding HoraFin}" TextColor="White" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center" />
+                                </Border>
                             </VerticalStackLayout>
                         </Grid>
 
